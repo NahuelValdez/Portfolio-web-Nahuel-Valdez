@@ -159,3 +159,23 @@ img {
 .link-custom:hover::after {
   width: 100%;
 }
+
+/* iconos redes sociales */
+
+.social-icons a {
+  width: 40px;
+  height: 40px;
+  display: inline flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  font-size: 30px;
+}
+
+.lab {
+  width: 35px;
+  height: 40px;
+  font-size: 35px;
+}
+
+/*//iconos redes sociales */
