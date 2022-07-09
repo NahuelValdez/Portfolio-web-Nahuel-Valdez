@@ -78,7 +78,7 @@ img {
   align-items: center;
   justify-content: center;
   font-size: 32px;
-  background-color: var(--color-brand);
+  background-color: var(--color-body);
   color: var(--color-base);
 }
 
@@ -106,12 +106,12 @@ img {
     min-height: 100vh;
     width: var(--sidbar-width);
     background: linear-gradient(
-        rgba(116, 140, 171, 0.7),
-        rgba(116, 140, 171, 0.7)
-      ),
-      url(../IMAGENES/paisaje.jpg);
+      rgba(116, 140, 171, 0.9),
+      rgba(116, 140, 171, 0.9)
+    );
+    /* url(../IMAGENES/paisaje.jpg);
     background-size: cover;
-    background-position: center;
+    background-position: center; */
   }
 
   .navbar-brand img {
