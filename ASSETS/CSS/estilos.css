@@ -7,9 +7,6 @@
   --color-base2: #3e5c76;
   --color-brand: #baffdf;
   --color-brand2: #b2edc5;
-  --color-brand3: #4af57d;
-  --color-brand4: #d656c8;
-  --color-brand5: #000000;
   --sidbar-width: 240px;
   --font-base: "Bai Jamjuree";
 }
@@ -107,7 +104,7 @@ img {
     width: var(--sidbar-width);
     background: linear-gradient(
       rgba(116, 140, 171, 0.9),
-      rgba(116, 140, 171, 0.9)
+      rgba(116, 140, 171, 0.1)
     );
     /* url(../IMAGENES/paisaje.jpg);
     background-size: cover;
