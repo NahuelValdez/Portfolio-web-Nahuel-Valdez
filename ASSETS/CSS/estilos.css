@@ -106,9 +106,6 @@ img {
       rgba(116, 140, 171, 0.9),
       rgba(116, 140, 171, 0.1)
     );
-    /* url(../IMAGENES/paisaje.jpg);
-    background-size: cover;
-    background-position: center; */
   }
 
   .navbar-brand img {
@@ -193,5 +190,3 @@ img {
   height: 40px;
   font-size: 35px;
 }
-
-/*//iconos redes sociales */
