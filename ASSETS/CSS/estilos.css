@@ -3,8 +3,8 @@
 :root {
   --color-body: #b6cbce;
   --color-heading: #eef3db;
-  --color-base: #748cab;
-  --color-base2: #3e5c76;
+  --color-base: #262d37;
+  --color-base2: #141e27;
   --color-brand: #baffdf;
   --color-brand2: #b2edc5;
   --sidbar-width: 240px;
@@ -103,7 +103,7 @@ img {
     min-height: 100vh;
     width: var(--sidbar-width);
     background: linear-gradient(
-      rgba(116, 140, 171, 0.9),
+      rgba(44, 54, 65, 0.9),
       rgba(116, 140, 171, 0.1)
     );
   }
