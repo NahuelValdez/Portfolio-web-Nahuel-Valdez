@@ -311,7 +311,7 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
         <div class="row justify-content-left text-left pb-4" data-aos="fade-up">
           <div class="col-lg-8">
             <h1 class="text-brand" data-aos="fade-up">contacto</h1>
-            <h5 data-aos="fade-up" data-aos-delay="300">e-mail : nahuelvaldez.di@gmail.com</h5>
+            <h5 data-aos="fade-up" data-aos-delay="300">e-mail : <span id="email-contacto"></span></h5>
           </div>
           <div class="social-icons mt-4" data-aos="fade-up" data-aos-delay="600">
             <a href="https://www.linkedin.com/in/nahuel-valdez-avila-19652720a/"><i class="lab la-linkedin-in"></i></a>
@@ -384,6 +384,10 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
       }
     });
   });
+
+  // Armar el mail con JS para evitar bots de spam
+  document.getElementById('email-contacto').innerHTML = 
+    '<a href="mailto:' + 'nahuelvaldez.di' + '@gmail.com' + '" class="text-brand">nahuelvaldez.di@gmail.com</a>';
 </script>
 </body>
 
