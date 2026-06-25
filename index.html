@@ -343,8 +343,8 @@ Tecnologías :
   <!-- //contenido -->
 
   <script src="./ASSETS/JS/bootstrap.bundle.min.js"></script>
-<script src="./ASSETS/JS/aos.js"></script>
-<script src="./ASSETS/JS/main.js"></script>
+  <script src="./ASSETS/JS/aos.js"></script>
+  <script src="./ASSETS/JS/main.js"></script>
 
 <script>
   let lastScrollY = window.scrollY;
@@ -364,6 +364,15 @@ Tecnologías :
     }
 
     lastScrollY = currentScrollY;
+  });
+  // Cerrar el menú mobile al hacer click en un link
+  const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+  const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      bsCollapse.hide();
+    });
   });
 </script>
 
