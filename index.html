@@ -279,7 +279,7 @@ Tecnologías :
                 <div class="bg-base p-4 rounded-4 shadow-effect">
                   <h5>Diseño Industrial</h5>
                   <p class="text-brand mb-2">UNLP (2014/2020)</p>
-                  <p class="mb-0">Formación académica orientada al desarrollo integral de productos, abarcando desde la investigación de usuario y la conceptualización morfológica hasta la viabilidad técnico-productiva. Enfoque centrado en la usabilidad, la optimización de recursos, la sostenibilidad y la gestión del diseño como disciplina estratégica, articulando el lenguaje visual y el desarrollo constructivo para resolver problemáticas tanto del entorno doméstico, como también de escala industrial</p>
+                  <p class="mb-0">Formación académica orientada al desarrollo integral de productos, abarcando desde la investigación de usuario y la conceptualización morfológica hasta la viabilidad técnico-productiva. Enfoque centrado en la usabilidad, la optimización de recursos, la sostenibilidad y la gestión del diseño como disciplina estratégica, articulando el lenguaje visual y el desarrollo constructivo para resolver problemáticas tanto del entorno doméstico, como también de escala industrial.</p>
                 </div>
               </div>
 
@@ -353,6 +353,11 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
   const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
 
   window.addEventListener('scroll', () => {
+    // Solo aplicar este comportamiento en mobile (menos de 992px)
+    if (window.innerWidth >= 992) {
+      return;
+    }
+
     const currentScrollY = window.scrollY;
     const menuAbierto = navbarCollapse.classList.contains('show');
 
@@ -374,7 +379,9 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
 
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
-      bsCollapse.hide();
+      if (window.innerWidth < 992) {
+        bsCollapse.hide();
+      }
     });
   });
 </script>
