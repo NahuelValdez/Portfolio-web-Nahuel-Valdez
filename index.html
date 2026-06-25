@@ -350,24 +350,27 @@ Tecnologías :
   let lastScrollY = window.scrollY;
   const navbar = document.querySelector('.navbar');
   const navbarCollapse = document.querySelector('.navbar-collapse');
+  const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
 
   window.addEventListener('scroll', () => {
     const currentScrollY = window.scrollY;
     const menuAbierto = navbarCollapse.classList.contains('show');
 
-    if (!menuAbierto) {
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        navbar.classList.add('nav-hidden');
-      } else {
-        navbar.classList.remove('nav-hidden');
-      }
+    if (menuAbierto) {
+      bsCollapse.hide();
+    }
+
+    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+      navbar.classList.add('nav-hidden');
+    } else {
+      navbar.classList.remove('nav-hidden');
     }
 
     lastScrollY = currentScrollY;
   });
+
   // Cerrar el menú mobile al hacer click en un link
   const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-  const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
 
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
@@ -375,7 +378,6 @@ Tecnologías :
     });
   });
 </script>
-
 </body>
 
 </html>
