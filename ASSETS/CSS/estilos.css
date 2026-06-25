@@ -190,3 +190,12 @@ img {
   height: 40px;
   font-size: 35px;
 }
+  /* NAVBAR - ocultar al scrollear */
+.navbar {
+  transition: transform 0.35s ease-in-out;
+}
+
+.navbar.nav-hidden {
+  transform: translateY(-100%);
+
+}
