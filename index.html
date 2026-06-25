@@ -343,8 +343,29 @@ Tecnologías :
   <!-- //contenido -->
 
   <script src="./ASSETS/JS/bootstrap.bundle.min.js"></script>
-  <script src="./ASSETS/JS/aos.js"></script>
-  <script src="./ASSETS/JS/main.js"></script>
+<script src="./ASSETS/JS/aos.js"></script>
+<script src="./ASSETS/JS/main.js"></script>
+
+<script>
+  let lastScrollY = window.scrollY;
+  const navbar = document.querySelector('.navbar');
+  const navbarCollapse = document.querySelector('.navbar-collapse');
+
+  window.addEventListener('scroll', () => {
+    const currentScrollY = window.scrollY;
+    const menuAbierto = navbarCollapse.classList.contains('show');
+
+    if (!menuAbierto) {
+      if (currentScrollY > lastScrollY && currentScrollY > 80) {
+        navbar.classList.add('nav-hidden');
+      } else {
+        navbar.classList.remove('nav-hidden');
+      }
+    }
+
+    lastScrollY = currentScrollY;
+  });
+</script>
 
 </body>
 
