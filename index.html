@@ -408,15 +408,15 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
     document.body.classList.toggle('menu-open');
   });
 
-// Ocultar bloque de foto al scrollear, solo en desktop (reacomoda el menú)
-  const brandBlock = document.querySelector('.navbar-brand');
+// Ocultar foto al scrollear, solo en desktop (reacomoda el menú)
+  const fotoPerfil = document.querySelector('.navbar-brand img');
 
   window.addEventListener('scroll', () => {
     if (window.innerWidth >= 992) {
       if (window.scrollY > 300) {
-        brandBlock.classList.add('brand-oculta');
+        fotoPerfil.classList.add('foto-oculta');
       } else {
-        brandBlock.classList.remove('brand-oculta');
+        fotoPerfil.classList.remove('foto-oculta');
       }
     }
   });
