@@ -401,7 +401,28 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
     togglerBtn.classList.toggle('active');
     document.body.classList.toggle('menu-open');
   });
+
+  // Animación hamburguesa -> X + bloqueo de scroll
+  togglerBtn.addEventListener('click', () => {
+    togglerBtn.classList.toggle('active');
+    document.body.classList.toggle('menu-open');
+  });
+
+  // Ocultar foto de perfil al scrollear, solo en desktop
+  const fotoPerfil = document.querySelector('.navbar-brand img');
+
+  window.addEventListener('scroll', () => {
+    if (window.innerWidth >= 992) {
+      if (window.scrollY > 300) {
+        fotoPerfil.classList.add('foto-oculta');
+      } else {
+        fotoPerfil.classList.remove('foto-oculta');
+      }
+    }
+  });
+
 </script>
+  
 </body>
 
 </html>
