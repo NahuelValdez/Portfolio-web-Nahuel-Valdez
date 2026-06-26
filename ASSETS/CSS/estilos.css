@@ -199,3 +199,34 @@ img {
   transform: translateY(-100%) !important;
 
 }
+
+/* Animación menú hamburguesa -> X */
+.navbar-toggler {
+  border: none;
+  padding: 4px 8px;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.toggler-bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  background-color: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar-toggler.active .bar1 {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.navbar-toggler.active .bar2 {
+  opacity: 0;
+}
+
+.navbar-toggler.active .bar3 {
+  transform: translateY(-8px) rotate(-45deg);
+}
