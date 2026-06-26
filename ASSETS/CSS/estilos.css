@@ -254,6 +254,7 @@ img {
 
   .navbar-nav {
     text-align: center;
+    margin: 0 !important;
   }
 
   .navbar-nav .nav-item {
@@ -264,8 +265,9 @@ img {
     font-size: 32px;
     font-weight: 700;
   }
-}
 
-body.menu-open {
-  overflow: hidden;
+  .navbar-toggler {
+    position: relative;
+    z-index: 1060;
+  }
 }
