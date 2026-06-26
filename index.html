@@ -367,6 +367,7 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
     if (menuAbierto) {
       bsCollapse.hide();
       togglerBtn.classList.remove('active');
+      document.body.classList.remove('menu-open');
     }
 
     if (currentScrollY > lastScrollY && currentScrollY > 80) {
@@ -386,6 +387,7 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
       if (window.innerWidth < 992) {
         bsCollapse.hide();
         togglerBtn.classList.remove('active');
+        document.body.classList.remove('menu-open');
       }
     });
   });
@@ -394,9 +396,10 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
   document.getElementById('email-contacto').innerHTML = 
     '<a href="mailto:' + 'nahuelvaldez.di' + '@gmail.com' + '" class="text-brand">nahuelvaldez.di@gmail.com</a>';
 
-  // Animación hamburguesa -> X
+  // Animación hamburguesa -> X + bloqueo de scroll
   togglerBtn.addEventListener('click', () => {
     togglerBtn.classList.toggle('active');
+    document.body.classList.toggle('menu-open');
   });
 </script>
 </body>
