@@ -234,19 +234,20 @@ img {
 /* Menú mobile a pantalla completa */
 @media (max-width: 991px) {
   .navbar-collapse {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: var(--color-base2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: translateX(100%);
-    transition: transform 0.4s ease-in-out;
-    z-index: 1050;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--color-base2);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 110px;
+  transform: translateX(100%);
+  transition: transform 0.4s ease-in-out;
+  z-index: 1050;
+}
 
   .navbar-collapse.show {
     transform: translateX(0);
