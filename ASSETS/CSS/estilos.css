@@ -273,3 +273,15 @@ img {
     z-index: 1060;
   }
 }
+
+@media (min-width: 992px) {
+  .navbar-brand img {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .navbar-brand img.foto-oculta {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+  }
+}
