@@ -296,7 +296,7 @@ img {
   }
 
   .navbar-nav .nav-item {
-    transition: margin 0.4s ease;
+    transition: margin 2s ease;
   }
 
   .navbar-nav .nav-link {
