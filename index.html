@@ -353,6 +353,7 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
   const navbar = document.querySelector('.navbar');
   const navbarCollapse = document.querySelector('.navbar-collapse');
   const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
+  const togglerBtn = document.querySelector('.navbar-toggler');
 
   window.addEventListener('scroll', () => {
     // Solo aplicar este comportamiento en mobile (menos de 992px)
@@ -365,6 +366,7 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
 
     if (menuAbierto) {
       bsCollapse.hide();
+      togglerBtn.classList.remove('active');
     }
 
     if (currentScrollY > lastScrollY && currentScrollY > 80) {
@@ -383,6 +385,7 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
     link.addEventListener('click', () => {
       if (window.innerWidth < 992) {
         bsCollapse.hide();
+        togglerBtn.classList.remove('active');
       }
     });
   });
@@ -390,6 +393,11 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
   // Armar el mail con JS para evitar bots de spam
   document.getElementById('email-contacto').innerHTML = 
     '<a href="mailto:' + 'nahuelvaldez.di' + '@gmail.com' + '" class="text-brand">nahuelvaldez.di@gmail.com</a>';
+
+  // Animación hamburguesa -> X
+  togglerBtn.addEventListener('click', () => {
+    togglerBtn.classList.toggle('active');
+  });
 </script>
 </body>
 
