@@ -312,12 +312,8 @@ img {
   }
 }
 
-311    font-size: 22px;
-312  }
-313  }
-314
-315  @media (max-width: 991px) {
-316    nav[data-aos="fade-right"] {
-317      transform: translate3d(0, -60px, 0) !important;
-318    }
-319  }
+@media (max-width: 991px) {
+  nav[data-aos="fade-right"] {
+    transform: translate3d(0, -60px, 0) !important;
+  }
+}
