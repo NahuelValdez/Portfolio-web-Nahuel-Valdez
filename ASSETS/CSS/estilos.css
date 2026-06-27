@@ -192,7 +192,7 @@ img {
 }
   /* NAVBAR - ocultar al scrollear */
 .navbar {
-  transition: transform 0.05s ease-in-out;
+  transition: transform 0.05s ease-in-out !important;
 }
 
 .navbar.nav-hidden {
