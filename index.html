@@ -353,29 +353,39 @@ Herramientas y metodologías: Diseño enfocado en el usuario, bases de software,
   const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
   const togglerBtn = document.querySelector('.navbar-toggler');
 
-  window.addEventListener('scroll', () => {
-    // Solo aplicar este comportamiento en mobile (menos de 992px)
-    if (window.innerWidth >= 992) {
-      return;
-    }
+  let scrollTicking = false;
 
-    const currentScrollY = window.scrollY;
-    const menuAbierto = navbarCollapse.classList.contains('show');
+function manejarScroll() {
+  if (window.innerWidth >= 992) {
+    scrollTicking = false;
+    return;
+  }
 
-    if (menuAbierto) {
-      bsCollapse.hide();
-      togglerBtn.classList.remove('active');
-      document.body.classList.remove('menu-open');
-    }
+  const currentScrollY = window.scrollY;
+  const menuAbierto = navbarCollapse.classList.contains('show');
 
-    if (currentScrollY > lastScrollY && currentScrollY > 20) {
-      navbar.classList.add('nav-hidden');
-    } else {
-      navbar.classList.remove('nav-hidden');
-    }
+  if (menuAbierto) {
+    bsCollapse.hide();
+    togglerBtn.classList.remove('active');
+    document.body.classList.remove('menu-open');
+  }
 
-    lastScrollY = currentScrollY;
-  });
+  if (currentScrollY > lastScrollY && currentScrollY > 20) {
+    navbar.classList.add('nav-hidden');
+  } else {
+    navbar.classList.remove('nav-hidden');
+  }
+
+  lastScrollY = currentScrollY;
+  scrollTicking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!scrollTicking) {
+    requestAnimationFrame(manejarScroll);
+    scrollTicking = true;
+  }
+});
 
   // Cerrar el menú mobile al hacer click en un link
   const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
