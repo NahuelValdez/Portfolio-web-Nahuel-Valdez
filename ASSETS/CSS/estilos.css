@@ -92,6 +92,16 @@ img {
 
 .navbar .nav-link:hover {
   color: var(--color-brand);
+  animation: latido 0.8s ease-in-out infinite;
+}
+
+@keyframes latido {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
 }
 
 .navbar .nav-link.active {
