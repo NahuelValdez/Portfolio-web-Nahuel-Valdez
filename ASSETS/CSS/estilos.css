@@ -148,6 +148,14 @@ img {
   transform: scale(1);
   opacity: 1;
 }
+
+  .navbar-brand {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  line-height: 0;
+}
+  
   /* contenido */
   #contenido {
     padding-left: var(--sidbar-width);
