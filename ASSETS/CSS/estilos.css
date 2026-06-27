@@ -313,7 +313,7 @@ img {
 }
 
 @media (max-width: 991px) {
-  nav[data-aos="fade-right"] {
+  nav[data-aos="fade-right"]:not(.aos-animate) {
     transform: translate3d(0, -60px, 0) !important;
   }
 }
