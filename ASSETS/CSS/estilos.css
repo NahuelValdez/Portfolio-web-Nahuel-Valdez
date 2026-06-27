@@ -119,8 +119,13 @@ img {
   }
 
   .navbar-brand img {
-    border: 6px solid var(--color-brand);
-  }
+  border: 6px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.navbar-brand:hover img {
+  border-color: var(--color-brand);
+}
 
   /* contenido */
   #contenido {
