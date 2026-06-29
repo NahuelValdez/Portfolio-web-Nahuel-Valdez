@@ -276,7 +276,7 @@ img {
 
 #Proyectos .container {
   position: relative;
-  z-index: 1;
+  z-index: 0.4;
 }
 
 #Proyectos::after {
@@ -324,7 +324,7 @@ img {
 }
 
 #home.grilla-activa::before {
-  opacity: 1;
+  opacity: 0.4;
 }
 
 #home .container {
