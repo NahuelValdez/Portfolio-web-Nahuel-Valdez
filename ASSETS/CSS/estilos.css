@@ -251,9 +251,14 @@ img {
   color: #fff;
 }
 
+#email-contacto a {
+  display: inline-block;
+}
+
 #email-contacto a:hover {
   animation: latido 0.8s ease-in-out infinite;
 }
+
 .lab {
   width: 35px;
   height: 40px;
