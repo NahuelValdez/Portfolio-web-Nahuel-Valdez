@@ -257,19 +257,13 @@ img {
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(to right, rgba(186, 255, 223, 0.35) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(186, 255, 223, 0.35) 1.5px, transparent 1.5px),
-    linear-gradient(to right, rgba(186, 255, 223, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(186, 255, 223, 0.15) 1px, transparent 1px);
+    linear-gradient(to right, rgba(186, 255, 223, 0.08) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(186, 255, 223, 0.08) 1.5px, transparent 1.5px),
+    linear-gradient(to right, rgba(186, 255, 223, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(186, 255, 223, 0.04) 1px, transparent 1px);
   background-size: 140px 140px, 140px 140px, 28px 28px, 28px 28px;
   pointer-events: none;
   z-index: 0;
-  opacity: 1;
-}
-
-#Proyectos.cursor-activo::before {
-  -webkit-mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), white 0%, rgba(255,255,255,0.25) 45%);
-  mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), white 0%, rgba(255,255,255,0.25) 45%);
 }
 
 #Proyectos .container {
@@ -308,19 +302,13 @@ img {
   width: 100%;
   height: 100%;
   background-image:
-    linear-gradient(to right, rgba(186, 255, 223, 0.35) 1.5px, transparent 1.5px),
-    linear-gradient(to bottom, rgba(186, 255, 223, 0.35) 1.5px, transparent 1.5px),
-    linear-gradient(to right, rgba(186, 255, 223, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(186, 255, 223, 0.15) 1px, transparent 1px);
+    linear-gradient(to right, rgba(186, 255, 223, 0.08) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(186, 255, 223, 0.08) 1.5px, transparent 1.5px),
+    linear-gradient(to right, rgba(186, 255, 223, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(186, 255, 223, 0.04) 1px, transparent 1px);
   background-size: 140px 140px, 140px 140px, 28px 28px, 28px 28px;
   pointer-events: none;
   z-index: 0;
-  opacity: 1;
-}
-
-#home.cursor-activo::before {
-  -webkit-mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), white 0%, rgba(255,255,255,0.25) 45%);
-  mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), white 0%, rgba(255,255,255,0.25) 45%);
 }
 
 #home .container {
@@ -344,6 +332,30 @@ img {
   );
   pointer-events: none;
   z-index: 0;
+}
+
+.grilla-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(to right, rgba(186, 255, 223, 0.35) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(186, 255, 223, 0.35) 1.5px, transparent 1.5px),
+    linear-gradient(to right, rgba(186, 255, 223, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(186, 255, 223, 0.15) 1px, transparent 1px);
+  background-size: 140px 140px, 140px 140px, 28px 28px, 28px 28px;
+  -webkit-mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), white 0%, transparent 40%);
+  mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), white 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 2.5s ease;
+}
+
+.cursor-activo .grilla-glow {
+  opacity: 1;
 }
 
 /* iconos redes sociales */
@@ -511,10 +523,16 @@ img {
 }
 
 @media (max-width: 991px) {
+  .grilla-glow {
+    display: none;
+  }
+
   #home::before,
   #Proyectos::before {
-    -webkit-mask-image: none;
-    mask-image: none;
-    opacity: 0.4;
+    background-image:
+      linear-gradient(to right, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
+      linear-gradient(to bottom, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
+      linear-gradient(to right, rgba(186, 255, 223, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(186, 255, 223, 0.1) 1px, transparent 1px);
   }
 }
