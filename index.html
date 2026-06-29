@@ -444,7 +444,7 @@ const seccionProyectos = document.getElementById('Proyectos');
 let animacionGrilla = null;
 
 seccionProyectos.addEventListener('mousemove', (e) => {
-  seccionProyectos.classList.add('grilla-activa');
+  seccionProyectos.classList.add('cursor-activo');
   if (animacionGrilla) {
     cancelAnimationFrame(animacionGrilla);
     animacionGrilla = null;
@@ -457,7 +457,7 @@ seccionProyectos.addEventListener('mousemove', (e) => {
 });
 
 seccionProyectos.addEventListener('mouseleave', () => {
-  seccionProyectos.classList.remove('grilla-activa');
+  seccionProyectos.classList.remove('cursor-activo');
 
   const estiloActual = getComputedStyle(seccionProyectos);
   let x = parseFloat(estiloActual.getPropertyValue('--mx')) || 50;
@@ -481,7 +481,7 @@ const seccionHome = document.getElementById('home');
 let animacionGrillaHome = null;
 
 seccionHome.addEventListener('mousemove', (e) => {
-  seccionHome.classList.add('grilla-activa');
+  seccionHome.classList.add('cursor-activo');
   if (animacionGrillaHome) {
     cancelAnimationFrame(animacionGrillaHome);
     animacionGrillaHome = null;
@@ -494,7 +494,7 @@ seccionHome.addEventListener('mousemove', (e) => {
 });
 
 seccionHome.addEventListener('mouseleave', () => {
-  seccionHome.classList.remove('grilla-activa');
+  seccionHome.classList.remove('cursor-activo');
 
   const estiloActual = getComputedStyle(seccionHome);
   let x = parseFloat(estiloActual.getPropertyValue('--mx')) || 50;
