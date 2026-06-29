@@ -505,3 +505,12 @@ img {
     transform: translate3d(0, -60px, 0) !important;
   }
 }
+
+@media (max-width: 991px) {
+  #home::before,
+  #Proyectos::before {
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 0.4;
+  }
+}
