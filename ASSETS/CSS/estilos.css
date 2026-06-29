@@ -270,10 +270,6 @@ img {
   transition: mask-position 0.1s linear;
 }
 
-#Proyectos.grilla-activa::before {
-  opacity: 1;
-}
-
 #Proyectos .container {
   position: relative;
   z-index: 0.4;
@@ -321,10 +317,6 @@ img {
   z-index: 0;
   opacity: 1;
   transition: mask-position 0.1s linear;
-}
-
-#home.grilla-activa::before {
-  opacity: 0.4;
 }
 
 #home .container {
