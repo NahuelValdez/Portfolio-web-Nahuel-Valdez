@@ -320,7 +320,7 @@ img {
   pointer-events: none;
   z-index: 0;
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transition: opacity 2.5s ease;
 }
 
 #home.grilla-activa::before {
