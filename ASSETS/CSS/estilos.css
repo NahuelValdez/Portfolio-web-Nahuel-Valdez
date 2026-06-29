@@ -238,6 +238,12 @@ img {
 
 /* //card */
 
+.separador-hero {
+  width: 1px;
+  height: 28px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 /* iconos redes sociales */
 
 .social-icons a {
