@@ -267,7 +267,7 @@ img {
   pointer-events: none;
   z-index: 0;
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transition: opacity 2.5s ease;
 }
 
 #Proyectos.grilla-activa::before {
@@ -511,5 +511,12 @@ img {
 @media (max-width: 991px) {
   nav[data-aos="fade-right"]:not(.aos-animate) {
     transform: translate3d(0, -60px, 0) !important;
+  }
+}
+
+@media (max-width: 991px) {
+  #home::before,
+  #Proyectos::before {
+    opacity: 1 !important;
   }
 }
