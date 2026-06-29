@@ -264,7 +264,12 @@ img {
   mask-image: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), black 0%, transparent 45%);
   pointer-events: none;
   z-index: 0;
-  transition: mask-position 0.05s linear;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#Proyectos.grilla-activa::before {
+  opacity: 1;
 }
 
 #Proyectos .container {
