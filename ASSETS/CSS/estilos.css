@@ -513,10 +513,3 @@ img {
     transform: translate3d(0, -60px, 0) !important;
   }
 }
-
-@media (max-width: 991px) {
-  #home::before,
-  #Proyectos::before {
-    opacity: 1 !important;
-  }
-}
