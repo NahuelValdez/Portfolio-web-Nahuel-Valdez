@@ -476,6 +476,43 @@ seccionProyectos.addEventListener('mouseleave', () => {
   animacionGrilla = requestAnimationFrame(volverAlCentro);
 });
 
+  // Grilla de Inicio: la zona nítida sigue al cursor, y se desvanece al salir
+const seccionHome = document.getElementById('home');
+let animacionGrillaHome = null;
+
+seccionHome.addEventListener('mousemove', (e) => {
+  seccionHome.classList.add('grilla-activa');
+  if (animacionGrillaHome) {
+    cancelAnimationFrame(animacionGrillaHome);
+    animacionGrillaHome = null;
+  }
+  const rect = seccionHome.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  seccionHome.style.setProperty('--mx', x + '%');
+  seccionHome.style.setProperty('--my', y + '%');
+});
+
+seccionHome.addEventListener('mouseleave', () => {
+  seccionHome.classList.remove('grilla-activa');
+
+  const estiloActual = getComputedStyle(seccionHome);
+  let x = parseFloat(estiloActual.getPropertyValue('--mx')) || 50;
+  let y = parseFloat(estiloActual.getPropertyValue('--my')) || 50;
+
+  function volverAlCentro() {
+    x += (50 - x) * 0.08;
+    y += (50 - y) * 0.08;
+    seccionHome.style.setProperty('--mx', x + '%');
+    seccionHome.style.setProperty('--my', y + '%');
+
+    if (Math.abs(x - 50) > 0.3 || Math.abs(y - 50) > 0.3) {
+      animacionGrillaHome = requestAnimationFrame(volverAlCentro);
+    }
+  }
+  animacionGrillaHome = requestAnimationFrame(volverAlCentro);
+});
+
 </script>
   
 </body>
