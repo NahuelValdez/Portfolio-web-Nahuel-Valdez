@@ -179,6 +179,7 @@ img {
 .btn-brand:focus {
   background-color: var(--color-base);
   color: var(--color-brand);
+  animation: latido 0.8s ease-in-out infinite;
 }
 
 .link-custom {
