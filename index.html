@@ -439,6 +439,17 @@ document.querySelectorAll('.card-custom-image').forEach(img => {
     }
   });
 
+  // Grilla de Proyectos: la zona nítida sigue al cursor
+const seccionProyectos = document.getElementById('Proyectos');
+
+seccionProyectos.addEventListener('mousemove', (e) => {
+  const rect = seccionProyectos.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * 100;
+  const y = ((e.clientY - rect.top) / rect.height) * 100;
+  seccionProyectos.style.setProperty('--mx', x + '%');
+  seccionProyectos.style.setProperty('--my', y + '%');
+});
+
 </script>
   
 </body>
