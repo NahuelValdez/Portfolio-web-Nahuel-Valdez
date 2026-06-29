@@ -251,6 +251,10 @@ img {
   color: #fff;
 }
 
+.social-icons a:first-child {
+  margin-left: -8px;
+}
+
 .social-icons a:first-child i {
   font-size: 36px;
 }
