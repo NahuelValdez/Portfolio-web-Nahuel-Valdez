@@ -251,6 +251,11 @@ img {
   color: #fff;
 }
 
+.social-icons a:hover {
+  color: var(--color-brand);
+  animation: latido 0.8s ease-in-out infinite;
+}
+
 .social-icons a:first-child {
   margin-left: -8px;
 }
@@ -261,10 +266,6 @@ img {
 
 #email-contacto a {
   display: inline-block;
-}
-
-#email-contacto a:hover {
-  animation: latido 0.8s ease-in-out infinite;
 }
 
 .lab {
