@@ -265,7 +265,7 @@ img {
   pointer-events: none;
   z-index: 0;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 1.2s ease;
 }
 
 #Proyectos.grilla-activa::before {
