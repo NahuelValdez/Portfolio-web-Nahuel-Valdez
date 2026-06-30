@@ -501,9 +501,8 @@ seccionHome.addEventListener('mouseleave', () => {
 
     if (Math.abs(x - 50) > 0.3 || Math.abs(y - 50) > 0.3) {
       animacionGrillaHome = requestAnimationFrame(volverAlCentro);
-    }
-  }
-  
+});
+
   // Navbar: estilo "Inicio" (foto arriba + texto grande) solo en la sección home
 const seccionesObservadas = document.querySelectorAll('section');
 const observerNavbar = new IntersectionObserver((entradas) => {
