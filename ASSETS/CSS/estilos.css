@@ -554,3 +554,17 @@ img {
       linear-gradient(to bottom, rgba(186, 255, 223, 0.1) 1px, transparent 1px);
   }
 }
+
+@media (min-width: 992px) {
+  .navbar[data-aos] {
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .navbar-nav .nav-item[data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
