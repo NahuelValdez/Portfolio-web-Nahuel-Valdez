@@ -517,9 +517,9 @@ img {
     padding: 0 !important;
   }
 
-  .navbar-nav .nav-item {
-    transition: margin 1.2s ease;
-  }
+  .navbar.listo .navbar-nav .nav-item {
+  transition: margin 1.2s ease;
+}
 
   .navbar-nav .nav-link {
     transition: font-size 0.4s ease;
