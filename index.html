@@ -519,11 +519,11 @@ const observerNavbar = new IntersectionObserver((entradas) => {
 
 seccionesObservadas.forEach(seccion => observerNavbar.observe(seccion));
 
-  // Activa las transiciones del navbar recién después de que cargó todo (evita el "salto" inicial)
+  // Activa las transiciones del navbar recién después de que TERMINÓ toda la entrada (evita el salto)
 window.addEventListener('load', () => {
   setTimeout(() => {
     navbar.classList.add('listo');
-  }, 1600);
+  }, 2600);
 });
 
 </script>
