@@ -499,8 +499,11 @@ seccionHome.addEventListener('mouseleave', () => {
     seccionHome.style.setProperty('--mx', x + '%');
     seccionHome.style.setProperty('--my', y + '%');
 
-    if (Math.abs(x - 50) > 0.3 || Math.abs(y - 50) > 0.3) {
+   if (Math.abs(x - 50) > 0.3 || Math.abs(y - 50) > 0.3) {
       animacionGrillaHome = requestAnimationFrame(volverAlCentro);
+    }
+  }
+  animacionGrillaHome = requestAnimationFrame(volverAlCentro);
 });
 
   // Navbar: estilo "Inicio" (foto arriba + texto grande) solo en la sección home
