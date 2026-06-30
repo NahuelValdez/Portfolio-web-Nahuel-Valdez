@@ -574,6 +574,47 @@ window.addEventListener('load', () => {
   }, 3000);
 });
 
+  // Carrusel de Proyectos (solo desktop)
+const items = document.querySelectorAll('.carousel-item');
+const dots = document.querySelectorAll('.carousel-dot');
+let indiceActual = 0;
+
+function actualizarCarrusel() {
+  items.forEach((item, i) => {
+    item.classList.remove('activo', 'anterior', 'siguiente');
+    if (i === indiceActual) {
+      item.classList.add('activo');
+    } else if (i === (indiceActual - 1 + items.length) % items.length) {
+      item.classList.add('anterior');
+    } else if (i === (indiceActual + 1) % items.length) {
+      item.classList.add('siguiente');
+    }
+  });
+
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('activo', i === indiceActual);
+  });
+}
+
+document.getElementById('flechaIzq').addEventListener('click', () => {
+  indiceActual = (indiceActual - 1 + items.length) % items.length;
+  actualizarCarrusel();
+});
+
+document.getElementById('flechaDer').addEventListener('click', () => {
+  indiceActual = (indiceActual + 1) % items.length;
+  actualizarCarrusel();
+});
+
+dots.forEach((dot) => {
+  dot.addEventListener('click', () => {
+    indiceActual = parseInt(dot.dataset.index);
+    actualizarCarrusel();
+  });
+});
+
+actualizarCarrusel();
+
 </script>
   
 </body>
