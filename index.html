@@ -519,6 +519,20 @@ seccionHome.addEventListener('mouseleave', () => {
   margin: 25px 0;
 }
 
+  // Navbar: estilo "Inicio" (foto arriba + texto grande) solo en la sección home
+const seccionesObservadas = document.querySelectorAll('section');
+const observerNavbar = new IntersectionObserver((entradas) => {
+  entradas.forEach(entrada => {
+    if (entrada.target.id === 'home' && entrada.isIntersecting) {
+      navbar.classList.add('en-inicio');
+    } else if (entrada.target.id === 'home' && !entrada.isIntersecting) {
+      navbar.classList.remove('en-inicio');
+    }
+  });
+}, { threshold: 0.5 });
+
+seccionesObservadas.forEach(seccion => observerNavbar.observe(seccion));
+
 </script>
   
 </body>
