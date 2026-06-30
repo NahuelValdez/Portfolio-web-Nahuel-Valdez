@@ -504,12 +504,6 @@ img {
   margin: 25px 0;
 }
 
-  #home ~ * .navbar .container.flex-lg-column,
-body:has(#home:target) .navbar .container.flex-lg-column {
-  justify-content: flex-start;
-  padding-top: 60px;
-}
-
   .navbar-brand img {
     transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
     max-height: 200px;
