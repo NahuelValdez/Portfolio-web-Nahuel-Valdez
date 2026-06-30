@@ -296,6 +296,7 @@ img {
 #home {
   position: relative;
   overflow: hidden;
+  padding-left: 3rem;
 }
 
 #home::before {
