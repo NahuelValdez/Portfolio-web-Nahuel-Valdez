@@ -491,6 +491,19 @@ img {
     justify-content: center;
   }
 
+  .navbar.en-inicio .container.flex-lg-column {
+  justify-content: flex-start;
+  padding-top: 60px;
+}
+
+.navbar.en-inicio .navbar-nav .nav-link {
+  font-size: 22px;
+}
+
+.navbar.en-inicio .navbar-nav .nav-item {
+  margin: 25px 0;
+}
+
   #home ~ * .navbar .container.flex-lg-column,
 body:has(#home:target) .navbar .container.flex-lg-column {
   justify-content: flex-start;
