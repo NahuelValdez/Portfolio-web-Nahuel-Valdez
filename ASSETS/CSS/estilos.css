@@ -493,7 +493,7 @@ img {
 
   .navbar.en-inicio .container.flex-lg-column {
   justify-content: flex-start;
-  padding-top: 60px;
+  padding-top: 24px;
 }
 
 .navbar.en-inicio .navbar-nav .nav-link {
