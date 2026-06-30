@@ -504,7 +504,6 @@ img {
     display: none;
   }
 
-  #home::before,
   #Proyectos::before {
     background-image:
       linear-gradient(to right, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
