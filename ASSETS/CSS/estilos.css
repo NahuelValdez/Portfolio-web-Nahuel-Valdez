@@ -353,12 +353,6 @@ img {
   pointer-events: none;
 }
 
-.card-slide .card-custom-content {
-  max-height: none !important;
-  opacity: 1 !important;
-  padding: 1.5rem !important;
-}
-
 .card-slide.activo {
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
