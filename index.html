@@ -455,9 +455,11 @@ window.addEventListener('scroll', () => {
     document.body.classList.toggle('menu-open');
   });
 
-  // Mostrar/ocultar texto de la tarjeta al hacer click en la imagen
+  // Mostrar/ocultar texto al hacer click en la imagen (tarjetas sueltas y carrusel)
 document.querySelectorAll('.card-custom-image').forEach(img => {
   img.addEventListener('click', () => {
+    const enCarrusel = img.closest('.carousel-track');
+    if (enCarrusel) detenerAutoplay();
     const card = img.closest('.card-custom');
     const contenido = card.querySelector('.card-custom-content');
     contenido.classList.toggle('activo');
