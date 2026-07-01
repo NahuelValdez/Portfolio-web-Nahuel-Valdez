@@ -373,18 +373,19 @@ img {
 }
 
   .carousel-flecha {
-    background: var(--color-base);
-    color: var(--color-brand);
-    border: none;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    font-size: 22px;
-    cursor: pointer;
-    z-index: 4;
-    transition: all 0.3s ease;
-  }
-
+  background: var(--color-base);
+  color: var(--color-brand);
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 4;
+  transition: all 0.3s ease;
+  display: none;
+}
+  
   .carousel-flecha:hover {
     background: var(--color-brand);
     color: var(--color-base2);
