@@ -582,6 +582,11 @@ let indiceActual = 0;
 function actualizarCarrusel() {
   items.forEach((item, i) => {
     item.classList.remove('activo', 'anterior', 'siguiente');
+
+    // Cerrar el texto al cambiar de tarjeta
+    const contenido = item.querySelector('.card-custom-content');
+    if (contenido) contenido.classList.remove('activo');
+
     if (i === indiceActual) {
       item.classList.add('activo');
     } else if (i === (indiceActual - 1 + items.length) % items.length) {
@@ -590,6 +595,11 @@ function actualizarCarrusel() {
       item.classList.add('siguiente');
     }
   });
+
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('activo', i === indiceActual);
+  });
+}
 
   dots.forEach((dot, i) => {
     dot.classList.toggle('activo', i === indiceActual);
