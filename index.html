@@ -601,11 +601,6 @@ function actualizarCarrusel() {
   });
 }
 
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('activo', i === indiceActual);
-  });
-}
-
 document.getElementById('flechaIzq').addEventListener('click', () => {
   indiceActual = (indiceActual - 1 + items.length) % items.length;
   actualizarCarrusel();
