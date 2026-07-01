@@ -343,40 +343,40 @@ img {
     height: 100%;
   }
 
-  .carousel-item {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 320px;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-    opacity: 0;
-    pointer-events: none;
-  }
+  .card-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
 
-  .carousel-item .card-custom-content {
-    max-height: none !important;
-    opacity: 1 !important;
-    padding: 1.5rem !important;
-  }
+.card-slide .card-custom-content {
+  max-height: none !important;
+  opacity: 1 !important;
+  padding: 1.5rem !important;
+}
 
-  .carousel-item.activo {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-    z-index: 3;
-    pointer-events: auto;
-  }
+.card-slide.activo {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  z-index: 3;
+  pointer-events: auto;
+}
 
-  .carousel-item.anterior {
-    transform: translate(-130%, -50%) scale(0.85);
-    opacity: 0.5;
-    z-index: 2;
-  }
+.card-slide.anterior {
+  transform: translate(-130%, -50%) scale(0.85);
+  opacity: 0.5;
+  z-index: 2;
+}
 
-  .carousel-item.siguiente {
-    transform: translate(30%, -50%) scale(0.85);
-    opacity: 0.5;
-    z-index: 2;
-  }
+.card-slide.siguiente {
+  transform: translate(30%, -50%) scale(0.85);
+  opacity: 0.5;
+  z-index: 2;
+}
 
   .carousel-flecha {
     background: var(--color-base);
