@@ -614,16 +614,6 @@ function detenerAutoplay() {
   }
 }
 
-// Click en imagen: detiene autoplay y despliega texto
-document.querySelectorAll('.carousel-track .card-custom-image').forEach(img => {
-  img.addEventListener('click', () => {
-    detenerAutoplay();
-    const card = img.closest('.card-custom');
-    const contenido = card.querySelector('.card-custom-content');
-    contenido.classList.toggle('activo');
-  });
-});
-
 dots.forEach((dot) => {
   dot.addEventListener('click', () => {
     indiceActual = parseInt(dot.dataset.index);
