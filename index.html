@@ -578,15 +578,13 @@ window.addEventListener('load', () => {
 const items = document.querySelectorAll('.card-slide');
 const dots = document.querySelectorAll('.carousel-dot');
 let indiceActual = 0;
+let autoplayCarrusel = null;
 
 function actualizarCarrusel() {
   items.forEach((item, i) => {
     item.classList.remove('activo', 'anterior', 'siguiente');
-
-    // Cerrar el texto al cambiar de tarjeta
     const contenido = item.querySelector('.card-custom-content');
     if (contenido) contenido.classList.remove('activo');
-
     if (i === indiceActual) {
       item.classList.add('activo');
     } else if (i === (indiceActual - 1 + items.length) % items.length) {
@@ -595,20 +593,33 @@ function actualizarCarrusel() {
       item.classList.add('siguiente');
     }
   });
-
   dots.forEach((dot, i) => {
     dot.classList.toggle('activo', i === indiceActual);
   });
 }
 
-document.getElementById('flechaIzq').addEventListener('click', () => {
-  indiceActual = (indiceActual - 1 + items.length) % items.length;
-  actualizarCarrusel();
-});
+function iniciarAutoplay() {
+  autoplayCarrusel = setInterval(() => {
+    indiceActual = (indiceActual + 1) % items.length;
+    actualizarCarrusel();
+  }, 2800);
+}
 
-document.getElementById('flechaDer').addEventListener('click', () => {
-  indiceActual = (indiceActual + 1) % items.length;
-  actualizarCarrusel();
+function detenerAutoplay() {
+  if (autoplayCarrusel) {
+    clearInterval(autoplayCarrusel);
+    autoplayCarrusel = null;
+  }
+}
+
+// Click en imagen: detiene autoplay y despliega texto
+document.querySelectorAll('.carousel-track .card-custom-image').forEach(img => {
+  img.addEventListener('click', () => {
+    detenerAutoplay();
+    const card = img.closest('.card-custom');
+    const contenido = card.querySelector('.card-custom-content');
+    contenido.classList.toggle('activo');
+  });
 });
 
 dots.forEach((dot) => {
@@ -619,7 +630,8 @@ dots.forEach((dot) => {
 });
 
 actualizarCarrusel();
-
+iniciarAutoplay();
+  
 </script>
   
 </body>
