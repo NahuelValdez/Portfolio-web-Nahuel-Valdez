@@ -614,6 +614,24 @@ function detenerAutoplay() {
   }
 }
 
+  // Click en tarjeta lateral para navegar manualmente
+document.getElementById('carouselTrack').addEventListener('click', (e) => {
+  const slide = e.target.closest('.card-slide');
+  if (!slide) return;
+
+  if (slide.classList.contains('siguiente')) {
+    detenerAutoplay();
+    indiceActual = (indiceActual + 1) % items.length;
+    actualizarCarrusel();
+  } else if (slide.classList.contains('anterior')) {
+    detenerAutoplay();
+    indiceActual = (indiceActual - 1 + items.length) % items.length;
+    actualizarCarrusel();
+  }
+});
+
+dots.forEach((dot) => {   ← esta línea ya existe, es la línea 617
+
 dots.forEach((dot) => {
   dot.addEventListener('click', () => {
     indiceActual = parseInt(dot.dataset.index);
