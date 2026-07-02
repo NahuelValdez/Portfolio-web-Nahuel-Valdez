@@ -658,10 +658,11 @@ img {
   }
 
   .navbar-brand img {
-    max-height: 170px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
     border-width: 6px;
   }
-
   .navbar:not(.en-inicio) .navbar-brand {
     opacity: 0;
     transform: translateY(-30px) scale(0.6);
@@ -695,10 +696,10 @@ img {
 
   /* Posiciones en INICIO (grandes, debajo de la foto, centrado) */
   .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { top: 300px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: 352px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: 404px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: 456px; }
-
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: 342px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: 384px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: 426px; }
+  
   /* Posiciones al SALIR (chicas, apiladas, arriba de todo) */
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { top: 30px; }
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { top: 60px; }
