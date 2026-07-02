@@ -637,112 +637,110 @@ window.addEventListener('load', () => {
 });
 
   // Carrusel de Proyectos (solo desktop)
-const items = document.querySelectorAll('.card-slide');
-const dots = document.querySelectorAll('.carousel-dot');
-let indiceActual = 0;
-let autoplayCarrusel = null;
+if (window.innerWidth >= 992) {
+  const items = document.querySelectorAll('.card-slide');
+  const dots = document.querySelectorAll('.carousel-dot');
+  let indiceActual = 0;
+  let autoplayCarrusel = null;
 
-function actualizarCarrusel() {
-  items.forEach((item, i) => {
-    item.classList.remove('activo', 'anterior', 'siguiente');
-    const contenido = item.querySelector('.card-custom-content');
-    if (contenido) contenido.classList.remove('activo');
-    if (i === indiceActual) {
-      item.classList.add('activo');
-    } else if (i === (indiceActual - 1 + items.length) % items.length) {
-      item.classList.add('anterior');
-    } else if (i === (indiceActual + 1) % items.length) {
-      item.classList.add('siguiente');
-    }
-  });
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('activo', i === indiceActual);
-  });
-}
-
-function iniciarAutoplay() {
-  if (autoplayCarrusel) return;
-  autoplayCarrusel = setInterval(() => {
-    indiceActual = (indiceActual + 1) % items.length;
-    actualizarCarrusel();
-  }, 4000);
-}
-
-function detenerAutoplay() {
-  if (autoplayCarrusel) {
-    clearInterval(autoplayCarrusel);
-    autoplayCarrusel = null;
+  function actualizarCarrusel() {
+    items.forEach((item, i) => {
+      item.classList.remove('activo', 'anterior', 'siguiente');
+      const contenido = item.querySelector('.card-custom-content');
+      if (contenido) contenido.classList.remove('activo');
+      if (i === indiceActual) {
+        item.classList.add('activo');
+      } else if (i === (indiceActual - 1 + items.length) % items.length) {
+        item.classList.add('anterior');
+      } else if (i === (indiceActual + 1) % items.length) {
+        item.classList.add('siguiente');
+      }
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('activo', i === indiceActual);
+    });
   }
-}
 
-// Click en tarjeta lateral para navegar manualmente
-document.getElementById('carouselTrack').addEventListener('click', (e) => {
-  const slide = e.target.closest('.card-slide');
-  if (!slide) return;
-  if (slide.classList.contains('siguiente')) {
-    detenerAutoplay();
-    indiceActual = (indiceActual + 1) % items.length;
-    actualizarCarrusel();
-  } else if (slide.classList.contains('anterior')) {
-    detenerAutoplay();
-    indiceActual = (indiceActual - 1 + items.length) % items.length;
-    actualizarCarrusel();
-  }
-});
-
-dots.forEach((dot) => {
-  dot.addEventListener('click', () => {
-    indiceActual = parseInt(dot.dataset.index);
-    actualizarCarrusel();
-  });
-});
-
-// Arranque inicial
-actualizarCarrusel();
-
-// Pausar autoplay al posar el cursor sobre cualquier parte del carrusel
-let timeoutReanudar = null;
-
-document.getElementById('carouselProyectos').addEventListener('mouseenter', () => {
-  if (timeoutReanudar) {
-    clearTimeout(timeoutReanudar);
-    timeoutReanudar = null;
-  }
-  detenerAutoplay();
-});
-
-document.getElementById('carouselProyectos').addEventListener('mouseleave', () => {
-  timeoutReanudar = setTimeout(() => {
-    if (!autoplayCarrusel) {
+  function iniciarAutoplay() {
+    if (autoplayCarrusel) return;
+    autoplayCarrusel = setInterval(() => {
       indiceActual = (indiceActual + 1) % items.length;
       actualizarCarrusel();
-      setTimeout(() => {
-        if (!autoplayCarrusel) {
-          iniciarAutoplay();
-        }
-      }, 4500);
+    }, 4000);
+  }
+
+  function detenerAutoplay() {
+    if (autoplayCarrusel) {
+      clearInterval(autoplayCarrusel);
+      autoplayCarrusel = null;
     }
-    timeoutReanudar = null;
-  }, 1000);
-});
+  }
 
-// Observer: reinicia autoplay al entrar a Proyectos, lo detiene al salir
-let proyectosVisto = false;
-
-const observerCarrusel = new IntersectionObserver((entradas) => {
-  entradas.forEach(entrada => {
-    if (entrada.isIntersecting) {
-      proyectosVisto = true;
-      iniciarAutoplay();
-    } else {
-      if (proyectosVisto) {
-        detenerAutoplay();
-      }
+  document.getElementById('carouselTrack').addEventListener('click', (e) => {
+    const slide = e.target.closest('.card-slide');
+    if (!slide) return;
+    if (slide.classList.contains('siguiente')) {
+      detenerAutoplay();
+      indiceActual = (indiceActual + 1) % items.length;
+      actualizarCarrusel();
+    } else if (slide.classList.contains('anterior')) {
+      detenerAutoplay();
+      indiceActual = (indiceActual - 1 + items.length) % items.length;
+      actualizarCarrusel();
     }
   });
-}, { threshold: 0.2 });
 
-observerCarrusel.observe(document.getElementById('Proyectos'));
+  dots.forEach((dot) => {
+    dot.addEventListener('click', () => {
+      indiceActual = parseInt(dot.dataset.index);
+      actualizarCarrusel();
+    });
+  });
+
+  actualizarCarrusel();
+
+  let timeoutReanudar = null;
+
+  document.getElementById('carouselProyectos').addEventListener('mouseenter', () => {
+    if (timeoutReanudar) {
+      clearTimeout(timeoutReanudar);
+      timeoutReanudar = null;
+    }
+    detenerAutoplay();
+  });
+
+  document.getElementById('carouselProyectos').addEventListener('mouseleave', () => {
+    timeoutReanudar = setTimeout(() => {
+      if (!autoplayCarrusel) {
+        indiceActual = (indiceActual + 1) % items.length;
+        actualizarCarrusel();
+        setTimeout(() => {
+          if (!autoplayCarrusel) {
+            iniciarAutoplay();
+          }
+        }, 4500);
+      }
+      timeoutReanudar = null;
+    }, 1000);
+  });
+
+  let proyectosVisto = false;
+
+  const observerCarrusel = new IntersectionObserver((entradas) => {
+    entradas.forEach(entrada => {
+      if (entrada.isIntersecting) {
+        proyectosVisto = true;
+        iniciarAutoplay();
+      } else {
+        if (proyectosVisto) {
+          detenerAutoplay();
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+
+  observerCarrusel.observe(document.getElementById('Proyectos'));
+}
   
 </script>
   
