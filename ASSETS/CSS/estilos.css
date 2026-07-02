@@ -398,7 +398,12 @@ img {
   opacity: 0.85;
   transform: translate(30%, -50%) scale(0.9);
 }
+  
   .carousel-flecha {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   background: var(--color-base);
   color: var(--color-brand);
   border: none;
@@ -409,7 +414,14 @@ img {
   cursor: pointer;
   z-index: 4;
   transition: all 0.3s ease;
-  display: none;
+}
+
+.carousel-flecha-izq {
+  left: 0;
+}
+
+.carousel-flecha-der {
+  right: 0;
 }
   
   .carousel-flecha:hover {
