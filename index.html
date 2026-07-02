@@ -697,9 +697,6 @@ dots.forEach((dot) => {
   });
 });
 
-// Arranque inicial — siempre muestra las tarjetas
-actualizarCarrusel();
-
  // Arranque inicial — siempre muestra las tarjetas
 actualizarCarrusel();
 
@@ -722,14 +719,7 @@ document.getElementById('carouselTrack').addEventListener('mouseout', (e) => {
   if (slide && slide.classList.contains('activo')) {
     const hacia = e.relatedTarget;
     if (hacia && slide.contains(hacia)) return;
-    timeoutReanudar = setTimeout(() => {
-      if (!autoplayCarrusel) {
-        iniciarAutoplay();
-      }
-      timeoutReanudar = null;
-    }, 4000);
-  }
-});
+    
 
 // Observer: reinicia autoplay al entrar a Proyectos, lo detiene al salir
 let proyectosVisto = false;
