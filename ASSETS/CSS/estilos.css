@@ -630,6 +630,7 @@ img {
   }
 }
 
+@media (min-width: 992px) {
 .navbar .container.flex-lg-column {
     height: 100%;
     display: flex;
