@@ -371,6 +371,12 @@ img {
   z-index: 2;
   pointer-events: auto;
   cursor: pointer;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.card-slide.anterior:hover {
+  opacity: 0.85;
+  transform: translate(-130%, -50%) scale(0.9);
 }
 
 .card-slide.siguiente {
@@ -379,8 +385,13 @@ img {
   z-index: 2;
   pointer-events: auto;
   cursor: pointer;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
+.card-slide.siguiente:hover {
+  opacity: 0.85;
+  transform: translate(30%, -50%) scale(0.9);
+}
   .carousel-flecha {
   background: var(--color-base);
   color: var(--color-brand);
