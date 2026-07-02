@@ -632,16 +632,8 @@ img {
 
 @media (min-width: 992px) {
   .navbar .container.flex-lg-column {
+    position: relative;
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: max(40px, calc((100vh - 520px) / 2));
-    transition: padding-top 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .navbar:not(.en-inicio) .container.flex-lg-column {
-    padding-top: 20px;
   }
 
   .navbar.en-inicio .navbar-nav .nav-link {
@@ -649,25 +641,31 @@ img {
   }
 
   .navbar-nav .nav-link {
-    transition: font-size 0.4s ease;
+    transition: font-size 0.4s ease, color 0.3s ease;
+  }
+
+  /* Foto: posicionada aparte, se desvanece SIN empujar a las palabras */
+  .navbar-brand {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 120px;
+    display: flex;
+    justify-content: center;
+    z-index: 2;
+    margin: 0 !important;
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .navbar-brand img {
-    transition:
-      max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      margin 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-      border-width 0.7s cubic-bezier(0.4, 0, 0.2, 1),
-      padding 0.7s cubic-bezier(0.4, 0, 0.2, 1);
     max-height: 170px;
+    border-width: 6px;
   }
 
-  .navbar:not(.en-inicio) .navbar-brand img {
-    max-height: 0;
+  .navbar:not(.en-inicio) .navbar-brand {
     opacity: 0;
-    margin: 0;
-    border-width: 0;
-    padding: 0;
+    transform: translateY(-30px) scale(0.6);
+    pointer-events: none;
   }
 
   .navbar[data-aos] {
@@ -675,40 +673,46 @@ img {
   }
 
   /* --- Menú palabra por palabra (cascada) --- */
-  /* La lista ocupa TODO el ancho del sidebar: por eso cada palabra
-     queda centrada y ya no se desborda hacia la derecha */
+  /* La lista ocupa TODO el ancho del sidebar: por eso las palabras
+     quedan centradas y no se desbordan */
   .navbar-nav {
-    position: relative;
-    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
     margin: 0 !important;
-    height: 200px; /* espacio reservado para las 4 palabras en estado Inicio */
   }
 
   .navbar-nav .nav-item {
     position: absolute;
     left: 0;
     right: 0;
-    width: 100%;
     margin: 0 !important;
     text-align: center;
     transition: top 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Posición en INICIO (texto grande, bien espaciado) */
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { top: 0px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: 52px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: 104px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: 156px; }
+  /* Posiciones en INICIO (grandes, debajo de la foto, centrado) */
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { top: 300px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: 352px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: 404px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: 456px; }
 
-  /* Posición al SALIR (apiladas, compactas, arriba de todo) */
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { top: 0px; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { top: 30px; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { top: 60px; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { top: 90px; }
+  /* Posiciones al SALIR (chicas, apiladas, arriba de todo) */
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { top: 30px; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { top: 60px; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { top: 90px; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { top: 120px; }
 
-  /* Cascada: Inicio se mueve primero, Contacto último */
+  /* La CASCADA: Inicio primero, Contacto último */
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { transition-delay: 0s; }
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { transition-delay: 0.09s; }
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { transition-delay: 0.18s; }
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { transition-delay: 0.27s; }
+
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { transition-delay: 0s; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { transition-delay: 0.09s; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { transition-delay: 0.18s; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { transition-delay: 0.27s; }
 }
