@@ -295,7 +295,12 @@ img {
 
 #home {
   position: relative;
-  padding-left: 3rem;
+}
+
+@media (min-width: 992px) {
+  #home {
+    padding-left: 3rem;
+  }
 }
 
 .grilla-glow {
