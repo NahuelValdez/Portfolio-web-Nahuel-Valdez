@@ -460,6 +460,12 @@ img {
   margin-top: 24px;
   position: relative;
   z-index: 4;
+  transition: opacity 0.4s ease;
+}
+
+.carousel-proyectos:has(.card-custom-content.activo) .carousel-dots {
+  opacity: 0;
+  pointer-events: none;
 }
 
   .carousel-dot {
