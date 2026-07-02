@@ -614,6 +614,7 @@ img {
       linear-gradient(to bottom, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
       linear-gradient(to right, rgba(186, 255, 223, 0.1) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(186, 255, 223, 0.1) 1px, transparent 1px);
+    background-position: center top;
   }
 
   nav[data-aos="fade-right"]:not(.aos-animate) {
