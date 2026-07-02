@@ -460,6 +460,35 @@ window.addEventListener('scroll', () => {
     });
   });
 
+  // Cerrar el menú al tocar afuera de los links (costados / abajo de Contacto)
+  navbarCollapse.addEventListener('click', (e) => {
+    if (!navbarCollapse.classList.contains('show')) return;
+    if (!e.target.closest('.nav-link')) {
+      bsCollapse.hide();
+    }
+  });
+
+  // Cerrar el menú al deslizar/scrollear dentro de él (intención de salir)
+  let touchStartY = null;
+
+  navbarCollapse.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  navbarCollapse.addEventListener('touchmove', (e) => {
+    if (!navbarCollapse.classList.contains('show') || touchStartY === null) return;
+    const delta = Math.abs(e.touches[0].clientY - touchStartY);
+    if (delta > 30) {           // umbral: evita cerrar por un toque tembloroso
+      bsCollapse.hide();
+      touchStartY = null;
+    }
+  }, { passive: true });
+
+  // Desktop / ventana angosta: cerrar con la rueda del mouse
+  navbarCollapse.addEventListener('wheel', () => {
+    if (navbarCollapse.classList.contains('show')) bsCollapse.hide();
+  }, { passive: true });
+
   // Armar el mail con JS para evitar bots de spam
   document.getElementById('email-contacto').innerHTML = 
   '<span class="text-white">' + 'nahuelvaldez.di' + '@gmail.com' + '</span>';
