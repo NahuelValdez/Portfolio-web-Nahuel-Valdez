@@ -636,7 +636,8 @@ img {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-top: 34vh;
+    /* en vez de 34vh fijo: se centra según el alto disponible y nunca corta Contacto */
+    padding-top: max(40px, calc((100vh - 540px) / 2));
     transition: padding-top 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -649,7 +650,7 @@ img {
   }
 
   .navbar.en-inicio .navbar-nav .nav-item {
-    margin: 25px 0;
+    margin: 16px 0; /* antes: 25px 0 */
   }
 
   .navbar-brand img {
@@ -659,7 +660,7 @@ img {
       margin 0.7s cubic-bezier(0.4, 0, 0.2, 1),
       border-width 0.7s cubic-bezier(0.4, 0, 0.2, 1),
       padding 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 200px;
+    max-height: 170px; /* antes: 200px */
   }
 
   .navbar:not(.en-inicio) .navbar-brand img {
