@@ -631,22 +631,25 @@ img {
 }
 
 @media (min-width: 992px) {
-.navbar .container.flex-lg-column {
+  .navbar .container.flex-lg-column {
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* en vez de 34vh fijo: se centra según el alto disponible y nunca corta Contacto */
-    padding-top: max(40px, calc((100vh - 540px) / 2));
+    padding-top: max(40px, calc((100vh - 520px) / 2));
     transition: padding-top 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-.navbar:not(.en-inicio) .container.flex-lg-column {
-    padding-top: 16px;
+  .navbar:not(.en-inicio) .container.flex-lg-column {
+    padding-top: 20px;
   }
 
   .navbar.en-inicio .navbar-nav .nav-link {
     font-size: 22px;
+  }
+
+  .navbar-nav .nav-link {
+    transition: font-size 0.4s ease;
   }
 
   .navbar-brand img {
@@ -656,7 +659,7 @@ img {
       margin 0.7s cubic-bezier(0.4, 0, 0.2, 1),
       border-width 0.7s cubic-bezier(0.4, 0, 0.2, 1),
       padding 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-    max-height: 170px; /* antes: 200px */
+    max-height: 170px;
   }
 
   .navbar:not(.en-inicio) .navbar-brand img {
@@ -667,47 +670,45 @@ img {
     padding: 0;
   }
 
- .navbar.listo .navbar-nav .nav-item {
-    transition: top 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .navbar-nav .nav-link {
-    transition: font-size 0.4s ease;
-  }
-
   .navbar[data-aos] {
     transition-duration: 1ms !important;
   }
 
-  /* El menú pasa a posicionarse "palabra por palabra" en vez de moverse como bloque */
+  /* --- Menú palabra por palabra (cascada) --- */
+  /* La lista ocupa TODO el ancho del sidebar: por eso cada palabra
+     queda centrada y ya no se desborda hacia la derecha */
   .navbar-nav {
     position: relative;
-    height: 180px; /* alto reservado para las 4 palabras en su estado más grande (Inicio) */
+    width: 100%;
+    margin: 0 !important;
+    height: 200px; /* espacio reservado para las 4 palabras en estado Inicio */
   }
 
   .navbar-nav .nav-item {
     position: absolute;
     left: 0;
     right: 0;
+    width: 100%;
     margin: 0 !important;
+    text-align: center;
+    transition: top 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Posición de cada palabra en INICIO (centrado, texto grande) */
+  /* Posición en INICIO (texto grande, bien espaciado) */
   .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { top: 0px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: 60px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: 120px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: 180px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: 52px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: 104px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: 156px; }
 
-  /* Posición de cada palabra en el resto de las secciones (arriba de todo, apiladas) */
+  /* Posición al SALIR (apiladas, compactas, arriba de todo) */
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { top: 0px; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { top: 34px; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { top: 68px; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { top: 102px; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { top: 30px; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { top: 60px; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { top: 90px; }
 
-  /* La cascada: Inicio sube primero, después Proyectos, Sobre mí y por último Contacto */
+  /* Cascada: Inicio se mueve primero, Contacto último */
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { transition-delay: 0s; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { transition-delay: 0.08s; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { transition-delay: 0.16s; }
-  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { transition-delay: 0.24s; }
-  
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { transition-delay: 0.09s; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { transition-delay: 0.18s; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { transition-delay: 0.27s; }
 }
