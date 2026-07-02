@@ -649,10 +649,6 @@ img {
     font-size: 22px;
   }
 
-  .navbar.en-inicio .navbar-nav .nav-item {
-    margin: 16px 0; /* antes: 25px 0 */
-  }
-
   .navbar-brand img {
     transition:
       max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1),
