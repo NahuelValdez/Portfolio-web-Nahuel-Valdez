@@ -703,35 +703,30 @@ actualizarCarrusel();
 // Pausar autoplay al posar el cursor sobre la tarjeta central
 let timeoutReanudar = null;
 
-document.getElementById('carouselTrack').addEventListener('mouseover', (e) => {
-  const slide = e.target.closest('.card-slide');
-  if (slide && slide.classList.contains('activo')) {
-    if (timeoutReanudar) {
-      clearTimeout(timeoutReanudar);
-      timeoutReanudar = null;
-    }
-    detenerAutoplay();
+// Pausar autoplay al posar el cursor sobre cualquier parte del carrusel
+let timeoutReanudar = null;
+
+document.getElementById('carouselProyectos').addEventListener('mouseenter', () => {
+  if (timeoutReanudar) {
+    clearTimeout(timeoutReanudar);
+    timeoutReanudar = null;
   }
+  detenerAutoplay();
 });
 
-document.getElementById('carouselTrack').addEventListener('mouseout', (e) => {
-  const slide = e.target.closest('.card-slide');
-  if (slide && slide.classList.contains('activo')) {
-    const hacia = e.relatedTarget;
-    if (hacia && slide.contains(hacia)) return;
-    timeoutReanudar = setTimeout(() => {
-      if (!autoplayCarrusel) {
-        indiceActual = (indiceActual + 1) % items.length;
-        actualizarCarrusel();
-        setTimeout(() => {
-          if (!autoplayCarrusel) {
-            iniciarAutoplay();
-          }
-        }, 500);
-      }
-      timeoutReanudar = null;
-    }, 1000);
-  }
+document.getElementById('carouselProyectos').addEventListener('mouseleave', () => {
+  timeoutReanudar = setTimeout(() => {
+    if (!autoplayCarrusel) {
+      indiceActual = (indiceActual + 1) % items.length;
+      actualizarCarrusel();
+      setTimeout(() => {
+        if (!autoplayCarrusel) {
+          iniciarAutoplay();
+        }
+      }, 4500);
+    }
+    timeoutReanudar = null;
+  }, 1000);
 });
     
 
