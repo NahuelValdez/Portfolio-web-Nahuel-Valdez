@@ -633,7 +633,8 @@ img {
 @media (min-width: 992px) {
   .navbar .container.flex-lg-column {
     position: relative;
-    height: 100%;
+    height: 100vh;
+    align-self: stretch;
   }
 
   .navbar.en-inicio .navbar-nav .nav-link {
@@ -649,7 +650,7 @@ img {
     position: absolute;
     left: 0;
     right: 0;
-    top: 40px;
+    top: calc(50% - 161px);
     display: flex;
     justify-content: center;
     z-index: 2;
@@ -697,10 +698,10 @@ img {
   }
 
   /* Posiciones en INICIO (grandes, debajo de la foto, centrado) */
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { top: 210px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: 252px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: 294px; }
-  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: 336px; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { top: calc(50% + 9px); }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { top: calc(50% + 51px); }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { top: calc(50% + 93px); }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { top: calc(50% + 135px); }
   
   /* Posiciones al SALIR (chicas, apiladas, arriba de todo) */
   .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { top: 12px; }
