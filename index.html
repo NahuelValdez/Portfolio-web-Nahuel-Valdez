@@ -406,16 +406,16 @@ Herramientas y metodologías: Diseño centrado en el usuario, bases de software,
   const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
   const togglerBtn = document.querySelector('.navbar-toggler');
 
-  // La X y el bloqueo de scroll se sincronizan con el ESTADO REAL del menú.
-  // Da igual cómo se abra o cierre (botón, link o scroll): siempre coinciden.
-  navbarCollapse.addEventListener('show.bs.collapse', () => {
-    togglerBtn.classList.add('active');
-    document.body.classList.add('menu-open');
-  });
-  navbarCollapse.addEventListener('hide.bs.collapse', () => {
-    togglerBtn.classList.remove('active');
-    document.body.classList.remove('menu-open');
-  });
+  // La X y el bloqueo de scroll siguen el ESTADO REAL del menú.
+  // Vigilamos la clase .show del menú directamente, así no dependemos de
+  // los eventos de Bootstrap (que en algunos navegadores no disparan).
+  function sincronizarMenu() {
+    const abierto = navbarCollapse.classList.contains('show');
+    togglerBtn.classList.toggle('active', abierto);
+    document.body.classList.toggle('menu-open', abierto);
+  }
+  const observerMenu = new MutationObserver(sincronizarMenu);
+  observerMenu.observe(navbarCollapse, { attributes: true, attributeFilter: ['class'] });
 
   let scrollTicking = false;
 
