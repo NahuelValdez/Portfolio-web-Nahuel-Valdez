@@ -601,10 +601,11 @@ function actualizarCarrusel() {
 }
 
 function iniciarAutoplay() {
+  if (autoplayCarrusel) return;
   autoplayCarrusel = setInterval(() => {
     indiceActual = (indiceActual + 1) % items.length;
     actualizarCarrusel();
-  }, 3500);
+  }, 4000);
 }
 
 function detenerAutoplay() {
@@ -614,11 +615,10 @@ function detenerAutoplay() {
   }
 }
 
-  // Click en tarjeta lateral para navegar manualmente
+// Click en tarjeta lateral para navegar manualmente
 document.getElementById('carouselTrack').addEventListener('click', (e) => {
   const slide = e.target.closest('.card-slide');
   if (!slide) return;
-
   if (slide.classList.contains('siguiente')) {
     detenerAutoplay();
     indiceActual = (indiceActual + 1) % items.length;
@@ -630,8 +630,6 @@ document.getElementById('carouselTrack').addEventListener('click', (e) => {
   }
 });
 
-dots.forEach((dot) => {   ← esta línea ya existe, es la línea 617
-
 dots.forEach((dot) => {
   dot.addEventListener('click', () => {
     indiceActual = parseInt(dot.dataset.index);
@@ -639,26 +637,19 @@ dots.forEach((dot) => {
   });
 });
 
+// Arranque inicial — siempre muestra las tarjetas
 actualizarCarrusel();
-iniciarAutoplay();
 
-// Reiniciar autoplay al volver a la sección Proyectos
-let proyectosVisto = false;
-
+// Observer: reinicia autoplay al entrar a Proyectos, lo detiene al salir
 const observerCarrusel = new IntersectionObserver((entradas) => {
   entradas.forEach(entrada => {
     if (entrada.isIntersecting) {
-      proyectosVisto = true;
-      if (!autoplayCarrusel) {
-        iniciarAutoplay();
-      }
+      iniciarAutoplay();
     } else {
-      if (proyectosVisto) {
-        detenerAutoplay();
-      }
+      detenerAutoplay();
     }
   });
-}, { threshold: 0.3 });
+}, { threshold: 0.2 });
 
 observerCarrusel.observe(document.getElementById('Proyectos'));
   
