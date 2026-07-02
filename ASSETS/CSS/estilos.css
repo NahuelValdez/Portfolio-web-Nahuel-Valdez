@@ -119,43 +119,38 @@ img {
   }
 
   .navbar-brand {
-  position: relative;
-  display: inline-block;
-}
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    line-height: 0;
+  }
 
-.navbar-brand img {
-  border: 6px solid transparent;
-  position: relative;
-  z-index: 1;
-}
+  .navbar-brand img {
+    border: 6px solid transparent;
+    position: relative;
+    z-index: 1;
+  }
 
-.navbar-brand::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 6px solid var(--color-brand);
-  transform: scale(0.8);
-  opacity: 0;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  pointer-events: none;
-}
+  .navbar-brand::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 6px solid var(--color-brand);
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    pointer-events: none;
+  }
 
-.navbar-brand:hover::after {
-  transform: scale(1);
-  opacity: 1;
-}
+  .navbar-brand:hover::after {
+    transform: scale(1);
+    opacity: 1;
+  }
 
-  .navbar-brand {
-  position: relative;
-  display: inline-block;
-  padding: 0;
-  line-height: 0;
-}
-  
   /* contenido */
   #contenido {
     padding-left: var(--sidbar-width);
@@ -339,14 +334,14 @@ img {
 
 @media (min-width: 992px) {
   .carousel-proyectos {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  height: 640px;
-  margin-top: 20px;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 640px;
+    margin-top: 20px;
+  }
 
   .carousel-track {
     position: relative;
@@ -355,50 +350,50 @@ img {
   }
 
   .card-slide {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 460px;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
-  pointer-events: none;
-}
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 460px;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
 
-.card-slide.activo {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-  z-index: 3;
-  pointer-events: auto;
-}
+  .card-slide.activo {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    z-index: 3;
+    pointer-events: auto;
+  }
 
-.card-slide.anterior {
-  transform: translate(-130%, -50%) scale(0.85);
-  opacity: 0.5;
-  z-index: 2;
-  pointer-events: auto;
-  cursor: pointer;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-}
+  .card-slide.anterior {
+    transform: translate(-130%, -50%) scale(0.85);
+    opacity: 0.5;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
 
-.card-slide.anterior:hover {
-  opacity: 0.85;
-  transform: translate(-130%, -50%) scale(0.9);
-}
+  .card-slide.anterior:hover {
+    opacity: 0.85;
+    transform: translate(-130%, -50%) scale(0.9);
+  }
 
-.card-slide.siguiente {
-  transform: translate(30%, -50%) scale(0.85);
-  opacity: 0.5;
-  z-index: 2;
-  pointer-events: auto;
-  cursor: pointer;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-}
+  .card-slide.siguiente {
+    transform: translate(30%, -50%) scale(0.85);
+    opacity: 0.5;
+    z-index: 2;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
 
-.carousel-titulo {
-  display: none;
-}
+  .card-slide.siguiente:hover {
+    opacity: 0.85;
+    transform: translate(30%, -50%) scale(0.9);
+  }
 
-@media (min-width: 992px) {
   .carousel-titulo {
     display: block;
     text-align: center;
@@ -411,62 +406,57 @@ img {
   }
 
   .card-slide.activo .carousel-titulo {
-  opacity: 1;
-}
+    opacity: 1;
+  }
 
-.card-slide.activo:has(.card-custom-content.activo) .carousel-titulo {
-  opacity: 0;
-}
-  
-.card-slide.siguiente:hover {
-  opacity: 0.85;
-  transform: translate(30%, -50%) scale(0.9);
-}
-  
+  .card-slide.activo:has(.card-custom-content.activo) .carousel-titulo {
+    opacity: 0;
+  }
+
   .carousel-flecha {
-  display: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: var(--color-base);
-  color: var(--color-brand);
-  border: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 4;
-  transition: all 0.3s ease;
-}
+    display: none;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-base);
+    color: var(--color-brand);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 4;
+    transition: all 0.3s ease;
+  }
 
-.carousel-flecha-izq {
-  left: 0;
-}
+  .carousel-flecha-izq {
+    left: 0;
+  }
 
-.carousel-flecha-der {
-  right: 0;
-}
-  
+  .carousel-flecha-der {
+    right: 0;
+  }
+
   .carousel-flecha:hover {
     background: var(--color-brand);
     color: var(--color-base2);
   }
 
   .carousel-dots {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: 24px;
-  position: relative;
-  z-index: 4;
-  transition: opacity 0.4s ease;
-}
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 24px;
+    position: relative;
+    z-index: 4;
+    transition: opacity 0.4s ease;
+  }
 
-.carousel-proyectos:has(.card-custom-content.activo) .carousel-dots {
-  opacity: 0;
-  pointer-events: none;
-}
+  .carousel-proyectos:has(.card-custom-content.activo) .carousel-dots {
+    opacity: 0;
+    pointer-events: none;
+  }
 
   .carousel-dot {
     width: 8px;
@@ -489,7 +479,7 @@ img {
 .social-icons a {
   width: 40px;
   height: 40px;
-  display: inline flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 100px;
@@ -520,14 +510,14 @@ img {
   height: 40px;
   font-size: 35px;
 }
-  /* NAVBAR - ocultar al scrollear */
+
+/* NAVBAR - ocultar al scrollear */
 .navbar {
   transition: transform 0.2s ease-in-out !important;
 }
 
 .navbar.nav-hidden {
   transform: translateY(-100%) !important;
-
 }
 
 /* Animación menú hamburguesa -> X */
@@ -564,22 +554,23 @@ img {
 /* Menú mobile a pantalla completa */
 @media (max-width: 991px) {
   .navbar-collapse {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(20, 30, 39, 0.60);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 70px;
-  transform: translateX(100%);
-  transition: transform 0.4s ease-in-out;
-  z-index: 1050;
-}
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(20, 30, 39, 0.60);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 70px;
+    transform: translateX(100%);
+    transition: transform 0.4s ease-in-out;
+    z-index: 1050;
+  }
+
   .navbar-collapse.show {
     transform: translateX(0);
   }
@@ -602,6 +593,38 @@ img {
     position: relative;
     z-index: 1060;
   }
+
+  /* Bloquea el scroll de fondo y evita que un transform del navbar
+     rompa el position:fixed y el blur del overlay */
+  body.menu-open {
+    overflow: hidden;
+  }
+
+  body.menu-open .navbar {
+    transform: none !important;
+  }
+
+  .grilla-glow {
+    display: none;
+  }
+
+  #Proyectos::before {
+    background-image:
+      linear-gradient(to right, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
+      linear-gradient(to bottom, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
+      linear-gradient(to right, rgba(186, 255, 223, 0.1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(186, 255, 223, 0.1) 1px, transparent 1px);
+  }
+
+  nav[data-aos="fade-right"]:not(.aos-animate) {
+    transform: translate3d(0, -60px, 0) !important;
+  }
+
+  .navbar-nav .nav-item[data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 @media (min-width: 992px) {
@@ -613,17 +636,17 @@ img {
   }
 
   .navbar.en-inicio .container.flex-lg-column {
-  justify-content: flex-start;
-  padding-top: 24px;
-}
+    justify-content: flex-start;
+    padding-top: 24px;
+  }
 
-.navbar.en-inicio .navbar-nav .nav-link {
-  font-size: 22px;
-}
+  .navbar.en-inicio .navbar-nav .nav-link {
+    font-size: 22px;
+  }
 
-.navbar.en-inicio .navbar-nav .nav-item {
-  margin: 25px 0;
-}
+  .navbar.en-inicio .navbar-nav .nav-item {
+    margin: 25px 0;
+  }
 
   .navbar-brand img {
     transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
@@ -639,8 +662,8 @@ img {
   }
 
   .navbar.listo .navbar-nav .nav-item {
-  transition: margin 1.2s ease;
-}
+    transition: margin 1.2s ease;
+  }
 
   .navbar-nav .nav-link {
     transition: font-size 0.4s ease;
@@ -653,52 +676,8 @@ img {
   .navbar.brand-hidden .navbar-nav .nav-link {
     font-size: 22px;
   }
-}
 
-@media (max-width: 991px) {
-  nav[data-aos="fade-right"]:not(.aos-animate) {
-    transform: translate3d(0, -60px, 0) !important;
-  }
-}
-
-@media (max-width: 991px) {
-  .grilla-glow {
-    display: none;
-  }
-
-  #Proyectos::before {
-    background-image:
-      linear-gradient(to right, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
-      linear-gradient(to bottom, rgba(186, 255, 223, 0.2) 1.5px, transparent 1.5px),
-      linear-gradient(to right, rgba(186, 255, 223, 0.1) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(186, 255, 223, 0.1) 1px, transparent 1px);
-  }
-}
-
-@media (min-width: 992px) {
   .navbar[data-aos] {
     transition-duration: 1ms !important;
   }
-}
-
-@media (max-width: 991px) {
-  .navbar-nav .nav-item[data-aos] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-}
-
-  body.menu-open {
-  overflow: hidden;
-}
-
-  /* Menú mobile: bloquea el scroll de fondo y evita que el transform del
-   navbar rompa el position:fixed y el blur (backdrop-filter) del overlay */
-body.menu-open {
-  overflow: hidden;
-}
-
-body.menu-open .navbar {
-  transform: none !important;
 }
