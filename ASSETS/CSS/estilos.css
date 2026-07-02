@@ -692,3 +692,13 @@ img {
   body.menu-open {
   overflow: hidden;
 }
+
+  /* Menú mobile: bloquea el scroll de fondo y evita que el transform del
+   navbar rompa el position:fixed y el blur (backdrop-filter) del overlay */
+body.menu-open {
+  overflow: hidden;
+}
+
+body.menu-open .navbar {
+  transform: none !important;
+}
