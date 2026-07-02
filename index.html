@@ -503,21 +503,6 @@ document.querySelectorAll('.card-custom-image').forEach(img => {
     contenido.classList.toggle('activo');
   });
 });
-  
-// Ocultar foto al scrollear, solo en desktop (reacomoda el menú)
-  const fotoPerfil = document.querySelector('.navbar-brand img');
-
-  window.addEventListener('scroll', () => {
-    if (window.innerWidth >= 992) {
-     if (window.scrollY > 300) {
-      fotoPerfil.classList.add('foto-oculta');
-      navbar.classList.add('brand-hidden');
-    } else {
-      fotoPerfil.classList.remove('foto-oculta');
-      navbar.classList.remove('brand-hidden');
-    }
-    }
-  });
 
   // Grilla de Proyectos: la zona nítida sigue al cursor, y se desvanece al salir
 const seccionProyectos = document.getElementById('Proyectos');
