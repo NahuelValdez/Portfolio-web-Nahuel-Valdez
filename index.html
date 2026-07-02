@@ -700,20 +700,29 @@ actualizarCarrusel();
 actualizarCarrusel();
 
 // Pausar autoplay al posar el cursor sobre la tarjeta central
-document.getElementById('carouselTrack').addEventListener('mouseenter', (e) => {
+let timeoutReanudar = null;
+
+document.getElementById('carouselTrack').addEventListener('mouseover', (e) => {
   const slide = e.target.closest('.card-slide');
   if (slide && slide.classList.contains('activo')) {
+    if (timeoutReanudar) {
+      clearTimeout(timeoutReanudar);
+      timeoutReanudar = null;
+    }
     detenerAutoplay();
   }
 });
 
-document.getElementById('carouselTrack').addEventListener('mouseleave', (e) => {
+document.getElementById('carouselTrack').addEventListener('mouseout', (e) => {
   const slide = e.target.closest('.card-slide');
   if (slide && slide.classList.contains('activo')) {
-    setTimeout(() => {
+    const hacia = e.relatedTarget;
+    if (hacia && slide.contains(hacia)) return;
+    timeoutReanudar = setTimeout(() => {
       if (!autoplayCarrusel) {
         iniciarAutoplay();
       }
+      timeoutReanudar = null;
     }, 4000);
   }
 });
