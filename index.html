@@ -719,6 +719,20 @@ document.getElementById('carouselTrack').addEventListener('mouseout', (e) => {
   if (slide && slide.classList.contains('activo')) {
     const hacia = e.relatedTarget;
     if (hacia && slide.contains(hacia)) return;
+    timeoutReanudar = setTimeout(() => {
+      if (!autoplayCarrusel) {
+        indiceActual = (indiceActual + 1) % items.length;
+        actualizarCarrusel();
+        setTimeout(() => {
+          if (!autoplayCarrusel) {
+            iniciarAutoplay();
+          }
+        }, 500);
+      }
+      timeoutReanudar = null;
+    }, 1000);
+  }
+});
     
 
 // Observer: reinicia autoplay al entrar a Proyectos, lo detiene al salir
