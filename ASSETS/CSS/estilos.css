@@ -216,6 +216,11 @@ img {
   animation: latido 0.8s ease-in-out infinite;
 }
 
+.card-custom .card-custom-content.activo ~ .card-custom-image img,
+.card-custom:has(.card-custom-content.activo) .card-custom-image img {
+  animation: none;
+}
+
 .card-custom-image {
   cursor: pointer;
 }
