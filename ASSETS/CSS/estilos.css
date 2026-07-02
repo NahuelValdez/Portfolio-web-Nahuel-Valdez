@@ -688,3 +688,7 @@ img {
     transition: none !important;
   }
 }
+
+  body.menu-open {
+  overflow: hidden;
+}
