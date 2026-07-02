@@ -697,7 +697,7 @@ dots.forEach((dot) => {
 actualizarCarrusel();
 
  // Arranque inicial — siempre muestra las tarjetas
-actualizarCarrusel();   ← línea 697, se queda
+actualizarCarrusel();
 
 // Pausar autoplay al posar el cursor sobre la tarjeta central
 document.getElementById('carouselTrack').addEventListener('mouseenter', (e) => {
@@ -718,15 +718,18 @@ document.getElementById('carouselTrack').addEventListener('mouseleave', (e) => {
   }
 });
 
-// Observer: reinicia autoplay al entrar a Proyectos...   ← línea 699, se queda 
-
 // Observer: reinicia autoplay al entrar a Proyectos, lo detiene al salir
+let proyectosVisto = false;
+
 const observerCarrusel = new IntersectionObserver((entradas) => {
   entradas.forEach(entrada => {
     if (entrada.isIntersecting) {
+      proyectosVisto = true;
       iniciarAutoplay();
     } else {
-      detenerAutoplay();
+      if (proyectosVisto) {
+        detenerAutoplay();
+      }
     }
   });
 }, { threshold: 0.2 });
