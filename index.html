@@ -643,14 +643,19 @@ actualizarCarrusel();
 iniciarAutoplay();
 
 // Reiniciar autoplay al volver a la sección Proyectos
+let proyectosVisto = false;
+
 const observerCarrusel = new IntersectionObserver((entradas) => {
   entradas.forEach(entrada => {
     if (entrada.isIntersecting) {
+      proyectosVisto = true;
       if (!autoplayCarrusel) {
         iniciarAutoplay();
       }
     } else {
-      detenerAutoplay();
+      if (proyectosVisto) {
+        detenerAutoplay();
+      }
     }
   });
 }, { threshold: 0.3 });
