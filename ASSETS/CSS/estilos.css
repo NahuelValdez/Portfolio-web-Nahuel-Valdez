@@ -369,12 +369,16 @@ img {
   transform: translate(-130%, -50%) scale(0.85);
   opacity: 0.5;
   z-index: 2;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .card-slide.siguiente {
   transform: translate(30%, -50%) scale(0.85);
   opacity: 0.5;
   z-index: 2;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
   .carousel-flecha {
