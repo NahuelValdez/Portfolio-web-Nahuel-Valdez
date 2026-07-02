@@ -697,7 +697,52 @@ dots.forEach((dot) => {
   });
 });
 
- // Arranque inicial
+// Arranque inicial
+actualizarCarrusel();
+
+// Pausar autoplay al posar el cursor sobre cualquier parte del carrusel
+let timeoutReanudar = null;
+
+document.getElementById('carouselProyectos').addEventListener('mouseenter', () => {
+  if (timeoutReanudar) {
+    clearTimeout(timeoutReanudar);
+    timeoutReanudar = null;
+  }
+  detenerAutoplay();
+});
+
+document.getElementById('carouselProyectos').addEventListener('mouseleave', () => {
+  timeoutReanudar = setTimeout(() => {
+    if (!autoplayCarrusel) {
+      indiceActual = (indiceActual + 1) % items.length;
+      actualizarCarrusel();
+      setTimeout(() => {
+        if (!autoplayCarrusel) {
+          iniciarAutoplay();
+        }
+      }, 4500);
+    }
+    timeoutReanudar = null;
+  }, 1000);
+});
+
+// Observer: reinicia autoplay al entrar a Proyectos, lo detiene al salir
+let proyectosVisto = false;
+
+const observerCarrusel = new IntersectionObserver((entradas) => {
+  entradas.forEach(entrada => {
+    if (entrada.isIntersecting) {
+      proyectosVisto = true;
+      iniciarAutoplay();
+    } else {
+      if (proyectosVisto) {
+        detenerAutoplay();
+      }
+    }
+  });
+}, { threshold: 0.2 });
+
+observerCarrusel.observe(document.getElementById('Proyectos'));
   
 </script>
   
