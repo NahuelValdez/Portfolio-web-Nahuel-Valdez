@@ -412,14 +412,13 @@ img {
   }
 
   .carousel-dots {
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 8px;
-    z-index: 4;
-  }
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 24px;
+  position: relative;
+  z-index: 4;
+}
 
   .carousel-dot {
     width: 8px;
