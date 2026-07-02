@@ -339,13 +339,14 @@ img {
 
 @media (min-width: 992px) {
   .carousel-proyectos {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  height: 560px;
-  margin-top: 20px;
-}
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 560px;
+    margin-top: 20px;
+  }
 
   .carousel-track {
     position: relative;
