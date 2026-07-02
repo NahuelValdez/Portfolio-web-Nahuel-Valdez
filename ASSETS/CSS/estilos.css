@@ -411,8 +411,11 @@ img {
   }
 
   .card-slide.activo .carousel-titulo {
-    opacity: 1;
-  }
+  opacity: 1;
+}
+
+.card-slide.activo:has(.card-custom-content.activo) .carousel-titulo {
+  opacity: 0;
 }
   
 .card-slide.siguiente:hover {
