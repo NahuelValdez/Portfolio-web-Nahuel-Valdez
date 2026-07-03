@@ -721,26 +721,48 @@ img {
   .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { transition-delay: 0.27s; }
 }
 
-/* === Navbar fuera de INICIO: menú pegado arriba === */
+//* === Navbar fuera de INICIO: subida escalonada === */
 @media (min-width: 992px) {
+
+  /* La lista ocupa todo el alto del sidebar */
   .navbar:not(.en-inicio) .navbar-nav {
     position: absolute !important;
-    top: 24px !important;          /* ← subí/bajá este número para la altura */
+    top: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: auto !important;
-    height: auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: flex-start !important;
-    gap: 6px;                      /* separación entre palabras */
+    height: 100% !important;
     margin: 0 !important;
-    transition: top 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Cada palabra se posiciona sola y anima su subida */
   .navbar:not(.en-inicio) .navbar-nav .nav-item {
-    position: static !important;
-    top: auto !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
     margin: 0 !important;
+    text-align: center;
+    transition: top 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  /* Posición final de cada palabra (arriba, apiladas) */
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { top: 18px !important; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { top: 50px !important; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { top: 82px !important; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { top: 114px !important; }
+
+  /* Cascada: Inicio sube primero, Contacto último */
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(1) { transition-delay: 0.15s !important; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(2) { transition-delay: 0.30s !important; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(3) { transition-delay: 0.45s !important; }
+  .navbar:not(.en-inicio) .navbar-nav .nav-item:nth-child(4) { transition-delay: 0.60s !important; }
+
+  /* La foto: sube y se desvanece, arrancando ANTES que las palabras */
+  .navbar:not(.en-inicio) .navbar-brand {
+    opacity: 0 !important;
+    transform: translateY(-240px) scale(0.85) !important;
+    pointer-events: none !important;
+  }
+  .navbar .navbar-brand {
+    transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 }
