@@ -760,3 +760,40 @@ img {
     transition: opacity 0.6s ease, transform 0.7s cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 }
+
+/* === Entrada inicial en cascada (CSS puro, solo desktop) === */
+@media (min-width: 992px) {
+
+  @keyframes entrarDesdeIzquierda {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Anula la regla vieja de 1ms que mataba la entrada */
+  .navbar[data-aos] {
+    transition-duration: 0.4s !important;
+  }
+
+  /* La foto entra primero */
+  .navbar.en-inicio .navbar-brand {
+    opacity: 0;
+    animation: entrarDesdeIzquierda 0.9s ease-out forwards;
+    animation-delay: 0.2s;
+  }
+
+  /* Las palabras entran una tras otra, después de la foto */
+  .navbar.en-inicio .navbar-nav .nav-item {
+    opacity: 0;
+    animation: entrarDesdeIzquierda 0.9s ease-out forwards;
+  }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(1) { animation-delay: 0.6s; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(2) { animation-delay: 0.9s; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { animation-delay: 1.2s; }
+  .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { animation-delay: 1.5s; }
+}
