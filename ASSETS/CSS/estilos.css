@@ -836,7 +836,7 @@ img {
   opacity: 0;
   transform: translateY(24px);
   animation:
-    entrarBotonAbajo 0.6s ease-out 1.8s forwards,
+    entrarBotonAbajo 8s ease-out 1.8s forwards,
     reboteBoton 1.6s ease-in-out 2.4s infinite;
 }
 
