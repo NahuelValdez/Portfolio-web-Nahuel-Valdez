@@ -294,6 +294,14 @@ img {
   font-size: 1.15rem;
 }
 
+.texto-hero {
+  max-width: 480px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--color-body);
+  opacity: 0.85;
+}
+
 #home {
   position: relative;
 }
