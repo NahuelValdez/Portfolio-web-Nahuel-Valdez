@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <div class="btn-scroll-down-wrap">
+  <div class="btn-scroll-down-wrap" id="btnScrollDownWrap">
     <a href="#Proyectos" class="btn btn-brand">
       Ver más
     </a>
@@ -774,6 +774,37 @@ if (window.innerWidth >= 992) {
     setTimeout(paso, 1500); // delay inicial, después de que entra el texto con AOS
   })();
 </script>
+
+  <script>
+  // Rotación "industrial" <-> "3D" con efecto máquina de escribir
+  (function rotarPalabra() {
+    ...
+  })();
+</script>
+
+<script>
+  // Ocultar el botón "Ver más" para siempre, apenas se abandona Inicio por primera vez
+  (function ocultarBotonAlSalirDeInicio() {
+    const home = document.getElementById('home');
+    const btnWrap = document.getElementById('btnScrollDownWrap');
+    if (!home || !btnWrap) return;
+
+    const observer = new IntersectionObserver((entradas) => {
+      entradas.forEach(entrada => {
+        if (!entrada.isIntersecting) {
+          btnWrap.classList.add('oculto');
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+
+    observer.observe(home);
+  })();
+</script>
+
+</body>
+
+</html>
 
 </body>
 
