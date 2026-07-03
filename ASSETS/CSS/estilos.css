@@ -805,3 +805,15 @@ img {
   .navbar.en-inicio .navbar-nav .nav-item:nth-child(3) { animation-delay: 0.45s; }
   .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { animation-delay: 0.55s; }
 }
+
+.cursor-parpadeo {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--color-brand);
+  animation: parpadeoCursor 0.85s steps(1) infinite;
+}
+
+@keyframes parpadeoCursor {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
