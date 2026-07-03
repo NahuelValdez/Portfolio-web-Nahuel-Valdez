@@ -835,8 +835,18 @@ img {
   gap: 8px;
   opacity: 0;
   transform: translateY(24px);
-  animation: entrarBotonAbajo 0.6s ease-out forwards;
-  animation-delay: 6s;
+  animation:
+    entrarBotonAbajo 0.6s ease-out 1.8s forwards,
+    reboteBoton 1.6s ease-in-out 2.4s infinite;
+}
+
+@keyframes reboteBoton {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
 }
 
 @keyframes entrarBotonAbajo {
@@ -847,19 +857,5 @@ img {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-.icono-rebote {
-  display: inline-block;
-  animation: reboteFlecha 1.6s ease-in-out infinite;
-}
-
-@keyframes reboteFlecha {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(5px);
   }
 }
