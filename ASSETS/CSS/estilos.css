@@ -650,7 +650,7 @@ img {
     position: absolute;
     left: 0;
     right: 0;
-    top: calc(50% - 161px);
+    top: calc(50% - 176px);
     display: flex;
     justify-content: center;
     z-index: 2;
@@ -659,8 +659,8 @@ img {
   }
 
   .navbar-brand img {
-    width: 150px !important;
-    height: 150px !important;
+    width: 180px !important;
+    height: 180px !important;
     object-fit: cover;
     border-width: 6px;
     border-radius: 50%;
