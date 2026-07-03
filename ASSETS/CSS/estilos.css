@@ -721,7 +721,7 @@ img {
   .navbar.en-inicio .navbar-nav .nav-item:nth-child(4) { transition-delay: 0.27s; }
 }
 
-//* === Navbar fuera de INICIO: subida escalonada === */
+/* === Navbar fuera de INICIO: subida escalonada === */
 @media (min-width: 992px) {
 
   /* La lista ocupa todo el alto del sidebar */
