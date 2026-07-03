@@ -736,7 +736,7 @@ if (window.innerWidth >= 992) {
 
     const VEL_ESCRIBIR = 90;
     const VEL_BORRAR = 55;
-    const PAUSA_PALABRA_COMPLETA = 1800;
+    const PAUSAS_COMPLETA = [1800, 3200]; // [industrial, 3D] — 3D se queda más tiempo
     const PAUSA_ANTES_DE_ESCRIBIR = 350;
 
     function paso() {
@@ -749,7 +749,7 @@ if (window.innerWidth >= 992) {
         }
         if (iLetra === actual.length) {
           borrando = true;
-          return setTimeout(paso, PAUSA_PALABRA_COMPLETA);
+          return setTimeout(paso, PAUSAS_COMPLETA[iPalabra]);
         }
         return setTimeout(paso, VEL_ESCRIBIR);
       } else {
