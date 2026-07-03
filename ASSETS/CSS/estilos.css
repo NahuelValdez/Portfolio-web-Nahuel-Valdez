@@ -836,7 +836,7 @@ img {
   opacity: 0;
   transform: translateY(24px);
   animation: entrarBotonAbajo 0.6s ease-out forwards;
-  animation-delay: 0.9s;
+  animation-delay: 2s;
 }
 
 @keyframes entrarBotonAbajo {
