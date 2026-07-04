@@ -863,7 +863,12 @@ if (window.innerWidth >= 992) {
         const box = new THREE.Box3().setFromObject(modelo);
         const centro = box.getCenter(new THREE.Vector3());
         const tam = box.getSize(new THREE.Vector3());
-        const escala = 2.0 / Math.max(tam.x, tam.y, tam.z);
+        // Escala pensada para un canvas angosto y alto: priorizamos que
+        // entre a lo ANCHO, con margen para la dispersión sin salirse.
+        const aspecto = W / H;                          // sidebar: angosto y alto
+        const anchoVisible = 2 * Math.tan((35 * Math.PI / 180) / 2) * camara.position.z * aspecto;
+        const margen = 0.7;                             // 70% del ancho visible (deja aire)
+        const escala = (anchoVisible * margen) / Math.max(tam.x, tam.z);
 
         const mat = new THREE.LineBasicMaterial({
           color: COLOR_LINEA, transparent: true, opacity: OPACIDAD_LINEA
