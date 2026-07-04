@@ -891,14 +891,14 @@ if (window.innerWidth >= 992) {
           // Guardamos su destino (posición ya armada)
           const destino = wrap.position.clone();
 
-          // Posición dispersa inicial (en abanico alrededor)
-          const ang = i * 2.399963;               // ángulo áureo → reparto parejo
-          const r = 0.2 + (i % 4) * 0.35;
-          const disperso = new THREE.Vector3(
-            Math.cos(ang) * r,
-            Math.sin(ang * 1.3) * r * 0.7 + ((i % 5) - 2) * 0.3,
-            Math.sin(ang) * r
-          );
+          // Dispersión acotada: cada pieza se separa desde su propio lugar,
+          // en dirección radial, con un desplazamiento limitado (no vuela fuera de cuadro)
+          const dir = destino.clone();
+          if (dir.length() < 0.001) dir.set(Math.cos(i), Math.sin(i), 0);
+          dir.normalize();
+          const empuje = 0.35;                    // cuánto se separan (más chico = más contenido)
+          const disperso = dir.multiplyScalar(empuje);
+          disperso.y += ((i % 5) - 2) * 0.06;     // leve variación vertical
 
           grupos.push({
             wrap,
