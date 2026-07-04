@@ -945,8 +945,8 @@ if (window.innerWidth >= 992) {
 
         for (const g of grupos) {
           g.wrap.position.lerpVectors(g.destino, g.destino.clone().add(g.disperso), disperso);
-          g.wrap.rotation.x = disperso * g.giro * 2.2;
-          g.wrap.rotation.y = disperso * g.giro * 3.1;
+          g.wrap.rotation.x = disperso * g.giro * 1.0;
+          g.wrap.rotation.y = disperso * g.giro * 1.5;
         }
 
         // Rotación lenta y constante de todo el conjunto
