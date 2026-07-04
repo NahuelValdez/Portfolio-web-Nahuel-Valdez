@@ -838,7 +838,7 @@ if (window.innerWidth >= 992) {
 
       const escena = new THREE.Scene();
       const camara = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
-      camara.position.set(0, 0.15, 4.6);
+      camara.position.set(0, 0.15, 6);
       camara.lookAt(0, 0, 0);
 
       const render = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
