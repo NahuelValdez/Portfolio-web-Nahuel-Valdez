@@ -887,7 +887,7 @@ img {
     right: 0;
     /* Zona liberada por el menú al apilarse arriba: desde debajo de los links
        hasta el fondo del sidebar. Ajustá 'top' si querés subir/bajar el modelo. */
-    top: 160px;
+    top: 0;
     bottom: 0;
     z-index: 0;            /* detrás de los links (que quedan por encima) */
     pointer-events: none;  /* no interfiere con los clicks del menú */
