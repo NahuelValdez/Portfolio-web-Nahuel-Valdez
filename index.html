@@ -856,19 +856,23 @@ if (window.innerWidth >= 992) {
       const raiz = new THREE.Group();
       escena.add(raiz);
 
-      loader.load(RUTA_MODELO, (gltf) => {
+     loader.load(RUTA_MODELO, (gltf) => {
         const modelo = gltf.scene;
 
-        // Centrar y normalizar escala a ~2 unidades
+        // Contenedor que centra y escala TODO el conjunto una sola vez
         const box = new THREE.Box3().setFromObject(modelo);
         const centro = box.getCenter(new THREE.Vector3());
         const tam = box.getSize(new THREE.Vector3());
-        // Escala pensada para un canvas angosto y alto: priorizamos que
-        // entre a lo ANCHO, con margen para la dispersión sin salirse.
-        const aspecto = W / H;                          // sidebar: angosto y alto
+
+        // Escala para canvas angosto y alto
+        const aspecto = W / H;
         const anchoVisible = 2 * Math.tan((35 * Math.PI / 180) / 2) * camara.position.z * aspecto;
-        const margen = 0.7;                             // 70% del ancho visible (deja aire)
+        const margen = 0.7;
         const escala = (anchoVisible * margen) / Math.max(tam.x, tam.z);
+
+        const contenedor3D = new THREE.Group();
+        contenedor3D.scale.setScalar(escala);
+        raiz.add(contenedor3D);
 
         const mat = new THREE.LineBasicMaterial({
           color: COLOR_LINEA, transparent: true, opacity: OPACIDAD_LINEA
@@ -878,46 +882,36 @@ if (window.innerWidth >= 992) {
         modelo.traverse((obj) => {
           if (!obj.isMesh) return;
 
-          // Wireframe fino (blueprint) por cada pieza
           const edges = new THREE.EdgesGeometry(obj.geometry, 18);
           const linea = new THREE.LineSegments(edges, mat);
 
-          // Copiamos la transformación mundial de la pieza
+          // Posición mundial real de la pieza, ya centrada
           obj.updateWorldMatrix(true, false);
           linea.applyMatrix4(obj.matrixWorld);
+          linea.position.sub(centro);   // centrar (sin escalar acá: lo hace el contenedor)
 
           const wrap = new THREE.Group();
           wrap.add(linea);
-          // Centrar+escalar todo el conjunto igual
-          wrap.position.sub(centro);
-          wrap.position.multiplyScalar(escala);
-          wrap.scale.setScalar(escala);
+          contenedor3D.add(wrap);
 
-          // Guardamos su destino (posición ya armada)
-          const destino = wrap.position.clone();
+          const destino = new THREE.Vector3(0, 0, 0);  // su lugar es el origen del wrap
 
-          // Dispersión acotada: cada pieza se separa desde su propio lugar,
-          // en dirección radial, con un desplazamiento limitado (no vuela fuera de cuadro)
-          const dir = destino.clone();
+          // Dispersión acotada, en coordenadas locales del contenedor
+          const centroPieza = new THREE.Box3().setFromObject(linea).getCenter(new THREE.Vector3());
+          const dir = centroPieza.clone();
           if (dir.length() < 0.001) dir.set(Math.cos(i), Math.sin(i), 0);
           dir.normalize();
-          const empuje = 0.35;                    // cuánto se separan (más chico = más contenido)
+          const empuje = 0.35;
           const disperso = dir.multiplyScalar(empuje);
-          disperso.y += ((i % 5) - 2) * 0.06;     // leve variación vertical
+          disperso.y += ((i % 5) - 2) * 0.06;
 
-          grupos.push({
-            wrap,
-            destino,
-            disperso,
-            giro: 0.5 + (i % 3) * 0.4
-          });
-          raiz.add(wrap);
+          grupos.push({ wrap, destino, disperso, giro: 0.5 + (i % 3) * 0.4 });
           i++;
         });
 
         animar();
       });
-
+      
       // --- Progreso de ensamblaje según scroll global ---
       // 0 = totalmente desarmado (al empezar Proyectos)
       // 1 = totalmente armado (al llegar a Contacto)
