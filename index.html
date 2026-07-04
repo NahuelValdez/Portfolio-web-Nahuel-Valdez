@@ -885,30 +885,37 @@ if (window.innerWidth >= 992) {
           const edges = new THREE.EdgesGeometry(obj.geometry, 18);
           const linea = new THREE.LineSegments(edges, mat);
 
-          // Posición mundial real de la pieza, ya centrada
+          // Llevamos la pieza a su posición mundial real, ya centrada al conjunto
           obj.updateWorldMatrix(true, false);
           linea.applyMatrix4(obj.matrixWorld);
-          linea.position.sub(centro);   // centrar (sin escalar acá: lo hace el contenedor)
+          linea.position.sub(centro);
 
+          // Centro real de la pieza (su lugar cuando está armada)
+          const cajaPieza = new THREE.Box3().setFromObject(linea);
+          const centroPieza = cajaPieza.getCenter(new THREE.Vector3());
+
+          // El wrap se ubica en el centro de la pieza; la línea se recentra
+          // dentro del wrap para que la rotación sea sobre su propio eje.
           const wrap = new THREE.Group();
+          wrap.position.copy(centroPieza);
+          linea.position.sub(centroPieza);
           wrap.add(linea);
           contenedor3D.add(wrap);
 
-          const destino = new THREE.Vector3(0, 0, 0);  // su lugar es el origen del wrap
+          const destino = centroPieza.clone();   // su lugar armado
 
-          // Dispersión acotada, en coordenadas locales del contenedor
-          const centroPieza = new THREE.Box3().setFromObject(linea).getCenter(new THREE.Vector3());
+          // Dispersión acotada: se separa desde su centro hacia afuera, poco
           const dir = centroPieza.clone();
           if (dir.length() < 0.001) dir.set(Math.cos(i), Math.sin(i), 0);
           dir.normalize();
-          const empuje = 0.35;
+          const empuje = 0.4;
           const disperso = dir.multiplyScalar(empuje);
-          disperso.y += ((i % 5) - 2) * 0.06;
+          disperso.y += ((i % 5) - 2) * 0.05;
 
           grupos.push({ wrap, destino, disperso, giro: 0.5 + (i % 3) * 0.4 });
           i++;
         });
-
+       
         animar();
       });
       
