@@ -808,10 +808,167 @@ if (window.innerWidth >= 992) {
   })();
 </script>
 
-</body>
+<!-- ===== Modelo 3D del sidebar (three.js + GLTF/Draco) ===== -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 
-</html>
+<script type="module">
+  // Solo desktop
+  if (window.matchMedia('(min-width: 992px)').matches) {
+    import('three').then(async (THREE) => {
+      const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+      const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
 
+      const RUTA_MODELO = './ASSETS/MODELOS/HUERTA.glb';
+      const COLOR_LINEA = 0xdfe5ea;   // blanco/gris neutro (blueprint)
+      const OPACIDAD_LINEA = 0.5;
+
+      const contenedor = document.getElementById('lienzo-navbar');
+      const canvas = document.getElementById('canvas-modelo');
+      if (!contenedor || !canvas) return;
+
+      let W = contenedor.clientWidth;
+      let H = contenedor.clientHeight;
+
+      const escena = new THREE.Scene();
+      const camara = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
+      camara.position.set(0, 0.15, 4.6);
+      camara.lookAt(0, 0, 0);
+
+      const render = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      render.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      render.setSize(W, H, false);
+      render.setClearColor(0x000000, 0);
+
+      // --- Carga del modelo (Draco) ---
+      const draco = new DRACOLoader();
+      draco.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/');
+      const loader = new GLTFLoader();
+      loader.setDRACOLoader(draco);
+
+      const grupos = [];   // cada pieza con su destino y su posición dispersa
+      const raiz = new THREE.Group();
+      escena.add(raiz);
+
+      loader.load(RUTA_MODELO, (gltf) => {
+        const modelo = gltf.scene;
+
+        // Centrar y normalizar escala a ~2 unidades
+        const box = new THREE.Box3().setFromObject(modelo);
+        const centro = box.getCenter(new THREE.Vector3());
+        const tam = box.getSize(new THREE.Vector3());
+        const escala = 2.0 / Math.max(tam.x, tam.y, tam.z);
+
+        const mat = new THREE.LineBasicMaterial({
+          color: COLOR_LINEA, transparent: true, opacity: OPACIDAD_LINEA
+        });
+
+        let i = 0;
+        modelo.traverse((obj) => {
+          if (!obj.isMesh) return;
+
+          // Wireframe fino (blueprint) por cada pieza
+          const edges = new THREE.EdgesGeometry(obj.geometry, 18);
+          const linea = new THREE.LineSegments(edges, mat);
+
+          // Copiamos la transformación mundial de la pieza
+          obj.updateWorldMatrix(true, false);
+          linea.applyMatrix4(obj.matrixWorld);
+
+          const wrap = new THREE.Group();
+          wrap.add(linea);
+          // Centrar+escalar todo el conjunto igual
+          wrap.position.sub(centro);
+          wrap.position.multiplyScalar(escala);
+          wrap.scale.setScalar(escala);
+
+          // Guardamos su destino (posición ya armada)
+          const destino = wrap.position.clone();
+
+          // Posición dispersa inicial (en abanico alrededor)
+          const ang = i * 2.399963;               // ángulo áureo → reparto parejo
+          const r = 1.6 + (i % 4) * 0.35;
+          const disperso = new THREE.Vector3(
+            Math.cos(ang) * r,
+            Math.sin(ang * 1.3) * r * 0.7 + ((i % 5) - 2) * 0.3,
+            Math.sin(ang) * r
+          );
+
+          grupos.push({
+            wrap,
+            destino,
+            disperso,
+            giro: 0.5 + (i % 3) * 0.4
+          });
+          raiz.add(wrap);
+          i++;
+        });
+
+        animar();
+      });
+
+      // --- Progreso de ensamblaje según scroll global ---
+      // 0 = totalmente desarmado (al empezar Proyectos)
+      // 1 = totalmente armado (al llegar a Contacto)
+      const secInicio = document.getElementById('Proyectos');
+      const secFin = document.getElementById('Contacto');
+
+      function progresoScroll() {
+        if (!secInicio || !secFin) return 0;
+        const y = window.scrollY;
+        const inicio = secInicio.offsetTop;        // empieza a armar en Proyectos
+        const fin = secFin.offsetTop;              // termina en Contacto
+        if (fin <= inicio) return 0;
+        return Math.min(1, Math.max(0, (y - inicio) / (fin - inicio)));
+      }
+
+      let objetivo = 0;
+      let actual = 0;
+
+      window.addEventListener('scroll', () => {
+        objetivo = progresoScroll();
+      }, { passive: true });
+
+      // --- Loop de animación ---
+      function animar() {
+        requestAnimationFrame(animar);
+
+        // Suavizado del progreso (lerp)
+        actual += (objetivo - actual) * 0.06;
+        const disperso = 1 - actual;   // 1 = disperso, 0 = armado
+
+        for (const g of grupos) {
+          g.wrap.position.lerpVectors(g.destino, g.destino.clone().add(g.disperso), disperso);
+          g.wrap.rotation.x = disperso * g.giro * 2.2;
+          g.wrap.rotation.y = disperso * g.giro * 3.1;
+        }
+
+        // Rotación lenta y constante de todo el conjunto
+        raiz.rotation.y += 0.006;
+
+        render.render(escena, camara);
+      }
+
+      // --- Resize ---
+      window.addEventListener('resize', () => {
+        if (!window.matchMedia('(min-width: 992px)').matches) return;
+        W = contenedor.clientWidth;
+        H = contenedor.clientHeight;
+        if (W === 0 || H === 0) return;
+        camara.aspect = W / H;
+        camara.updateProjectionMatrix();
+        render.setSize(W, H, false);
+      });
+    });
+  }
+</script>
+  
 </body>
 
 </html>
