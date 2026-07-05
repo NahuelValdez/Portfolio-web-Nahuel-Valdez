@@ -377,8 +377,8 @@ img {
   }
 
   .card-slide.anterior {
-    transform: translate(-130%, -50%) scale(0.85);
-    opacity: 0.5;
+    transform: translate(-130%, -50%) scale(0.72);
+    opacity: 0.3;
     z-index: 2;
     pointer-events: auto;
     cursor: pointer;
@@ -386,13 +386,13 @@ img {
   }
 
   .card-slide.anterior:hover {
-    opacity: 0.85;
-    transform: translate(-130%, -50%) scale(0.9);
+    opacity: 0.6;
+    transform: translate(-130%, -50%) scale(0.78);
   }
 
   .card-slide.siguiente {
-    transform: translate(30%, -50%) scale(0.85);
-    opacity: 0.5;
+    transform: translate(30%, -50%) scale(0.72);
+    opacity: 0.3;
     z-index: 2;
     pointer-events: auto;
     cursor: pointer;
@@ -400,8 +400,8 @@ img {
   }
 
   .card-slide.siguiente:hover {
-    opacity: 0.85;
-    transform: translate(30%, -50%) scale(0.9);
+    opacity: 0.6;
+    transform: translate(30%, -50%) scale(0.78);
   }
 
   .carousel-titulo {
