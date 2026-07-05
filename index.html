@@ -656,6 +656,14 @@ if (window.innerWidth >= 992) {
     }
   };
 
+  // Abre el texto de la card que quedó como principal
+  function abrirContenidoActivo() {
+    const activa = items[indiceActual];
+    if (!activa) return;
+    const contenido = activa.querySelector('.card-custom-content');
+    if (contenido) contenido.classList.add('activo');
+  }
+
   document.getElementById('carouselTrack').addEventListener('click', (e) => {
     const slide = e.target.closest('.card-slide');
     if (!slide) return;
@@ -663,10 +671,12 @@ if (window.innerWidth >= 992) {
       detenerAutoplay();
       indiceActual = (indiceActual + 1) % items.length;
       actualizarCarrusel();
+      abrirContenidoActivo();
     } else if (slide.classList.contains('anterior')) {
       detenerAutoplay();
       indiceActual = (indiceActual - 1 + items.length) % items.length;
       actualizarCarrusel();
+      abrirContenidoActivo();
     }
   });
 
