@@ -941,9 +941,15 @@ if (window.innerWidth >= 992) {
         objetivo = progresoScroll();
       }, { passive: true });
 
+      // --- Cámara: órbita alrededor del modelo, controlada por el scroll ---
+      const DISTANCIA_CAMARA = 6;       // radio de la órbita (coincide con la Z original)
+      const VUELTAS_CAMARA = 0.6;       // cuántas vueltas completas da la cámara en todo el recorrido
+      const ALTURA_BASE_CAMARA = 0.15;  // igual que la posición Y original
+
       // --- Loop de animación ---
-      function animar() {
+      function animar(t) {
         requestAnimationFrame(animar);
+        const tiempo = t * 0.001; // a segundos
 
         // Suavizado del progreso (lerp)
         actual += (objetivo - actual) * 0.06;
@@ -955,12 +961,20 @@ if (window.innerWidth >= 992) {
           g.wrap.rotation.y = disperso * g.giro * 1.5;
         }
 
-        // Rotación lenta y constante de todo el conjunto
-        raiz.rotation.y += 0.006;
+        // El objeto queda quieto: solo un leve flote constante (sin rotación direccional)
+        raiz.position.y = Math.sin(tiempo * 0.6) * 0.06;
+        raiz.rotation.z = Math.sin(tiempo * 0.4) * 0.02;
+        raiz.rotation.x = Math.sin(tiempo * 0.35) * 0.015;
+
+        // La cámara orbita alrededor del modelo según el progreso de scroll
+        const angulo = actual * Math.PI * 2 * VUELTAS_CAMARA;
+        camara.position.x = Math.sin(angulo) * DISTANCIA_CAMARA;
+        camara.position.z = Math.cos(angulo) * DISTANCIA_CAMARA;
+        camara.position.y = ALTURA_BASE_CAMARA + Math.sin(angulo * 0.5) * 0.4;
+        camara.lookAt(0, 0, 0);
 
         render.render(escena, camara);
       }
-
       // --- Resize ---
       window.addEventListener('resize', () => {
         if (!window.matchMedia('(min-width: 992px)').matches) return;
