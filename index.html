@@ -845,7 +845,6 @@ if (window.innerWidth >= 992) {
       const loader = new GLTFLoader();
       loader.setDRACOLoader(draco);
 
-      const grupos = [];   // cada pieza con su destino y su posición dispersa
       const raiz = new THREE.Group();
       escena.add(raiz);
 
@@ -871,7 +870,7 @@ if (window.innerWidth >= 992) {
           color: COLOR_LINEA, transparent: true, opacity: OPACIDAD_LINEA
         });
 
-        let i = 0;
+        // El modelo se arma UNA sola vez y queda siempre así (no se desarma más)
         modelo.traverse((obj) => {
           if (!obj.isMesh) return;
 
@@ -883,46 +882,22 @@ if (window.innerWidth >= 992) {
           linea.applyMatrix4(obj.matrixWorld);
           linea.position.sub(centro);
 
-          // Centro real de la pieza (su lugar cuando está armada)
-          const cajaPieza = new THREE.Box3().setFromObject(linea);
-          const centroPieza = cajaPieza.getCenter(new THREE.Vector3());
-
-          // El wrap se ubica en el centro de la pieza; la línea se recentra
-          // dentro del wrap para que la rotación sea sobre su propio eje.
-          const wrap = new THREE.Group();
-          wrap.position.copy(centroPieza);
-          linea.position.sub(centroPieza);
-          wrap.add(linea);
-          contenedor3D.add(wrap);
-
-          const destino = centroPieza.clone();   // su lugar armado
-
-          // Dispersión acotada: se separa desde su centro hacia afuera, poco
-          const dir = centroPieza.clone();
-          if (dir.length() < 0.001) dir.set(Math.cos(i), Math.sin(i), 0);
-          dir.normalize();
-          const empuje = 0.4;
-          const disperso = dir.multiplyScalar(empuje);
-          disperso.y += ((i % 5) - 2) * 0.05;
-
-          grupos.push({ wrap, destino, disperso, giro: 0.5 + (i % 3) * 0.4 });
-          i++;
+          contenedor3D.add(linea);
         });
-       
+
         animar();
       });
-      
-      // --- Progreso de ensamblaje según scroll global ---
-      // 0 = totalmente desarmado (al empezar Proyectos)
-      // 1 = totalmente armado (al llegar a Contacto)
+
+      // --- Progreso de scroll global (0 a 1, de Proyectos a Contacto) ---
+      // Ya no arma/desarma nada: solo aporta un extra de giro a la cámara.
       const secInicio = document.getElementById('Proyectos');
       const secFin = document.getElementById('Contacto');
 
       function progresoScroll() {
         if (!secInicio || !secFin) return 0;
         const y = window.scrollY;
-        const inicio = secInicio.offsetTop;        // empieza a armar en Proyectos
-        const fin = secFin.offsetTop;              // termina en Contacto
+        const inicio = secInicio.offsetTop;
+        const fin = secFin.offsetTop;
         if (fin <= inicio) return 0;
         return Math.min(1, Math.max(0, (y - inicio) / (fin - inicio)));
       }
@@ -934,40 +909,38 @@ if (window.innerWidth >= 992) {
         objetivo = progresoScroll();
       }, { passive: true });
 
-      // --- Cámara: órbita alrededor del modelo, controlada por el scroll ---
-      const DISTANCIA_CAMARA = 6;       // radio de la órbita (coincide con la Z original)
-      const VUELTAS_CAMARA = 0.28;       // cuántas vueltas completas da la cámara en todo el recorrido
-      const ALTURA_BASE_CAMARA = 0.15;  // igual que la posición Y original
+      // --- Cámara: órbita alrededor del modelo (giro propio constante + impulso del scroll) ---
+      const DISTANCIA_CAMARA = 6;         // radio de la órbita
+      const VUELTAS_SCROLL = 0.5;         // vueltas extra que aporta el scroll (Proyectos -> Contacto)
+      const VELOCIDAD_AUTOGIRO = 0.12;    // rad/seg del giro propio y constante de la cámara
+      const ALTURA_BASE_CAMARA = 0.15;
+      const DESPLAZAMIENTO_INFERIOR = 1.6; // cuánto "más abajo" queda el modelo dentro del canvas
 
       // --- Loop de animación ---
       function animar(t) {
         requestAnimationFrame(animar);
         const tiempo = t * 0.001; // a segundos
 
-        // Suavizado del progreso (lerp)
+        // Suavizado del progreso de scroll (lerp)
         actual += (objetivo - actual) * 0.06;
-        const disperso = 1 - actual;   // 1 = disperso, 0 = armado
 
-        for (const g of grupos) {
-          g.wrap.position.lerpVectors(g.destino, g.destino.clone().add(g.disperso), disperso);
-          g.wrap.rotation.x = disperso * g.giro * 1.0;
-          g.wrap.rotation.y = disperso * g.giro * 1.5;
-        }
-
-        // El objeto queda quieto: solo un leve flote constante (sin rotación direccional)
+        // El modelo queda siempre armado y quieto: solo un leve flote constante
         raiz.position.y = Math.sin(tiempo * 0.6) * 0.06;
         raiz.rotation.z = Math.sin(tiempo * 0.4) * 0.02;
         raiz.rotation.x = Math.sin(tiempo * 0.35) * 0.015;
 
-        // La cámara orbita alrededor del modelo según el progreso de scroll
-        const angulo = actual * Math.PI * 2 * VUELTAS_CAMARA;
+        // Ángulo de la cámara: giro propio constante + impulso adicional del scroll
+        const angulo = tiempo * VELOCIDAD_AUTOGIRO + actual * Math.PI * 2 * VUELTAS_SCROLL;
         camara.position.x = Math.sin(angulo) * DISTANCIA_CAMARA;
         camara.position.z = Math.cos(angulo) * DISTANCIA_CAMARA;
         camara.position.y = ALTURA_BASE_CAMARA + Math.sin(angulo * 0.5) * 0.4;
-        camara.lookAt(0, 0, 0);
+
+        // Mirar un punto por ENCIMA del modelo hace que este quede más abajo en el canvas
+        camara.lookAt(0, DESPLAZAMIENTO_INFERIOR, 0);
 
         render.render(escena, camara);
       }
+
       // --- Resize ---
       window.addEventListener('resize', () => {
         if (!window.matchMedia('(min-width: 992px)').matches) return;
