@@ -623,6 +623,10 @@ if (window.innerWidth >= 992) {
   let indiceActual = 0;
   let autoplayCarrusel = null;
 
+  function hayContenidoAbierto() {
+    return !!document.querySelector('#carouselTrack .card-custom-content.activo');
+  }
+
   function actualizarCarrusel() {
     items.forEach((item, i) => {
       item.classList.remove('activo', 'anterior', 'siguiente');
@@ -641,9 +645,18 @@ if (window.innerWidth >= 992) {
     });
   }
 
+  function abrirContenidoActivo() {
+    const activa = items[indiceActual];
+    if (!activa) return;
+    const contenido = activa.querySelector('.card-custom-content');
+    if (contenido) contenido.classList.add('activo');
+  }
+
   function iniciarAutoplay() {
     if (autoplayCarrusel) return;
+    if (hayContenidoAbierto()) return; // no arranca si hay texto abierto
     autoplayCarrusel = setInterval(() => {
+      if (hayContenidoAbierto()) return; // pausa mientras se está leyendo
       indiceActual = (indiceActual + 1) % items.length;
       actualizarCarrusel();
     }, 3000);
@@ -655,14 +668,6 @@ if (window.innerWidth >= 992) {
       autoplayCarrusel = null;
     }
   };
-
-  // Abre el texto de la card que quedó como principal
-  function abrirContenidoActivo() {
-    const activa = items[indiceActual];
-    if (!activa) return;
-    const contenido = activa.querySelector('.card-custom-content');
-    if (contenido) contenido.classList.add('activo');
-  }
 
   document.getElementById('carouselTrack').addEventListener('click', (e) => {
     const slide = e.target.closest('.card-slide');
@@ -718,12 +723,13 @@ if (window.innerWidth >= 992) {
   });
 
   document.getElementById('carouselProyectos').addEventListener('mouseleave', () => {
+    if (hayContenidoAbierto()) return; // no reanudar si hay texto abierto
     timeoutReanudar = setTimeout(() => {
-      if (!autoplayCarrusel) {
+      if (!autoplayCarrusel && !hayContenidoAbierto()) {
         indiceActual = (indiceActual + 1) % items.length;
         actualizarCarrusel();
         setTimeout(() => {
-          if (!autoplayCarrusel) {
+          if (!autoplayCarrusel && !hayContenidoAbierto()) {
             iniciarAutoplay();
           }
         }, 4500);
@@ -748,6 +754,18 @@ if (window.innerWidth >= 992) {
   }, { threshold: 0.2 });
 
   observerCarrusel.observe(document.getElementById('Proyectos'));
+
+  // Click fuera de una card: cierra el texto abierto y reanuda el autoplay
+  document.getElementById('Proyectos').addEventListener('click', (e) => {
+    const contenidoAbierto = document.querySelector('#carouselTrack .card-custom-content.activo');
+    if (!contenidoAbierto) return; // no hay nada que cerrar
+
+    const dentroDeCard = e.target.closest('.card-custom');
+    if (dentroDeCard) return; // el click fue sobre una card, lo maneja su propio listener
+
+    contenidoAbierto.classList.remove('activo');
+    iniciarAutoplay();
+  });
 }
 
 </script>
