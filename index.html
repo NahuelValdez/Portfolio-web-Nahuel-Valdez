@@ -505,6 +505,15 @@ window.addEventListener('scroll', () => {
   // Mostrar/ocultar texto al hacer click en la imagen (tarjetas sueltas y carrusel)
 document.querySelectorAll('.card-custom-image').forEach(img => {
   img.addEventListener('click', () => {
+    const slide = img.closest('.card-slide');
+
+    // Si la card pertenece al carrusel y NO es la principal (es anterior/siguiente),
+    // no togglear nada acá: el cambio de card principal + apertura del texto
+    // lo maneja el listener de #carouselTrack más abajo.
+    if (slide && (slide.classList.contains('anterior') || slide.classList.contains('siguiente'))) {
+      return;
+    }
+
     const enCarrusel = img.closest('.carousel-track');
     if (enCarrusel && typeof detenerAutoplay === 'function') detenerAutoplay();
     const card = img.closest('.card-custom');
@@ -512,7 +521,6 @@ document.querySelectorAll('.card-custom-image').forEach(img => {
     contenido.classList.toggle('activo');
   });
 });
-
   // Grilla de Proyectos: la zona nítida sigue al cursor, y se desvanece al salir
 const seccionProyectos = document.getElementById('Proyectos');
 let animacionGrilla = null;
