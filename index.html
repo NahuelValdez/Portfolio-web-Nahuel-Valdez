@@ -876,7 +876,10 @@ if (window.innerWidth >= 992) {
       let H = contenedor.clientHeight;
 
       const escena = new THREE.Scene();
-      const camara = new THREE.PerspectiveCamera(35, W / H, 0.1, 100);
+      // near/far ajustados a donde realmente vive el modelo (no 0.1-100): así el buffer de
+      // profundidad concentra su precisión ahí, evitando el parpadeo/transparencia entre
+      // tubos que casi se tocan (típico en piezas CAD sin holgura entre sí).
+      const camara = new THREE.PerspectiveCamera(35, W / H, 1, 20);
       camara.position.set(0, 0.15, 6);
       camara.lookAt(0, 0, 0);
 
@@ -912,13 +915,18 @@ if (window.innerWidth >= 992) {
         contenedor3D.scale.setScalar(escala);
         raiz.add(contenedor3D);
 
-        // Relleno = color del fondo, sin luz => invisible, pero tapa las líneas de atrás
+        // Relleno = color del fondo, sin luz => invisible, pero tapa las líneas de atrás.
+        // Sin polygonOffset acá: el sólido queda en su profundidad REAL, así ocluye bien
+        // entre tubos distintos que se cruzan cerca (si no, "gana" la línea de atrás y se ve
+        // el modelo como transparente en esas zonas). El offset va en las líneas (ver abajo).
         const matSolido = new THREE.MeshBasicMaterial({
-          color: COLOR_FONDO, side: THREE.DoubleSide, depthWrite: true,
-          polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1
+          color: COLOR_FONDO, side: THREE.DoubleSide, depthWrite: true
         });
+        // Las líneas se empujan un poco HACIA la cámara (offset negativo) para dibujarse
+        // limpias sobre su propia superficie, sin desplazar el sólido (evita el "sangrado").
         const matLinea = new THREE.LineBasicMaterial({
-          color: COLOR_LINEA, transparent: true, opacity: OPACIDAD_LINEA
+          color: COLOR_LINEA, transparent: true, opacity: OPACIDAD_LINEA,
+          polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1
         });
 
         // El modelo se arma UNA sola vez y queda siempre así (no se desarma más)
@@ -1034,11 +1042,9 @@ if (window.innerWidth >= 992) {
       // Orientación inicial del modelo (pose de referencia elegida por el usuario)
       const INICIO_ROT = { y: -1.35, x: 0.16 };
 
-      // --- Entrada: "giro + fundido" (arranca cuando el texto del hero ya entró) ---
-      const DELAY_ENTRADA = 1200;  // ms desde que carga la página
-      const DUR_ENTRADA   = 1.2;   // segundos que dura la animación de entrada
-      const GIRO_OFFSET_Y = -1.3;  // rad: de dónde "viene girando" hasta encajar en su pose
-      const GIRO_OFFSET_X = 0.25;
+      // --- Entrada: fundido tipo "fantasma" (arranca cuando el texto del hero ya entró) ---
+      const DELAY_ENTRADA = 0;     // arranca ya (simultáneo con el título, que no tiene delay)
+      const DUR_ENTRADA   = 0.4;   // más rápida que el título (800ms): termina de entrar antes
       const easeOut = (p) => 1 - Math.pow(1 - p, 3);
 
       const contenedor = document.getElementById('lienzo-hero');
@@ -1051,7 +1057,10 @@ if (window.innerWidth >= 992) {
 
       const escena = new THREE.Scene();
       const FOV = 40;
-      const camara = new THREE.PerspectiveCamera(FOV, W / H, 0.1, 100);
+      // near/far ajustados a donde realmente vive el modelo (no 0.1-100): así el buffer de
+      // profundidad concentra su precisión ahí, evitando el parpadeo/transparencia entre
+      // tubos que casi se tocan (típico en piezas CAD sin holgura entre sí).
+      const camara = new THREE.PerspectiveCamera(FOV, W / H, 1, 20);
       camara.position.set(0, 0.2, 6);
       camara.lookAt(0, 0, 0);
 
@@ -1103,13 +1112,18 @@ if (window.innerWidth >= 992) {
         contenedor3D.rotation.y = Math.PI;   // orientación: de frente y derecho
         raiz.add(contenedor3D);
 
-        // Relleno = color del fondo, sin luz => invisible, pero tapa las líneas de atrás
+        // Relleno = color del fondo, sin luz => invisible, pero tapa las líneas de atrás.
+        // Sin polygonOffset acá: el sólido queda en su profundidad REAL, así ocluye bien
+        // entre tubos distintos que se cruzan cerca (si no, "gana" la línea de atrás y se ve
+        // el modelo como transparente en esas zonas). El offset va en las líneas (ver abajo).
         const matSolido = new THREE.MeshBasicMaterial({
-          color: COLOR_FONDO, side: THREE.DoubleSide, depthWrite: true,
-          polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1
+          color: COLOR_FONDO, side: THREE.DoubleSide, depthWrite: true
         });
+        // Las líneas se empujan un poco HACIA la cámara (offset negativo) para dibujarse
+        // limpias sobre su propia superficie, sin desplazar el sólido (evita el "sangrado").
         matLinea = new THREE.LineBasicMaterial({
-          color: COLOR_LINEA, transparent: true, opacity: 0   // arranca invisible; la entrada lo sube
+          color: COLOR_LINEA, transparent: true, opacity: 0,  // arranca invisible; la entrada lo sube
+          polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1
         });
 
         modelo.traverse((obj) => {
@@ -1132,16 +1146,40 @@ if (window.innerWidth >= 992) {
         animar();
       });
 
-      // --- Parallax de scroll: el modelo sube más rápido que el resto del contenido ---
-      const PARALLAX_DISTANCIA = 1.4; // unidades que sube "de más" al scrollear un alto de hero
+      // --- Parallax de scroll (solo dentro del hero): capas a distinta velocidad ---
+      // El 3D sube más rápido que el scroll normal (capa "cercana"). El texto se ATRASA
+      // respecto al scroll normal (capa "lejana/pesada"), en 3 intensidades: "Hola" es la
+      // que MENOS se atrasa (1º), el título un poco más (2º), el subtítulo la que MÁS (3º).
+      // Usamos la propiedad CSS "translate" (no "transform") porque el título/subtítulo ya
+      // tienen su propia animación de entrada (AOS) que usa "transform"; así se combinan
+      // sin pisarse en vez de competir por la misma propiedad.
+      const PARALLAX_DISTANCIA = 2.6;  // unidades world que sube el 3D "de más" (más notorio que antes)
+      const PARALLAX_GIRO      = 1.3;  // rad que el 3D gira "de más" al scrollear un alto de hero (sube girando)
+      const LAG_HOLA_PX        = 20;   // "Hola —": el que MENOS se atrasa (1º)
+      const LAG_TITULO_PX      = 90;   // título: atraso bien marcado (2º)
+      const LAG_SUBTITULO_PX   = 190;  // subtítulo: el que MÁS se atrasa, separación grande (3º)
+      const LAG_BOTON_PX       = 60;   // botón "Ver más"
+
+      const heroHola = document.querySelector('#home .hola-hero');
+      const heroTitulo = document.querySelector('#home h1');
+      const heroSubtitulo = document.querySelector('#home .texto-hero');
+      const heroBtnWrap = document.getElementById('btnScrollDownWrap');
 
       function calcularParallax() {
         const alto = contenedor.clientHeight || window.innerHeight;
         return Math.min(1, Math.max(0, window.scrollY / alto));
       }
+      function aplicarParallaxDOM(progreso) {
+        if (heroHola)       heroHola.style.translate       = `0 ${progreso * LAG_HOLA_PX}px`;
+        if (heroTitulo)     heroTitulo.style.translate     = `0 ${progreso * LAG_TITULO_PX}px`;
+        if (heroSubtitulo)  heroSubtitulo.style.translate  = `0 ${progreso * LAG_SUBTITULO_PX}px`;
+        if (heroBtnWrap)    heroBtnWrap.style.translate    = `0 ${progreso * LAG_BOTON_PX}px`;
+      }
       let parallaxProgreso = calcularParallax();
+      aplicarParallaxDOM(parallaxProgreso);
       window.addEventListener('scroll', () => {
         parallaxProgreso = calcularParallax();
+        aplicarParallaxDOM(parallaxProgreso);
       }, { passive: true });
 
       // --- Interacción ---
@@ -1204,21 +1242,18 @@ if (window.innerWidth >= 992) {
         const vY = Math.sin(tiempo * 0.25) * VAIVEN_Y;
         const vX = Math.sin(tiempo * 0.19) * VAIVEN_X;
 
-        // Entrada "giro + fundido": el modelo viene girando desde un offset y encaja en su
-        // pose mientras las líneas suben de opacidad 0 -> OPACIDAD_LINEA. Dispara sola cuando
-        // el texto ya entró (DELAY_ENTRADA) y el modelo ya cargó (lo que pase después).
-        let giroExtraY = 0, giroExtraX = 0;
+        // Entrada tipo "fantasma": solo fundido de opacidad (sin giro), suave y sin golpe.
+        // Dispara sola cuando el texto ya entró (DELAY_ENTRADA) y el modelo ya cargó.
         if (entradaActiva) {
           const p = Math.min(1, (performance.now() - entradaT0) / 1000 / DUR_ENTRADA);
           const e = easeOut(p);
-          giroExtraY = (1 - e) * GIRO_OFFSET_Y;
-          giroExtraX = (1 - e) * GIRO_OFFSET_X;
           if (matLinea) matLinea.opacity = OPACIDAD_LINEA * e;
           if (p >= 1) entradaActiva = false;
         }
 
-        raiz.rotation.y = rotY + vY + giroExtraY;
-        raiz.rotation.x = BASE_TILT + rotX + vX + giroExtraX;
+        // Parallax: sube Y gira a medida que se scrollea el hero (además del resto de rotación)
+        raiz.rotation.y = rotY + vY + parallaxProgreso * PARALLAX_GIRO;
+        raiz.rotation.x = BASE_TILT + rotX + vX;
         raiz.position.x = UB.x;
         raiz.position.y = UB.y + Math.sin(tiempo * 0.6) * FLOTE + parallaxProgreso * PARALLAX_DISTANCIA;
         raiz.scale.setScalar(UB.escala);
