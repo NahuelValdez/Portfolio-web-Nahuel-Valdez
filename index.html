@@ -964,49 +964,55 @@ if (window.innerWidth >= 992) {
         animar();
       });
 
-      // --- Progreso de scroll global (0 a 1, de Proyectos a Contacto) ---
-      // Ya no arma/desarma nada: solo aporta un extra de giro a la cámara.
-      const secInicio = document.getElementById('Proyectos');
-      const secFin = document.getElementById('Contacto');
-
-      function progresoScroll() {
-        if (!secInicio || !secFin) return 0;
-        const y = window.scrollY;
-        const inicio = secInicio.offsetTop;
-        const fin = secFin.offsetTop;
-        if (fin <= inicio) return 0;
-        return Math.min(1, Math.max(0, (y - inicio) / (fin - inicio)));
-      }
-
-      let objetivo = 0;
-      let actual = 0;
+      // --- Dirección del giro según el SENTIDO del scroll ---
+      // La cámara gira siempre, pero la DIRECCIÓN depende de hacia dónde scrolleás:
+      //   scroll hacia ABAJO  -> giro normal (adelante)
+      //   scroll hacia ARRIBA -> giro invertido
+      // Además, scrollear le da un impulso extra (acelera) que decae solo. La dirección
+      // queda "memorizada": si dejás de scrollear, sigue girando en el último sentido.
+      let dirGiro = 1;                 // 1 = adelante (scroll abajo) | -1 = invertido (scroll arriba)
+      let impulso = 0;                 // extra de velocidad al scrollear (decae)
+      let ultimoScrollY = window.scrollY;
 
       window.addEventListener('scroll', () => {
-        objetivo = progresoScroll();
+        const y = window.scrollY;
+        const delta = y - ultimoScrollY;
+        ultimoScrollY = y;
+        if (delta > 0) dirGiro = 1;        // abajo  -> giro normal
+        else if (delta < 0) dirGiro = -1;  // arriba -> giro invertido
+        impulso = Math.min(impulso + Math.abs(delta) * 0.004, IMPULSO_MAX);
       }, { passive: true });
 
-      // --- Cámara: órbita alrededor del modelo (giro propio constante + impulso del scroll) ---
-      const DISTANCIA_CAMARA = 6;         // radio de la órbita
-      const VUELTAS_SCROLL = 0.5;         // vueltas extra que aporta el scroll (Proyectos -> Contacto)
-      const VELOCIDAD_AUTOGIRO = 0.12;    // rad/seg del giro propio y constante de la cámara
+      // --- Cámara: órbita alrededor del modelo ---
+      const DISTANCIA_CAMARA   = 6;      // radio de la órbita
+      const VELOCIDAD_BASE     = 0.12;   // rad/seg del giro constante (en la dirección actual)
+      const IMPULSO_MAX        = 0.9;    // tope del extra de velocidad al scrollear
       const ALTURA_BASE_CAMARA = 0.15;
       const DESPLAZAMIENTO_INFERIOR = 1.4; // cuánto "más abajo" queda el modelo dentro del canvas
+
+      let angulo = 0;        // ángulo acumulado de la órbita
+      let velGiro = VELOCIDAD_BASE; // velocidad angular actual (con signo), suavizada
+      let tPrev = null;
 
       // --- Loop de animación ---
       function animar(t) {
         requestAnimationFrame(animar);
         const tiempo = t * 0.001; // a segundos
-
-        // Suavizado del progreso de scroll (lerp)
-        actual += (objetivo - actual) * 0.06;
+        const dt = (t && tPrev) ? Math.min((t - tPrev) * 0.001, 0.05) : 0.016;
+        if (t) tPrev = t;
 
         // El modelo queda siempre armado y quieto: solo un leve flote constante
         raiz.position.y = Math.sin(tiempo * 0.6) * 0.06;
         raiz.rotation.z = Math.sin(tiempo * 0.4) * 0.02;
         raiz.rotation.x = Math.sin(tiempo * 0.35) * 0.015;
 
-        // Ángulo de la cámara: giro propio constante + impulso adicional del scroll
-        const angulo = tiempo * VELOCIDAD_AUTOGIRO + actual * Math.PI * 2 * VUELTAS_SCROLL;
+        // Velocidad objetivo = dirección actual * (base + impulso del scroll). El impulso
+        // decae solo, y la velocidad real la persigue suavizada (reversión sin golpe).
+        impulso *= 0.94;
+        const velObjetivo = dirGiro * (VELOCIDAD_BASE + impulso);
+        velGiro += (velObjetivo - velGiro) * 0.08;
+        angulo += velGiro * dt;
+
         camara.position.x = Math.sin(angulo) * DISTANCIA_CAMARA;
         camara.position.z = Math.cos(angulo) * DISTANCIA_CAMARA;
         camara.position.y = ALTURA_BASE_CAMARA + Math.sin(angulo * 0.5) * 0.4;
@@ -1163,12 +1169,18 @@ if (window.innerWidth >= 992) {
       // Usamos la propiedad CSS "translate" (no "transform") porque el título/subtítulo ya
       // tienen su propia animación de entrada (AOS) que usa "transform"; así se combinan
       // sin pisarse en vez de competir por la misma propiedad.
-      const PARALLAX_DISTANCIA = 2.6;  // unidades world que sube el 3D "de más" (más notorio que antes)
-      const PARALLAX_GIRO      = 1.3;  // rad que el 3D gira "de más" al scrollear un alto de hero (sube girando)
-      const LAG_HOLA_PX        = 20;   // "Hola —": el que MENOS se atrasa (1º)
-      const LAG_TITULO_PX      = 90;   // título: atraso bien marcado (2º)
-      const LAG_SUBTITULO_PX   = 190;  // subtítulo: el que MÁS se atrasa, separación grande (3º)
-      const LAG_BOTON_PX       = 60;   // botón "Ver más"
+      const PARALLAX_DISTANCIA  = 2.6;  // unidades world que sube el 3D "de más" (más notorio que antes)
+      const PARALLAX_GIRO       = 1.3;  // rad que el 3D gira "de más" al scrollear un alto de hero (sube girando)
+      const PARALLAX_SUAVIZADO  = 0.08; // 0-1: cuán rápido el parallax alcanza al scroll real
+                                         // (menor = más delay/fluidez; evita el efecto "acelera y frena")
+      // Cascada: los tres textos SUBEN en SECUENCIA (Hola 1º, título 2º, subtítulo 3º).
+      // Cada uno sube su distancia completa dentro de su "ventana" del progreso de scroll
+      // (0-1); las ventanas se solapan para que la ola se sienta fluida, no cortada.
+      const SUBE_PX = 130;             // cuánto sube cada texto (igual para los tres)
+      const VENTANA_HOLA      = [0.00, 0.45]; // 1º: arranca primero
+      const VENTANA_TITULO    = [0.18, 0.63]; // 2º
+      const VENTANA_SUBTITULO = [0.36, 0.81]; // 3º: arranca último
+      const LAG_BOTON_PX       = 60;   // botón "Ver más" (se atrasa hacia abajo, sin cambios)
 
       const heroHola = document.querySelector('#home .hola-hero');
       const heroTitulo = document.querySelector('#home h1');
@@ -1179,17 +1191,27 @@ if (window.innerWidth >= 992) {
         const alto = contenedor.clientHeight || window.innerHeight;
         return Math.min(1, Math.max(0, window.scrollY / alto));
       }
+      // Reasigna el progreso global (0-1) a la ventana [inicio, fin] de un elemento, con
+      // easing suave al final para que cada texto "asiente" en vez de frenar de golpe.
+      function progresoEnVentana(progreso, ventana) {
+        const local = Math.min(1, Math.max(0, (progreso - ventana[0]) / (ventana[1] - ventana[0])));
+        return easeOut(local);
+      }
       function aplicarParallaxDOM(progreso) {
-        if (heroHola)       heroHola.style.translate       = `0 ${progreso * LAG_HOLA_PX}px`;
-        if (heroTitulo)     heroTitulo.style.translate     = `0 ${progreso * LAG_TITULO_PX}px`;
-        if (heroSubtitulo)  heroSubtitulo.style.translate  = `0 ${progreso * LAG_SUBTITULO_PX}px`;
+        // Cada texto SUBE (negativo) su distancia completa, pero dentro de su propia ventana:
+        // así arrancan escalonados (cascada) en vez de moverse todos juntos.
+        if (heroHola)       heroHola.style.translate       = `0 ${-progresoEnVentana(progreso, VENTANA_HOLA) * SUBE_PX}px`;
+        if (heroTitulo)     heroTitulo.style.translate     = `0 ${-progresoEnVentana(progreso, VENTANA_TITULO) * SUBE_PX}px`;
+        if (heroSubtitulo)  heroSubtitulo.style.translate  = `0 ${-progresoEnVentana(progreso, VENTANA_SUBTITULO) * SUBE_PX}px`;
         if (heroBtnWrap)    heroBtnWrap.style.translate    = `0 ${progreso * LAG_BOTON_PX}px`;
       }
+      // "parallaxProgreso" es el valor RAW (salta con cada evento de scroll, discontinuo).
+      // "parallaxSuave" lo persigue de a poco, cuadro a cuadro (ver animar()), y es el que
+      // se usa para mover el 3D y el texto: eso elimina el efecto de "acelera y frena".
       let parallaxProgreso = calcularParallax();
-      aplicarParallaxDOM(parallaxProgreso);
+      let parallaxSuave = parallaxProgreso;
       window.addEventListener('scroll', () => {
         parallaxProgreso = calcularParallax();
-        aplicarParallaxDOM(parallaxProgreso);
       }, { passive: true });
 
       // --- Interacción ---
@@ -1261,11 +1283,16 @@ if (window.innerWidth >= 992) {
           if (p >= 1) entradaActiva = false;
         }
 
+        // Parallax suavizado: persigue al scroll real cuadro a cuadro (evita el efecto
+        // "acelera y frena" de aplicar el valor crudo del evento scroll directamente).
+        parallaxSuave += (parallaxProgreso - parallaxSuave) * PARALLAX_SUAVIZADO;
+        aplicarParallaxDOM(parallaxSuave);
+
         // Parallax: sube Y gira a medida que se scrollea el hero (además del resto de rotación)
-        raiz.rotation.y = rotY + vY + parallaxProgreso * PARALLAX_GIRO;
+        raiz.rotation.y = rotY + vY + parallaxSuave * PARALLAX_GIRO;
         raiz.rotation.x = BASE_TILT + rotX + vX;
         raiz.position.x = UB.x;
-        raiz.position.y = UB.y + Math.sin(tiempo * 0.6) * FLOTE + parallaxProgreso * PARALLAX_DISTANCIA;
+        raiz.position.y = UB.y + Math.sin(tiempo * 0.6) * FLOTE + parallaxSuave * PARALLAX_DISTANCIA;
         raiz.scale.setScalar(UB.escala);
 
         render.render(escena, camara);
