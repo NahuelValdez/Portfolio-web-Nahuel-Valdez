@@ -436,9 +436,7 @@ img {
   }
 
   .carousel-flecha {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: none;   /* invisibles: la navegación es solo por teclado (flechas ←/→) */
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

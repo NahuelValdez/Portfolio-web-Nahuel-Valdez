@@ -709,6 +709,15 @@ if (window.innerWidth >= 992) {
     });
   }
 
+  // Navegación por teclado (←/→): sin flechas visibles, solo la función.
+  // Reutiliza los botones existentes (ocultos) disparando su propio click.
+  let proyectosEnPantalla = false;
+  window.addEventListener('keydown', (e) => {
+    if (!proyectosEnPantalla) return;
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); flechaIzq && flechaIzq.click(); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); flechaDer && flechaDer.click(); }
+  });
+
   dots.forEach((dot) => {
     dot.addEventListener('click', () => {
       indiceActual = parseInt(dot.dataset.index);
@@ -748,6 +757,7 @@ if (window.innerWidth >= 992) {
 
   const observerCarrusel = new IntersectionObserver((entradas) => {
     entradas.forEach(entrada => {
+      proyectosEnPantalla = entrada.isIntersecting; // habilita/deshabilita el teclado
       if (entrada.isIntersecting) {
         proyectosVisto = true;
         iniciarAutoplay();
