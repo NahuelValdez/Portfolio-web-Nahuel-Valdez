@@ -232,6 +232,16 @@
 
     <!-- skills -->
 
+    <!-- Bloque unificado: Habilidades + Sobre mí + Contacto comparten UNA sola aurora
+         continua de fondo, que fluye de una sección a la otra sin costuras. -->
+    <div class="bloque-glass">
+      <div class="fondo-glass-continuo" aria-hidden="true">
+        <span class="fg-blob fg-b1"></span>
+        <span class="fg-blob fg-b2"></span>
+        <span class="fg-blob fg-b3"></span>
+        <span class="fg-blob fg-b4"></span>
+      </div>
+
     <section id="Skills" class="full-height px-lg-5">
       <div class="container">
 
@@ -388,6 +398,7 @@ Herramientas y metodologías: Diseño centrado en el usuario, bases de software,
         </div>
       </div>
     </section>
+    </div><!-- /.bloque-glass -->
 
     <!-- //contacto -->
 
@@ -1097,6 +1108,7 @@ if (window.innerWidth >= 992) {
       // Estado de la entrada: se dispara cuando el modelo YA cargó Y ya pasó el delay
       // (lo que ocurra después), así no depende de la velocidad de carga del .glb.
       let matLinea = null;
+      let proxyModelo = null;   // caja invisible que abraza el modelo, para el raycasting del arrastre
       let modeloListo = false, tiempoListo = false, entradaActiva = false, entradaT0 = 0;
       function intentarDispararEntrada() {
         if (modeloListo && tiempoListo && !entradaActiva) {
@@ -1152,6 +1164,15 @@ if (window.innerWidth >= 992) {
           l.applyMatrix4(obj.matrixWorld); l.position.sub(centro);
           contenedor3D.add(l);
         });
+
+        // Proxy invisible: una caja que abraza el modelo (el conjunto quedó centrado en el
+        // origen por el .sub(centro)). Se usa SOLO para el raycasting del arrastre: así el
+        // 3D se agarra únicamente cuando el cursor está sobre/cerca de él, no desde todo el hero.
+        proxyModelo = new THREE.Mesh(
+          new THREE.BoxGeometry(tam.x, tam.y, tam.z),
+          new THREE.MeshBasicMaterial({ visible: false })
+        );
+        contenedor3D.add(proxyModelo);
 
         // El contenedor se hace visible ya; el modelo real arranca invisible vía matLinea.opacity=0
         // (más arriba). El "fundido" real lo controla la entrada, sincronizado con el giro.
@@ -1233,7 +1254,21 @@ if (window.innerWidth >= 992) {
       let velY = 0, velX = 0;
       let arrastrando = false, lastX = 0, lastY = 0;
 
+      // Raycasting: ¿el cursor está sobre/cerca del modelo? (contra la caja proxy, barato).
+      const raycaster = new THREE.Raycaster();
+      const puntero2D = new THREE.Vector2();
+      function sobreModelo(clientX, clientY) {
+        if (!proxyModelo) return false;
+        const r = canvas.getBoundingClientRect();
+        if (!r.width || !r.height) return false;
+        puntero2D.x = ((clientX - r.left) / r.width) * 2 - 1;
+        puntero2D.y = -((clientY - r.top) / r.height) * 2 + 1;
+        raycaster.setFromCamera(puntero2D, camara);
+        return raycaster.intersectObject(proxyModelo, false).length > 0;
+      }
+
       canvas.addEventListener('mousedown', (e) => {
+        if (!sobreModelo(e.clientX, e.clientY)) return; // solo se agarra SOBRE/cerca del modelo
         arrastrando = true;
         lastX = e.clientX; lastY = e.clientY;
         velY = 0; velX = 0;
@@ -1250,6 +1285,11 @@ if (window.innerWidth >= 992) {
       window.addEventListener('mouseup', () => {
         arrastrando = false;
         canvas.classList.remove('arrastrando');
+      });
+      // Cursor "agarrable" solo cuando estás sobre el modelo (no en todo el hero)
+      canvas.addEventListener('mousemove', (e) => {
+        if (arrastrando) return;
+        canvas.classList.toggle('sobre-modelo', sobreModelo(e.clientX, e.clientY));
       });
 
       function animar(t) {
