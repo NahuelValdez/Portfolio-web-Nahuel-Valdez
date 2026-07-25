@@ -497,6 +497,16 @@ img {
 
 /* iconos redes sociales */
 
+/* Flex en el contenedor (no solo en cada link) para que los tres se centren
+   verticalmente entre si. Sin esto, cada <a> es un inline-flex suelto alineado
+   por baseline, y el boton de WhatsApp (icono + texto, otra fuente/tamano) cae
+   varios px mas abajo que los iconos de mail/instagram. */
+.social-icons {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .social-icons a {
   width: 40px;
   height: 40px;
