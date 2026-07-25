@@ -1358,6 +1358,43 @@ if (window.innerWidth >= 992) {
   }
 </script>
 
+<!-- ===== Aurora viva: el scroll acelera el movimiento natural de los blobs ===== -->
+<script>
+  (function auroraViva() {
+    const blobs = document.querySelectorAll('.fondo-glass-continuo .fg-blob, .fondo-glass-mobile .fg-blob');
+    if (!blobs.length) return;
+
+    const BOOST_MAX = 4;      // aceleración máxima (playbackRate llega hasta 1 + BOOST_MAX = 5x)
+    const SENS      = 0.03;   // cuánto suma cada pixel de scroll al impulso
+    // Decaimiento LENTO (por cuadro, a 60fps): con scroll a los tirones (mouse wheel, en
+    // ráfagas con gaps) un decaimiento agresivo apagaba el impulso ENTRE ráfagas y nunca
+    // se notaba. Con 0.965 el impulso persiste ~2s tras soltar: se alcanza a sentir.
+    const DECAIMIENTO = 0.965;
+
+    let boost = 0;
+    let ultimoY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      boost = Math.min(boost + Math.abs(y - ultimoY) * SENS, BOOST_MAX);
+      ultimoY = y;
+    }, { passive: true });
+
+    let rateAnterior = -1;
+    function tick() {
+      requestAnimationFrame(tick);
+      boost *= DECAIMIENTO;                 // el impulso decae -> vuelve a velocidad natural (rate 1)
+      const rate = 1 + boost;
+      if (Math.abs(rate - rateAnterior) < 0.01) return; // evita trabajo si no cambió
+      rateAnterior = rate;
+      blobs.forEach((b) => {
+        b.getAnimations().forEach((a) => { a.playbackRate = rate; });
+      });
+    }
+    requestAnimationFrame(tick);
+  })();
+</script>
+
 </body>
 
 </html>

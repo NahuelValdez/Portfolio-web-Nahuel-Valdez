@@ -979,57 +979,63 @@ img {
   overflow: hidden;
   pointer-events: none;
   /* Se desvanece solo en el borde superior (entrada) e inferior (salida) de todo el
-     bloque, no entre secciones: por eso el fondo se ve continuo. */
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 6%, #000 94%, transparent 100%);
+     bloque, no entre secciones: por eso el fondo se ve continuo. Fade largo y parejo
+     (sobre todo abajo, hacia el footer) para que se apague del todo ANTES del borde,
+     en vez de cortarse de golpe contra él. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 72%, transparent 100%);
 }
 
-/* Aurora: manchas de color distribuidas a lo alto del bloque, que respiran lento */
+/* Aurora: manchas de color distribuidas a lo alto del bloque, que respiran lento.
+   border-radius asimétrico (no 50%) => silueta amorfa/orgánica, no un círculo perfecto. */
 .fondo-glass-continuo .fg-blob {
   position: absolute;
   width: 42vw;
   height: 42vw;
   max-width: 560px;
   max-height: 560px;
-  border-radius: 50%;
+  border-radius: 42% 58% 61% 39% / 55% 46% 54% 45%;
   filter: blur(80px);
   will-change: transform;
 }
 .fondo-glass-continuo .fg-b1 {
-  background: var(--color-brand);
+  background: #5a82af;   /* azul (paleta unificada) */
   opacity: 0.15;
   right: -16%;   /* pegada al costado derecho */
-  top: 2%;
+  top: 14%;      /* con margen del borde superior (antes 2%, muy pegada) */
   animation: fgBlobA 26s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b2 {
   background: #5a82af;
   opacity: 0.14;
   left: -18%;    /* pegada al costado izquierdo */
-  top: 33%;
+  top: 37%;
   animation: fgBlobB 32s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b3 {
-  background: #3f6f8f;
+  background: #5a82af;   /* mismo azul que b2 (antes tiraba a verdoso) */
   opacity: 0.13;
   right: -16%;
-  top: 60%;
+  top: 58%;
   animation: fgBlobA 30s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b4 {
-  background: var(--color-brand);
+  background: #5a82af;   /* azul (paleta unificada) */
   opacity: 0.12;
   left: -18%;
-  top: 88%;
+  top: 76%;      /* con margen del borde inferior, antes de llegar al footer (antes 88%) */
   animation: fgBlobB 34s ease-in-out infinite;
 }
+/* Deriva sobre todo VERTICAL (los blobs quedan a los costados pero "respiran"
+   subiendo/bajando) + un leve cambio de escala. El JS acelera estas animaciones
+   al scrollear (playbackRate) para que el movimiento se sienta reactivo. */
 @keyframes fgBlobA {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(-70px, 40px) scale(1.12); }
+  50%      { transform: translate(-24px, 90px) scale(1.16); }
 }
 @keyframes fgBlobB {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(60px, -40px) scale(1.15); }
+  50%      { transform: translate(24px, -90px) scale(1.18); }
 }
 
 /* Cards glass en las 3 secciones del bloque (Habilidades y Sobre mí usan .bg-base) */
@@ -1080,12 +1086,12 @@ img {
     position: absolute;
     width: 72vw;
     height: 72vw;
-    border-radius: 50%;
+    border-radius: 42% 58% 61% 39% / 55% 46% 54% 45%; /* amorfo, no círculo perfecto */
     filter: blur(55px);
     will-change: transform;
   }
   .fondo-glass-mobile .fg-b1 {
-    background: var(--color-brand);
+    background: #5a82af;   /* azul (paleta unificada) */
     opacity: 0.28;
     right: -32%;   /* costado derecho */
     top: 0%;       /* bien arriba */
