@@ -1459,6 +1459,29 @@ if (window.innerWidth >= 992) {
   })();
 </script>
 
+<!-- ===== Reflejo de borde de las cards glass de Proyectos: sigue al cursor ===== -->
+<!-- Acá no hay manchas de aurora (el vidrio muestra la grilla), así que el brillo
+     no se orienta a un blob sino directamente a la posición del mouse dentro de
+     cada card, igual que hace .grilla-glow con --mx/--my pero por card. -->
+<script>
+  (function glowCardsGrilla() {
+    const cards = document.querySelectorAll('#Proyectos .card-custom');
+    if (!cards.length) return;
+
+    cards.forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--glow-x', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--glow-y', (e.clientY - r.top) + 'px');
+        card.style.setProperty('--glow-o', '1');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--glow-o', '0');
+      });
+    });
+  })();
+</script>
+
 </body>
 
 </html>
