@@ -522,6 +522,36 @@ img {
   font-size: 36px;
 }
 
+/* Boton de WhatsApp en Contacto: unico acceso a ese canal en todo el sitio
+   (ver bloque-glass de Proyectos para la decision de no duplicarlo con un
+   boton flotante). Reusa el lenguaje de .btn-brand (fondo menta, invierte
+   a oscuro + late en hover) en vez del circulo chico de los otros iconos,
+   para que se lea como la accion preferida. */
+.social-icons a.btn-whatsapp {
+  width: auto;
+  height: 40px;
+  padding: 0 18px 0 14px;
+  margin-left: 10px;
+  gap: 8px;
+  border-radius: 100px;
+  background-color: var(--color-brand);
+  color: var(--color-base2);
+  font-size: 15px;
+  font-weight: 700;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a.btn-whatsapp i {
+  font-size: 20px;
+}
+
+.social-icons a.btn-whatsapp:hover,
+.social-icons a.btn-whatsapp:focus {
+  background-color: var(--color-base);
+  color: var(--color-brand);
+  animation: latido 0.8s ease-in-out infinite;
+}
+
 #email-contacto a {
   display: inline-block;
 }
