@@ -567,14 +567,16 @@ img {
   gap: 10px;
 }
 
+/* 48px de lado: por encima del minimo de 44px que recomienda WCAG 2.5.5 para
+   objetivos tactiles (a 40px se sentian chicos de tocar en el celular). */
 .social-icons a {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 100px;
-  font-size: 18px;
+  font-size: 22px;
   color: #fff;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(150, 180, 220, 0.25);
@@ -591,7 +593,7 @@ img {
    fijos (35px) pensados para uso suelto; acá pisamos eso para que el icono
    de Instagram quede al mismo tamaño chico que el resto dentro del circulo. */
 .social-icons a i {
-  font-size: 18px;
+  font-size: 22px;
   width: auto;
   height: auto;
 }
@@ -603,20 +605,20 @@ img {
    para que se lea como la accion preferida. */
 .social-icons a.btn-whatsapp {
   width: auto;
-  height: 40px;
-  padding: 0 18px 0 14px;
-  gap: 8px;
+  height: 48px;
+  padding: 0 22px 0 18px;
+  gap: 9px;
   border-radius: 100px;
   background-color: var(--color-brand);
   border-color: transparent;
   color: var(--color-base2);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .social-icons a.btn-whatsapp i {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .social-icons a.btn-whatsapp:hover,
