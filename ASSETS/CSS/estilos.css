@@ -1101,7 +1101,11 @@ img {
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  opacity: var(--glow-o, 0.9);
+  /* Sin JS (o antes del primer cálculo) no mostramos brillo: lo posiciona y
+     lo prende ASSETS/JS más abajo (glowCardsAurora), según la mancha real
+     mas cercana que esté visible en pantalla. */
+  opacity: var(--glow-o, 0);
+  transition: opacity 0.4s ease;
 }
 
 /* Ruido sutil para romper la lisura del blur y diferenciar la card del fondo aurora. */

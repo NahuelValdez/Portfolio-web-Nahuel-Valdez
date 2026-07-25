@@ -261,7 +261,7 @@
         <div class="row gy-4">
 
           <div class="col-md-4" data-aos="fade">
-            <div class="Skills p-4 bg-base rounded-4 shadow-effect" style="--glow-x:0%; --glow-y:100%; --glow-o:0.4;">
+            <div class="Skills p-4 bg-base rounded-4 shadow-effect">
               <div class="iconbox mb-4 rounded-2">
                 <i class="las la-pencil-ruler"></i>
               </div>
@@ -272,7 +272,7 @@
           </div>
 
           <div class="col-md-4" data-aos="fade" data-aos-delay="300">
-            <div class="Skills p-4 bg-base rounded-4 shadow-effect" style="--glow-x:100%; --glow-y:0%; --glow-o:0.55;">
+            <div class="Skills p-4 bg-base rounded-4 shadow-effect">
               <div class="iconbox mb-4 rounded-2">
                 <i class="las la-mouse"></i>
               </div>
@@ -284,7 +284,7 @@
           </div>
 
           <div class="col-md-4" data-aos="fade" data-aos-delay="600">
-            <div class="Skills p-4 bg-base rounded-4 shadow-effect" style="--glow-x:100%; --glow-y:0%; --glow-o:0.9;">
+            <div class="Skills p-4 bg-base rounded-4 shadow-effect">
               <div class="iconbox mb-4 rounded-2">
                 <i class="las la-desktop"></i>
 
@@ -321,7 +321,7 @@
               <div class="row gy-4">
 
                 <div class="col-12" data-aos="fade" data-aos-delay="600">
-                  <div class="bg-base p-4 rounded-4 shadow-effect" style="--glow-x:0%; --glow-y:20%; --glow-o:0.6;">
+                  <div class="bg-base p-4 rounded-4 shadow-effect">
                     <h5>Fabricación Digital y Prototipado</h5>
                     <p class="text-brand mb-2">Proyectos Independientes y Corporativos (2018/2026)</p>
                     <p class="mb-0">Materialización de ideas mediante procesos industriales y de prototipado rápido. Optimización de archivos y control de procesos productivos para asegurar la viabilidad técnica del objeto antes de su fabricación final.
@@ -338,7 +338,7 @@ Tecnologías :
                 </div>
 
                 <div class="col-12" data-aos="fade" data-aos-delay="600">
-                  <div class="bg-base p-4 rounded-4 shadow-effect" style="--glow-x:0%; --glow-y:60%; --glow-o:0.75;">
+                  <div class="bg-base p-4 rounded-4 shadow-effect">
                     <h5>Modelado 3D & Renderizado</h5>
                     <p class="text-brand mb-2">Freelance / Consultoría Externa (2018/2026)</p>
                     <p>Desarrollo técnico de producto y representación de proyectos mediante softwares de modelados 3D para su posterior renderizado. Gestión integral del proceso de prototipado rápido y fabricación digital, abarcando la optimización de archivos y operación para impresión 3D / ruteado CNC. Preparación de documentación técnica y planos para corte láser en metal y chapas / plegado, garantizando la viabilidad constructiva de los objetos desde la etapa digital hasta el taller.
@@ -355,7 +355,7 @@ Tecnologías :
             <div class="row gy-4">
 
               <div class="col-12" data-aos="fade" data-aos-delay="600">
-                <div class="bg-base p-4 rounded-4 shadow-effect" style="--glow-x:100%; --glow-y:20%; --glow-o:0.6;">
+                <div class="bg-base p-4 rounded-4 shadow-effect">
                   <h5>Diseño Industrial</h5>
                   <p class="text-brand mb-2">Universidad Nacional de La Plata (2014/2020)</p>
                   <p class="mb-0">Formación académica orientada al desarrollo integral de productos, abarcando desde la investigación de usuario y la conceptualización morfológica hasta la viabilidad técnico-productiva. Enfoque centrado en la usabilidad, la optimización de recursos, la sostenibilidad y la gestión del diseño como disciplina estratégica, articulando el lenguaje visual y el desarrollo constructivo para resolver problemáticas tanto del entorno doméstico, como también de escala industrial.</p>
@@ -363,7 +363,7 @@ Tecnologías :
               </div>
 
               <div class="col-12" data-aos="fade" data-aos-delay="600">
-                <div class="bg-base p-4 rounded-4 shadow-effect" style="--glow-x:100%; --glow-y:60%; --glow-o:0.75;">
+                <div class="bg-base p-4 rounded-4 shadow-effect">
                   <h5>Desarrollo web & UX</h5>
                   <p class="text-brand mb-2">Formación Técnica y Complementaria (2020/2022)</p>
                   <p>Trayectoria enfocada en el diseño de experiencias digitales integrales y la optimización de su uso en pantallas.
@@ -1391,6 +1391,71 @@ if (window.innerWidth >= 992) {
       });
     }
     requestAnimationFrame(tick);
+  })();
+</script>
+
+<!-- ===== Reflejo de borde de las cards glass: orientado a la mancha visible más cercana ===== -->
+<script>
+  (function glowCardsAurora() {
+    const cards = document.querySelectorAll('.bloque-glass .bg-base');
+    const blobs = document.querySelectorAll('.fondo-glass-continuo .fg-blob');
+    if (!cards.length || !blobs.length) return;
+
+    const MARGEN_VISIBLE = 250; // px de tolerancia: la mancha cuenta como "en pantalla" un poco antes de entrar
+
+    function actualizar() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const diag = Math.hypot(vw, vh);
+
+      const blobsInfo = Array.from(blobs).map((b) => {
+        const r = b.getBoundingClientRect();
+        return {
+          cx: r.left + r.width / 2,
+          cy: r.top + r.height / 2,
+          enPantalla: r.right > -MARGEN_VISIBLE && r.left < vw + MARGEN_VISIBLE &&
+                      r.bottom > -MARGEN_VISIBLE && r.top < vh + MARGEN_VISIBLE,
+        };
+      }).filter((b) => b.enPantalla);
+
+      cards.forEach((card) => {
+        if (!blobsInfo.length) {
+          card.style.setProperty('--glow-o', '0');
+          return;
+        }
+        const r = card.getBoundingClientRect();
+        const ccx = r.left + r.width / 2;
+        const ccy = r.top + r.height / 2;
+
+        let masCercana = null;
+        let distMin = Infinity;
+        blobsInfo.forEach((b) => {
+          const d = Math.hypot(b.cx - ccx, b.cy - ccy);
+          if (d < distMin) { distMin = d; masCercana = b; }
+        });
+
+        // El brillo apunta al costado de la card orientado hacia la mancha (no al centro).
+        card.style.setProperty('--glow-x', masCercana.cx >= ccx ? '100%' : '0%');
+        card.style.setProperty('--glow-y', masCercana.cy >= ccy ? '100%' : '0%');
+
+        // Más cerca => más intenso. Más lejos (pero aun visible) => se atenúa.
+        const intensidad = Math.max(0, 1 - distMin / diag);
+        card.style.setProperty('--glow-o', (0.15 + intensidad * 0.85).toFixed(2));
+      });
+    }
+
+    let ticking = false;
+    function solicitarActualizacion() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => { actualizar(); ticking = false; });
+    }
+
+    window.addEventListener('scroll', solicitarActualizacion, { passive: true });
+    window.addEventListener('resize', solicitarActualizacion);
+    // Las manchas también derivan solas (animación CSS) sin que haya scroll: refresco liviano periódico.
+    setInterval(actualizar, 1200);
+    actualizar();
   })();
 </script>
 
