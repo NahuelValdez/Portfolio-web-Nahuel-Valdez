@@ -1513,6 +1513,99 @@ if (window.innerWidth >= 992) {
   })();
 </script>
 
+<!-- ===== Latido automático de la card protagonista (grilla MOBILE de Proyectos) ===== -->
+<!-- Late una sola card a la vez: la más centrada en pantalla. Arranca a los 2s de
+     tomar el protagonismo, se corta al abrir el texto, y tras cerrarlo exige 5s
+     continuos de seguir siendo protagonista para volver a latir. -->
+<script>
+  (function latidoProtagonista() {
+    const cards = Array.from(document.querySelectorAll('.row.gy-4.d-lg-none .card-custom'));
+    if (!cards.length) return;
+
+    const ESPERA_NORMAL = 2000;   // al ganar protagonismo
+    const ESPERA_TRAS_CERRAR = 5000;
+    const VISIBLE_MIN = 0.5;      // fracción de la card que debe verse para ser candidata
+
+    let protagonista = null;
+    let temporizador = null;
+    // Cards recién cerradas: la próxima vez piden 5s en vez de 2s. Se limpia recién
+    // cuando vuelven a latir, así scrollear y volver reinicia el conteo desde cero.
+    const esperaLarga = new WeakSet();
+
+    function estaAbierta(card) {
+      return !!card.querySelector('.card-custom-content.activo');
+    }
+
+    // La grilla mobile está en display:none arriba de 992px: ahí los rects miden 0
+    // y esta función devuelve null sola, sin necesidad de chequear el ancho.
+    function elegirProtagonista() {
+      const centroVista = window.innerHeight / 2;
+      let mejor = null;
+      let menorDist = Infinity;
+      cards.forEach((card) => {
+        const r = card.getBoundingClientRect();
+        const visible = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+        if (visible <= 0 || visible / r.height < VISIBLE_MIN) return;
+        const dist = Math.abs(r.top + r.height / 2 - centroVista);
+        if (dist < menorDist) { menorDist = dist; mejor = card; }
+      });
+      return mejor;
+    }
+
+    function cancelar() {
+      clearTimeout(temporizador);
+      temporizador = null;
+    }
+
+    function programar(card) {
+      cancelar();
+      if (!card || estaAbierta(card)) return;
+      const espera = esperaLarga.has(card) ? ESPERA_TRAS_CERRAR : ESPERA_NORMAL;
+      temporizador = setTimeout(() => {
+        if (protagonista === card && !estaAbierta(card)) {
+          card.classList.add('latiendo');
+          esperaLarga.delete(card);
+        }
+      }, espera);
+    }
+
+    function revisar() {
+      const nueva = elegirProtagonista();
+      if (nueva === protagonista) return;
+      if (protagonista) protagonista.classList.remove('latiendo');
+      protagonista = nueva;
+      programar(protagonista);
+    }
+
+    // El toggle del texto lo hace otro script, así que en vez de duplicar ese
+    // listener observamos el cambio de clase real sobre el contenido.
+    cards.forEach((card) => {
+      const contenido = card.querySelector('.card-custom-content');
+      if (!contenido) return;
+      new MutationObserver(() => {
+        if (estaAbierta(card)) {
+          card.classList.remove('latiendo');
+          if (protagonista === card) cancelar();
+        } else {
+          esperaLarga.add(card);
+          if (protagonista === card) programar(card);
+        }
+      }).observe(contenido, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    let pendiente = false;
+    function solicitarRevision() {
+      if (pendiente) return;
+      pendiente = true;
+      requestAnimationFrame(() => { revisar(); pendiente = false; });
+    }
+
+    window.addEventListener('scroll', solicitarRevision, { passive: true });
+    window.addEventListener('resize', solicitarRevision);
+    revisar();
+  })();
+</script>
+
 </body>
 
 </html>

@@ -206,7 +206,17 @@ img {
   transition: all 0.4s ease;
 }
 
-.card-custom:hover .card-custom-image img {
+/* El latido por hover queda solo para punteros reales. En touch el navegador
+   emula :hover al tocar y NO lo suelta hasta que tocás otra cosa: por eso la
+   card se quedaba latiendo despues de cerrar el texto. En mobile el latido lo
+   maneja el script latidoProtagonista (clase .latiendo). */
+@media (hover: hover) {
+  .card-custom:hover .card-custom-image img {
+    animation: latido 2s ease-in-out infinite;
+  }
+}
+
+.card-custom.latiendo .card-custom-image img {
   animation: latido 2s ease-in-out infinite;
 }
 
