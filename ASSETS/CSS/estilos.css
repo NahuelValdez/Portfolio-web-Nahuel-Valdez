@@ -1132,39 +1132,48 @@ img {
   opacity: 0.15;
   right: -16%;   /* pegada al costado derecho */
   top: 14%;      /* con margen del borde superior (antes 2%, muy pegada) */
-  animation: fgBlobA 26s ease-in-out infinite;
+  animation: fgBlobA 19s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b2 {
   background: #5a82af;
   opacity: 0.14;
   left: -18%;    /* pegada al costado izquierdo */
   top: 37%;
-  animation: fgBlobB 32s ease-in-out infinite;
+  animation: fgBlobB 23s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b3 {
   background: #5a82af;   /* mismo azul que b2 (antes tiraba a verdoso) */
   opacity: 0.13;
   right: -16%;
   top: 58%;
-  animation: fgBlobA 30s ease-in-out infinite;
+  animation: fgBlobA 21s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b4 {
   background: #5a82af;   /* azul (paleta unificada) */
   opacity: 0.12;
   left: -18%;
   top: 76%;      /* con margen del borde inferior, antes de llegar al footer (antes 88%) */
-  animation: fgBlobB 34s ease-in-out infinite;
+  animation: fgBlobB 25s ease-in-out infinite;
 }
 /* Deriva sobre todo VERTICAL (los blobs quedan a los costados pero "respiran"
-   subiendo/bajando) + un leve cambio de escala. El JS acelera estas animaciones
-   al scrollear (playbackRate) para que el movimiento se sienta reactivo. */
+   subiendo/bajando) + cambio de escala. El JS acelera estas animaciones al
+   scrollear (playbackRate) para que el movimiento se sienta reactivo.
+
+   Los pasos intermedios (25% / 75%) no estan sobre la recta que une 0% y 50%:
+   con solo dos keyframes el blob iba y volvia por el mismo camino y se leia
+   como un vaiven mecanico. Desviando el recorrido, la ida y la vuelta son
+   distintas y el movimiento se siente organico. */
 @keyframes fgBlobA {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(-24px, 90px) scale(1.16); }
+  25%      { transform: translate(-52px, 72px) scale(1.12); }
+  50%      { transform: translate(28px, 178px) scale(1.30); }
+  75%      { transform: translate(-18px, 96px) scale(1.15); }
 }
 @keyframes fgBlobB {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(24px, -90px) scale(1.18); }
+  25%      { transform: translate(54px, -78px) scale(1.14); }
+  50%      { transform: translate(-26px, -184px) scale(1.32); }
+  75%      { transform: translate(34px, -102px) scale(1.16); }
 }
 
 /* Cards glass en las 3 secciones del bloque (Habilidades y Sobre mí usan .bg-base) */
@@ -1366,14 +1375,14 @@ img {
     opacity: 0.28;
     right: -32%;   /* costado derecho */
     top: 0%;       /* bien arriba */
-    animation: fgBlobA 26s ease-in-out infinite;
+    animation: fgBlobA 19s ease-in-out infinite;
   }
   .fondo-glass-mobile .fg-b2 {
     background: #5a82af;
     opacity: 0.26;
     left: -32%;    /* costado izquierdo */
     bottom: 0%;    /* bien abajo (más separada de la otra) */
-    animation: fgBlobB 30s ease-in-out infinite;
+    animation: fgBlobB 23s ease-in-out infinite;
   }
 
   /* El texto y el botón del hero por encima de la aurora del Inicio en mobile */

@@ -1466,8 +1466,11 @@ if (window.innerWidth >= 992) {
 
     window.addEventListener('scroll', solicitarActualizacion, { passive: true });
     window.addEventListener('resize', solicitarActualizacion);
-    // Las manchas también derivan solas (animación CSS) sin que haya scroll: refresco liviano periódico.
-    setInterval(actualizar, 1200);
+    // Las manchas también derivan solas (animación CSS) sin que haya scroll: refresco
+    // liviano periódico. A 1200ms el brillo se movía a saltos ahora que los blobs
+    // recorren más distancia; 400ms lo vuelve a sentir continuo y sigue siendo barato
+    // (un getBoundingClientRect por card y por mancha).
+    setInterval(actualizar, 400);
     actualizar();
   })();
 </script>
