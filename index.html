@@ -1459,25 +1459,40 @@ if (window.innerWidth >= 992) {
   })();
 </script>
 
-<!-- ===== Reflejo de borde de las cards glass de Proyectos: sigue al cursor ===== -->
+<!-- ===== Reflejo de borde de las cards glass de Proyectos: sigue al cursor/dedo ===== -->
 <!-- Acá no hay manchas de aurora (el vidrio muestra la grilla), así que el brillo
-     no se orienta a un blob sino directamente a la posición del mouse dentro de
-     cada card, igual que hace .grilla-glow con --mx/--my pero por card. -->
+     no se orienta a un blob sino directamente a la posición del puntero dentro de
+     cada card, igual que hace .grilla-glow con --mx/--my pero por card. Se suman
+     eventos touch para que reaccione también al tocar la card en mobile. -->
 <script>
   (function glowCardsGrilla() {
     const cards = document.querySelectorAll('#Proyectos .card-custom');
     if (!cards.length) return;
 
+    function ubicar(card, clientX, clientY) {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--glow-x', (clientX - r.left) + 'px');
+      card.style.setProperty('--glow-y', (clientY - r.top) + 'px');
+      card.style.setProperty('--glow-o', '1');
+    }
+    function apagar(card) {
+      card.style.setProperty('--glow-o', '0');
+    }
+
     cards.forEach((card) => {
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--glow-x', (e.clientX - r.left) + 'px');
-        card.style.setProperty('--glow-y', (e.clientY - r.top) + 'px');
-        card.style.setProperty('--glow-o', '1');
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.setProperty('--glow-o', '0');
-      });
+      card.addEventListener('mousemove', (e) => ubicar(card, e.clientX, e.clientY));
+      card.addEventListener('mouseleave', () => apagar(card));
+
+      card.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        if (t) ubicar(card, t.clientX, t.clientY);
+      }, { passive: true });
+      card.addEventListener('touchmove', (e) => {
+        const t = e.touches[0];
+        if (t) ubicar(card, t.clientX, t.clientY);
+      }, { passive: true });
+      card.addEventListener('touchend', () => apagar(card));
+      card.addEventListener('touchcancel', () => apagar(card));
     });
   })();
 </script>
