@@ -57,7 +57,6 @@ img {
   justify-content: center;
   padding-top: 80px;
   padding-bottom: 80px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .shadow-effect {
@@ -972,12 +971,6 @@ img {
   z-index: 1;
 }
 
-/* Sin divisores internos entre las 3: se leen como un solo bloque (se mantiene el
-   divisor de arriba —de Proyectos— y el de abajo de Contacto —hacia el footer—). */
-.bloque-glass > section:not(:last-child) {
-  border-bottom: none;
-}
-
 /* Capa única de aurora que abarca TODO el bloque (las 3 secciones) */
 .fondo-glass-continuo {
   position: absolute;
@@ -1050,4 +1043,63 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   .fondo-glass-continuo .fg-blob { animation: none; }
+  .fondo-glass-mobile .fg-blob { animation: none; }
+}
+
+/* Aurora del Inicio: SOLO mobile (en desktop ese lugar lo ocupa el modelo 3D). */
+.fondo-glass-mobile { display: none; }
+
+/* ===== Ajustes MOBILE ===== */
+@media (max-width: 991px) {
+  /* La aurora del bloque (Habilidades/Sobre mí/Contacto) más notoria en pantalla chica:
+     blobs más grandes, menos blur (color más denso) y más opacidad. */
+  .fondo-glass-continuo .fg-blob {
+    width: 85vw;
+    height: 85vw;
+    max-width: none;
+    max-height: none;
+    filter: blur(60px);
+  }
+  .fondo-glass-continuo .fg-b1 { opacity: 0.28; }
+  .fondo-glass-continuo .fg-b2 { opacity: 0.26; }
+  .fondo-glass-continuo .fg-b3 { opacity: 0.24; }
+  .fondo-glass-continuo .fg-b4 { opacity: 0.24; }
+
+  /* Aurora del Inicio (solo mobile), por detrás del texto del hero */
+  .fondo-glass-mobile {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%);
+  }
+  .fondo-glass-mobile .fg-blob {
+    position: absolute;
+    width: 85vw;
+    height: 85vw;
+    border-radius: 50%;
+    filter: blur(60px);
+    will-change: transform;
+  }
+  .fondo-glass-mobile .fg-b1 {
+    background: var(--color-brand);
+    opacity: 0.26;
+    right: -18%;
+    top: 6%;
+    animation: fgBlobA 26s ease-in-out infinite;
+  }
+  .fondo-glass-mobile .fg-b2 {
+    background: #5a82af;
+    opacity: 0.24;
+    left: -18%;
+    bottom: 8%;
+    animation: fgBlobB 30s ease-in-out infinite;
+  }
+
+  /* El texto y el botón del hero por encima de la aurora del Inicio en mobile */
+  #home .container { position: relative; z-index: 1; }
+  #home .btn-scroll-down-wrap { z-index: 1; }
 }
