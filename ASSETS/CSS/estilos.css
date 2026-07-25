@@ -998,29 +998,29 @@ img {
 .fondo-glass-continuo .fg-b1 {
   background: var(--color-brand);
   opacity: 0.15;
-  right: -6%;
-  top: 4%;
+  right: -16%;   /* pegada al costado derecho */
+  top: 2%;
   animation: fgBlobA 26s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b2 {
   background: #5a82af;
   opacity: 0.14;
-  left: -8%;
-  top: 30%;
+  left: -18%;    /* pegada al costado izquierdo */
+  top: 33%;
   animation: fgBlobB 32s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b3 {
   background: #3f6f8f;
   opacity: 0.13;
-  right: -4%;
-  top: 56%;
+  right: -16%;
+  top: 60%;
   animation: fgBlobA 30s ease-in-out infinite;
 }
 .fondo-glass-continuo .fg-b4 {
   background: var(--color-brand);
   opacity: 0.12;
-  left: -6%;
-  top: 82%;
+  left: -18%;
+  top: 88%;
   animation: fgBlobB 34s ease-in-out infinite;
 }
 @keyframes fgBlobA {
@@ -1054,16 +1054,16 @@ img {
   /* La aurora del bloque (Habilidades/Sobre mí/Contacto) más notoria en pantalla chica:
      blobs más grandes, menos blur (color más denso) y más opacidad. */
   .fondo-glass-continuo .fg-blob {
-    width: 85vw;
-    height: 85vw;
+    width: 70vw;
+    height: 70vw;
     max-width: none;
     max-height: none;
-    filter: blur(60px);
+    filter: blur(55px);
   }
-  .fondo-glass-continuo .fg-b1 { opacity: 0.28; }
-  .fondo-glass-continuo .fg-b2 { opacity: 0.26; }
-  .fondo-glass-continuo .fg-b3 { opacity: 0.24; }
-  .fondo-glass-continuo .fg-b4 { opacity: 0.24; }
+  .fondo-glass-continuo .fg-b1 { opacity: 0.30; right: -30%; }
+  .fondo-glass-continuo .fg-b2 { opacity: 0.28; left: -32%; }
+  .fondo-glass-continuo .fg-b3 { opacity: 0.26; right: -30%; }
+  .fondo-glass-continuo .fg-b4 { opacity: 0.26; left: -32%; }
 
   /* Aurora del Inicio (solo mobile), por detrás del texto del hero */
   .fondo-glass-mobile {
@@ -1078,24 +1078,24 @@ img {
   }
   .fondo-glass-mobile .fg-blob {
     position: absolute;
-    width: 85vw;
-    height: 85vw;
+    width: 72vw;
+    height: 72vw;
     border-radius: 50%;
-    filter: blur(60px);
+    filter: blur(55px);
     will-change: transform;
   }
   .fondo-glass-mobile .fg-b1 {
     background: var(--color-brand);
-    opacity: 0.26;
-    right: -18%;
-    top: 6%;
+    opacity: 0.28;
+    right: -32%;   /* costado derecho */
+    top: 0%;       /* bien arriba */
     animation: fgBlobA 26s ease-in-out infinite;
   }
   .fondo-glass-mobile .fg-b2 {
     background: #5a82af;
-    opacity: 0.24;
-    left: -18%;
-    bottom: 8%;
+    opacity: 0.26;
+    left: -32%;    /* costado izquierdo */
+    bottom: 0%;    /* bien abajo (más separada de la otra) */
     animation: fgBlobB 30s ease-in-out infinite;
   }
 
