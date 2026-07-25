@@ -1072,6 +1072,11 @@ img {
     0 12px 40px rgba(0, 0, 0, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.16),
     inset 0 0 60px rgba(90, 130, 175, 0.10);
+  /* Fuerza a que el navegador componga el blur/saturate en su propia capa GPU
+     DESDE el primer frame (no cuando AOS recién la hace visible), para que no
+     se vea un instante en gris plano antes de que "prenda" el efecto glass. */
+  will-change: backdrop-filter, transform;
+  transform: translateZ(0);
 }
 
 /* Reflejo de la aurora, pero SOLO en el trazo del borde (no relleno), y acentuado
