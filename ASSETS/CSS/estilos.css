@@ -533,6 +533,29 @@ img {
   }
 }
 
+/* Titulo debajo de la card en la grilla MOBILE. Mismo tratamiento que el del
+   carrusel de desktop (.carousel-titulo vive dentro del media query de arriba,
+   asi que en mobile no heredaba ningun estilo). Diferencia: en desktop solo se
+   muestra el de la card activa; aca se ven los cuatro, y cada uno se desvanece
+   cuando esa card tiene el texto desplegado. */
+@media (max-width: 991px) {
+  .carousel-titulo {
+    display: block;
+    text-align: center;
+    color: var(--color-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 12px;
+    margin-bottom: 0;
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+
+  .col-md-6:has(.card-custom-content.activo) .carousel-titulo {
+    opacity: 0;
+  }
+}
+
 /* iconos redes sociales */
 
 /* Flex en el contenedor (no solo en cada link) para que los tres se centren
