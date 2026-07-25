@@ -514,22 +514,26 @@ img {
   align-items: center;
   justify-content: center;
   border-radius: 100px;
-  font-size: 30px;
+  font-size: 18px;
   color: #fff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(150, 180, 220, 0.25);
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
 .social-icons a:hover {
   color: var(--color-brand);
+  background: rgba(255, 255, 255, 0.1);
   animation: latido 0.8s ease-in-out infinite;
 }
 
-.social-icons a:first-child {
-  margin-left: -8px;
-  margin-right: 6px;
-}
-
-.social-icons a:first-child i {
-  font-size: 36px;
+/* .lab (linea-awesome, iconos de marca) trae su propio width/height/font-size
+   fijos (35px) pensados para uso suelto; acá pisamos eso para que el icono
+   de Instagram quede al mismo tamaño chico que el resto dentro del circulo. */
+.social-icons a i {
+  font-size: 18px;
+  width: auto;
+  height: auto;
 }
 
 /* Boton de WhatsApp en Contacto: unico acceso a ese canal en todo el sitio
@@ -545,6 +549,7 @@ img {
   gap: 8px;
   border-radius: 100px;
   background-color: var(--color-brand);
+  border-color: transparent;
   color: var(--color-base2);
   font-size: 15px;
   font-weight: 700;
