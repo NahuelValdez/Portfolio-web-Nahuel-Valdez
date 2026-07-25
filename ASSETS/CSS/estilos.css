@@ -217,6 +217,44 @@ img {
 
 .card-custom-image {
   cursor: pointer;
+  position: relative;
+}
+
+/* Aviso sutil de que la imagen es clickeable. Tono neutro (gris oscuro
+   translucido, no el menta de marca) para no competir con la foto del
+   proyecto; se apaga solo cuando el texto ya esta desplegado, porque en
+   ese momento ya no hace falta invitar al click. */
+.card-hint {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(20, 30, 39, 0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--color-heading);
+  font-size: 12.5px;
+  font-weight: 600;
+  pointer-events: none;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.card-hint i {
+  font-size: 11px;
+}
+
+.card-custom:hover .card-hint {
+  background: rgba(20, 30, 39, 0.72);
+}
+
+.card-custom:has(.card-custom-content.activo) .card-hint {
+  opacity: 0;
 }
 
 .card-custom-content {
