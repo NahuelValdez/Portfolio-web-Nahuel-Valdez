@@ -762,14 +762,19 @@ img {
     left: 0;
     width: 100%;
     height: 100vh;
-    /* 0.85 y no 0.60: el backdrop-filter anidado (navbar fixed > container >
-       menu fixed) se resuelve distinto segun el motor. WebKit (Safari/iOS) sube
-       hasta el documento y desenfoca toda la pagina; Blink (Chrome, tambien en
-       Android) lo limita a la capa compuesta del navbar, donde no hay nada que
-       desenfocar, y el blur no hace nada. El tinte es lo unico que funciona
-       igual en los dos motores, asi que sube para ocultar el fondo incluso
-       donde el blur no aplica. */
-    background-color: rgba(20, 30, 39, 0.85);
+    /* Opaco del todo, no translucido: 0.85 seguia dejando pasar ~15% de la luz
+       del titular del hero (display-4, grande y en negrita), y a simple vista
+       ese 15% alcanza para que el ojo distinga las letras. No es un problema de
+       motor ni de cache: es aritmetica de alpha (0.85 sobre un texto claro da
+       aprox rgb(53,62,66) contra un fondo de rgb(20,30,39), una diferencia de
+       ~33 por canal que sigue siendo perceptible). Como el objetivo es que NADA
+       se lea detras, no tiene sentido seguir subiendo el porcentaje: se pasa a
+       opaco completo, que lo garantiza en cualquier motor sin depender del
+       backdrop-filter (que ademas no aplica en Chrome/Blink por el anidamiento
+       de contextos, ver comentario en .navbar). El blur sigue declarado abajo
+       porque no molesta donde si funciona (Safari/iOS), pero ya no es lo que
+       oculta el fondo. */
+    background-color: rgb(20, 30, 39);
     /* 28px y no 12: el titular del hero es display-4 (~40px), y a 12px el blur lo
        suavizaba pero se seguia leyendo perfecto por detras del menu. El radio
        tiene que ser comparable al tamano del trazo para que la forma de la letra
