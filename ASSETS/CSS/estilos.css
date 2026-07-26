@@ -1376,6 +1376,17 @@ img {
   transition-duration: 0.85s;
 }
 
+/* Las cards que entran desde la derecha arrancan 46px corridas hacia afuera, y
+   como ocupan casi todo el ancho del container eso asomaba fuera de la pantalla:
+   en mobile el documento quedaba 34px mas ancho que el viewport (46 menos los
+   12px de padding del container) y se podia scrollear en horizontal, dejando ver
+   una franja de fondo a la derecha. Se recorta en la seccion.
+   'clip' y no 'hidden': hidden convertiria la seccion en contenedor de scroll y
+   forzaria overflow-y a auto, con riesgo de barra vertical interna. */
+#sobremi {
+  overflow-x: clip;
+}
+
 .bloque-glass .bg-base.entra-lateral.desde-der {
   transform: translateX(46px) translateZ(0);
 }
