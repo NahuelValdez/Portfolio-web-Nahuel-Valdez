@@ -756,31 +756,49 @@ img {
 
 /* Menú mobile a pantalla completa */
 @media (max-width: 991px) {
+  /* Velo borroso del menú, montado en el BODY y no dentro del menú.
+     Ese es todo el truco: el .navbar es position:fixed y forma su propia capa
+     compuesta, asi que un backdrop-filter declarado adentro suyo (como estaba
+     antes) no ve la pagina en Chrome/Blink y no desenfoca nada. body::before
+     cuelga directo del body, sin ningun ancestro que le limite el backdrop, asi
+     que el blur funciona igual en Safari y en Chrome.
+
+     z-index 1000: por encima de todo el contenido de la pagina, pero por debajo
+     del navbar (1030). Ojo, no sirve subirlo mas: el menu tiene z-index 1050
+     pero vive DENTRO del navbar, asi que todo el grupo se pinta a la altura de
+     1030 y cualquier valor mayor a eso taparia los links. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background-color: rgba(20, 30, 39, 0.72);
+    -webkit-backdrop-filter: blur(28px);
+    backdrop-filter: blur(28px);
+    opacity: 0;
+    visibility: hidden;   /* asi el filtro no se compone mientras el menu esta cerrado */
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+  }
+
+  body.menu-open::before {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease, visibility 0s;
+  }
+
   .navbar-collapse {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100vh;
-    /* Opaco del todo, no translucido: 0.85 seguia dejando pasar ~15% de la luz
-       del titular del hero (display-4, grande y en negrita), y a simple vista
-       ese 15% alcanza para que el ojo distinga las letras. No es un problema de
-       motor ni de cache: es aritmetica de alpha (0.85 sobre un texto claro da
-       aprox rgb(53,62,66) contra un fondo de rgb(20,30,39), una diferencia de
-       ~33 por canal que sigue siendo perceptible). Como el objetivo es que NADA
-       se lea detras, no tiene sentido seguir subiendo el porcentaje: se pasa a
-       opaco completo, que lo garantiza en cualquier motor sin depender del
-       backdrop-filter (que ademas no aplica en Chrome/Blink por el anidamiento
-       de contextos, ver comentario en .navbar). El blur sigue declarado abajo
-       porque no molesta donde si funciona (Safari/iOS), pero ya no es lo que
-       oculta el fondo. */
-    background-color: rgb(20, 30, 39);
-    /* 28px y no 12: el titular del hero es display-4 (~40px), y a 12px el blur lo
-       suavizaba pero se seguia leyendo perfecto por detras del menu. El radio
-       tiene que ser comparable al tamano del trazo para que la forma de la letra
-       se pierda del todo. */
-    -webkit-backdrop-filter: blur(28px);
-    backdrop-filter: blur(28px);
+    /* Sin fondo ni blur propios: el velo borroso lo pone body::before (mas
+       abajo). Este elemento esta anidado dentro del navbar, que es position
+       fixed, y ahi Chrome/Blink no resuelve el backdrop-filter contra la pagina
+       (ver comentario en .navbar). Por eso el velo se mudo al body, que no tiene
+       ese problema, y aca solo quedan la textura de ruido y los links. */
+    background-color: transparent;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -791,10 +809,8 @@ img {
   }
 
   /* Ruido: la misma textura que ya usan el navbar y las cards glass, para que el
-     panel opaco no quede como un rectangulo liso. Es seguro acá porque se mezcla
-     (mix-blend-mode) con el propio background-color del elemento, que es opaco:
-     no depende del backdrop-filter, asi que no reabre la filtracion que se
-     acababa de cerrar. */
+     velo no se lea como un plano liso. Se mezcla contra lo que quedo pintado
+     debajo (el body::before ya desenfocado), no depende del backdrop-filter. */
   .navbar-collapse::after {
     content: "";
     position: absolute;
