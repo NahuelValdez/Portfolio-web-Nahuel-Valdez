@@ -24,7 +24,7 @@
   <canvas id="canvas-modelo"></canvas>
 </div>
       
-      <a class="navbar-brand mx-lg-auto mb-lg-4" href="#"><span class="h3 fw-bold d-block d-lg-none">Nahuel Valdez / DI.</span><img src="./ASSETS/IMAGENES/foto.jpg" class="d-none d-lg-block rounded-circle" alt="fotodeperfil"></a>
+      <a class="navbar-brand mx-lg-auto mb-lg-4" href="#"><span class="h3 fw-bold d-block d-lg-none">Nahu / DI.</span><img src="./ASSETS/IMAGENES/foto.jpg" class="d-none d-lg-block rounded-circle" alt="fotodeperfil"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="toggler-bar bar1"></span>
@@ -1603,10 +1603,20 @@ if (window.innerWidth >= 992) {
       }, espera);
     }
 
+    function cerrarTexto(card) {
+      const contenido = card.querySelector('.card-custom-content.activo');
+      if (contenido) contenido.classList.remove('activo');
+    }
+
     function revisar() {
       const nueva = elegirProtagonista();
       if (nueva === protagonista) return;
-      if (protagonista) protagonista.classList.remove('latiendo');
+      if (protagonista) {
+        protagonista.classList.remove('latiendo');
+        // Al perder el protagonismo por scroll, la card se cierra sola: si no,
+        // quedaba un texto abierto arriba mientras ya estás mirando otra.
+        cerrarTexto(protagonista);
+      }
       protagonista = nueva;
       programar(protagonista);
     }
@@ -1620,6 +1630,10 @@ if (window.innerWidth >= 992) {
         if (estaAbierta(card)) {
           card.classList.remove('latiendo');
           if (protagonista === card) cancelar();
+          // Solo una card abierta a la vez: abrir una cierra la que estuviera.
+          // Cerrar dispara el observer de la otra, pero cae en la rama de abajo,
+          // así que no hay recursión.
+          cards.forEach((otra) => { if (otra !== card) cerrarTexto(otra); });
         } else {
           esperaLarga.add(card);
           if (protagonista === card) programar(card);

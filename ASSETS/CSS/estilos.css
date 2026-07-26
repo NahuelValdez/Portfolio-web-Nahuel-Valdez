@@ -1318,40 +1318,50 @@ img {
 }
 
 /* ===== Entrada de las cards glass (Habilidades y Sobre mí) =====
-   CLAVE: se anima SOLO transform, nunca opacity. Ese fue el motivo por el que
-   estas 7 cards se habian quedado sin data-aos: con opacity:0 el navegador no
-   calcula el backdrop-filter mientras la card esta invisible, y al aparecer se
-   veia 1-2 frames en gris plano antes de "prender" el vidrio.
+   OJO CON LA OPACIDAD DE ARRANQUE: no es 0 a propósito, y no hay que "corregirla"
+   a 0. Estas 7 cards se habían quedado sin data-aos justamente porque con
+   opacity:0 el navegador no pinta la card y por lo tanto no calcula su
+   backdrop-filter; al volverse visible se veían 1-2 frames en gris plano antes
+   de "prender" el vidrio. Arrancando en 0.04 la card se pinta desde el primer
+   frame (la capa del filtro queda viva) y a simple vista igual entra
+   transparente. Ese 4% es indistinguible de 0, pero para el compositor es la
+   diferencia entre pintar y no pintar.
 
    Las reglas van con .bloque-glass adelante porque .bloque-glass .bg-base ya
    define transform: translateZ(0) (la promocion a capa GPU) y con menos
-   especificidad este transform no ganaria. Por el mismo motivo el estado final
-   vuelve a translateZ(0) en vez de 'none': asi la card queda promovida como
-   estaba antes de la animacion. */
+   especificidad este transform no ganaria. Por el mismo motivo todos los estados
+   conservan el translateZ(0): asi la card sigue promovida durante toda la
+   animacion, no solo al final. */
 .bloque-glass .bg-base.entra-escala,
 .bloque-glass .bg-base.entra-lateral {
   /* Acelera y frena: sale despacio, toma velocidad en el medio y se asienta sin
      golpe seco. Sobre mi usa un pelin mas de tiempo porque recorre mas distancia. */
-  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+  transition:
+    transform 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Mantiene backdrop-filter en la lista: es lo que fuerza a componer el vidrio
+     en su propia capa GPU desde el primer frame. */
+  will-change: backdrop-filter, transform, opacity;
+  opacity: 0.04;
 }
 
 .bloque-glass .bg-base.entra-escala {
-  transform: scale(0.92);
+  transform: scale(0.92) translateZ(0);
 }
 
 .bloque-glass .bg-base.entra-lateral {
-  transform: translateX(-46px);
+  transform: translateX(-46px) translateZ(0);
   transition-duration: 0.85s;
 }
 
 .bloque-glass .bg-base.entra-lateral.desde-der {
-  transform: translateX(46px);
+  transform: translateX(46px) translateZ(0);
 }
 
 .bloque-glass .bg-base.entra-escala.visible,
 .bloque-glass .bg-base.entra-lateral.visible {
   transform: translateZ(0);
+  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1359,6 +1369,7 @@ img {
   .bloque-glass .bg-base.entra-lateral {
     transition: none;
     transform: translateZ(0);
+    opacity: 1;
   }
 }
 
