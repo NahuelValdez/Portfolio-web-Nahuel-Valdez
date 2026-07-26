@@ -273,7 +273,7 @@
         <div class="row gy-4">
 
           <div class="col-md-4">
-            <div class="Skills p-4 bg-base rounded-4 shadow-effect">
+            <div class="Skills p-4 bg-base rounded-4 shadow-effect entra-escala">
               <div class="iconbox mb-4 rounded-2">
                 <i class="las la-pencil-ruler"></i>
               </div>
@@ -284,7 +284,7 @@
           </div>
 
           <div class="col-md-4">
-            <div class="Skills p-4 bg-base rounded-4 shadow-effect">
+            <div class="Skills p-4 bg-base rounded-4 shadow-effect entra-escala">
               <div class="iconbox mb-4 rounded-2">
                 <i class="las la-mouse"></i>
               </div>
@@ -296,7 +296,7 @@
           </div>
 
           <div class="col-md-4">
-            <div class="Skills p-4 bg-base rounded-4 shadow-effect">
+            <div class="Skills p-4 bg-base rounded-4 shadow-effect entra-escala">
               <div class="iconbox mb-4 rounded-2">
                 <i class="las la-desktop"></i>
 
@@ -333,7 +333,7 @@
               <div class="row gy-4">
 
                 <div class="col-12">
-                  <div class="bg-base p-4 rounded-4 shadow-effect">
+                  <div class="bg-base p-4 rounded-4 shadow-effect entra-lateral">
                     <h5>Fabricación Digital y Prototipado</h5>
                     <p class="text-brand mb-2">Proyectos Independientes y Corporativos (2018/2026)</p>
                     <p class="mb-0">Materialización de ideas mediante procesos industriales y de prototipado rápido. Optimización de archivos y control de procesos productivos para asegurar la viabilidad técnica del objeto antes de su fabricación final.
@@ -350,7 +350,7 @@ Tecnologías :
                 </div>
 
                 <div class="col-12">
-                  <div class="bg-base p-4 rounded-4 shadow-effect">
+                  <div class="bg-base p-4 rounded-4 shadow-effect entra-lateral desde-der">
                     <h5>Modelado 3D & Renderizado</h5>
                     <p class="text-brand mb-2">Freelance / Consultoría Externa (2018/2026)</p>
                     <p>Desarrollo técnico de producto y representación de proyectos mediante softwares de modelados 3D para su posterior renderizado. Gestión integral del proceso de prototipado rápido y fabricación digital, abarcando la optimización de archivos y operación para impresión 3D / ruteado CNC. Preparación de documentación técnica y planos para corte láser en metal y chapas / plegado, garantizando la viabilidad constructiva de los objetos desde la etapa digital hasta el taller.
@@ -367,7 +367,7 @@ Tecnologías :
             <div class="row gy-4">
 
               <div class="col-12">
-                <div class="bg-base p-4 rounded-4 shadow-effect">
+                <div class="bg-base p-4 rounded-4 shadow-effect entra-lateral">
                   <h5>Diseño Industrial</h5>
                   <p class="text-brand mb-2">Universidad Nacional de La Plata (2014/2020)</p>
                   <p class="mb-0">Formación académica orientada al desarrollo integral de productos, abarcando desde la investigación de usuario y la conceptualización morfológica hasta la viabilidad técnico-productiva. Enfoque centrado en la usabilidad, la optimización de recursos, la sostenibilidad y la gestión del diseño como disciplina estratégica, articulando el lenguaje visual y el desarrollo constructivo para resolver problemáticas tanto del entorno doméstico, como también de escala industrial.</p>
@@ -375,7 +375,7 @@ Tecnologías :
               </div>
 
               <div class="col-12">
-                <div class="bg-base p-4 rounded-4 shadow-effect">
+                <div class="bg-base p-4 rounded-4 shadow-effect entra-lateral desde-der">
                   <h5>Desarrollo web & UX</h5>
                   <p class="text-brand mb-2">Formación Técnica y Complementaria (2020/2022)</p>
                   <p>Trayectoria enfocada en el diseño de experiencias digitales integrales y la optimización de su uso en pantallas.
@@ -1510,6 +1510,40 @@ if (window.innerWidth >= 992) {
       card.addEventListener('touchend', () => apagar(card));
       card.addEventListener('touchcancel', () => apagar(card));
     });
+  })();
+</script>
+
+<!-- ===== Entrada de las cards glass de Habilidades y Sobre mí ===== -->
+<!-- No se usa AOS a propósito: AOS siempre arranca en opacity:0 y eso es lo que
+     provocaba el flash gris en estas cards (ver estilos.css). Acá el disparo es
+     un IntersectionObserver propio y lo único que se anima es transform. -->
+<script>
+  (function entradaCardsGlass() {
+    const cards = document.querySelectorAll('.entra-escala, .entra-lateral');
+    if (!cards.length) return;
+
+    // El escalonado se calcula por orden dentro de cada sección, así no hay que
+    // mantener delays a mano en el HTML si mañana se agrega o saca una card.
+    document.querySelectorAll('#Skills, #sobremi').forEach((seccion) => {
+      seccion.querySelectorAll('.entra-escala, .entra-lateral').forEach((card, i) => {
+        card.style.transitionDelay = (i * 0.1).toFixed(2) + 's';
+      });
+    });
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      cards.forEach((c) => c.classList.add('visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (!entrada.isIntersecting) return;
+        entrada.target.classList.add('visible');
+        observer.unobserve(entrada.target);   // la entrada ocurre una sola vez
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+    cards.forEach((c) => observer.observe(c));
   })();
 </script>
 
