@@ -79,8 +79,15 @@ img {
 }
 
 /* NAVBAR */
+/* Navbar de vidrio: deja ver (borroso) lo que scrollea por detrás, incluidas las
+   manchas de la aurora. El fondo tiene que ser TRANSLUCIDO para que el
+   backdrop-filter tenga algo que mostrar; con el color opaco de antes el blur
+   existía pero quedaba tapado. */
 .navbar {
-  background-color: var(--color-base2);
+  background-color: rgba(20, 30, 39, 0.62);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border-bottom: 1px solid rgba(150, 180, 220, 0.12);
 }
 
 .navbar .nav-link {
@@ -111,10 +118,15 @@ img {
   .navbar {
     min-height: 100vh;
     width: var(--sidbar-width);
+    /* Más transparente que en mobile: el sidebar es alto y ocupa toda la altura,
+       así que un tinte fuerte apagaría del todo la aurora que pasa por detrás.
+       El borde va a la derecha (no abajo) porque acá es una columna. */
     background: linear-gradient(
-      rgba(44, 54, 65, 0.9),
-      rgba(116, 140, 171, 0.1)
+      rgba(44, 54, 65, 0.55),
+      rgba(38, 45, 55, 0.42)
     );
+    border-bottom: none;
+    border-right: 1px solid rgba(150, 180, 220, 0.12);
   }
 
   .navbar-brand {
@@ -1164,6 +1176,29 @@ img {
   left: -18%;
   top: 76%;      /* con margen del borde inferior, antes de llegar al footer (antes 88%) */
   animation: fgBlobB 25s ease-in-out infinite;
+}
+
+/* En desktop #contenido está corrido por el sidebar (padding-left), así que la
+   aurora arrancaba justo donde termina el navbar y por detrás de él no se pintaba
+   nada: su backdrop-filter no tenía manchas que capturar. Estirando la capa hacia
+   la izquierda, los blobs pasan POR DEBAJO del sidebar y el vidrio los recoge.
+
+   Va DESPUÉS de las reglas .fg-b* a propósito: tienen la misma especificidad, así
+   que si estuviera antes ganaría el left: -18% de arriba por orden de cascada. */
+@media (min-width: 992px) {
+  .fondo-glass-continuo {
+    left: calc(-1 * var(--sidbar-width));
+  }
+
+  /* Efecto secundario de ensanchar la capa: el -18% de las manchas de la izquierda
+     pasa a medirse sobre un ancho mayor y se irían ~280px más afuera, dejando el
+     área de contenido casi sin aurora. Se las reancla al borde del sidebar para que
+     queden donde estaban, pero ahora con su mitad izquierda pintando por debajo
+     del navbar (que es justo lo que su vidrio necesita capturar). */
+  .fondo-glass-continuo .fg-b2,
+  .fondo-glass-continuo .fg-b4 {
+    left: calc(var(--sidbar-width) - 16%);
+  }
 }
 /* Deriva sobre todo VERTICAL (los blobs quedan a los costados pero "respiran"
    subiendo/bajando) + cambio de escala. El JS acelera estas animaciones al
