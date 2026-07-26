@@ -1467,11 +1467,21 @@ img {
     top: 0%;       /* bien arriba */
     animation: fgBlobA 19s ease-in-out infinite;
   }
+  /* Mancha SECUNDARIA, deliberadamente menor que la de arriba: antes las dos
+     median 72vw con casi la misma opacidad (0.28 vs 0.26) y el hero se leia como
+     un patron simetrico. Achicada y bajada de brillo, la de arriba manda y esta
+     acompana, que es lo que da la sensacion de algo casual y no compuesto.
+     Tambien cambia la silueta y el blur para que no parezca la misma mancha
+     espejada. */
   .fondo-glass-mobile .fg-b2 {
     background: #5a82af;
-    opacity: 0.26;
-    left: -32%;    /* costado izquierdo */
-    bottom: 0%;    /* bien abajo (más separada de la otra) */
+    width: 50vw;
+    height: 50vw;
+    opacity: 0.15;
+    filter: blur(46px);
+    border-radius: 57% 43% 44% 56% / 47% 57% 43% 53%;
+    left: -20%;    /* costado izquierdo */
+    bottom: 2%;    /* bien abajo (más separada de la otra) */
     animation: fgBlobB 23s ease-in-out infinite;
   }
 
