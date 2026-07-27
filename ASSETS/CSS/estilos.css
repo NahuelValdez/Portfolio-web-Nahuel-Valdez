@@ -790,8 +790,12 @@ img {
   background-color: var(--color-brand);
 }
 
+/* Para cerrar la X cada barra de los extremos tiene que caer justo sobre la del
+   medio, o sea recorrer grosor + separación. Sale de las mismas variables que
+   dibujan el ícono para que al cambiarle el tamaño la X siga cerrando; con el
+   8px fijo de antes, tocar la separación la dejaba abierta. */
 .navbar-toggler.active .bar1 {
-  transform: translateY(8px) rotate(45deg);
+  transform: translateY(calc(var(--grosor-barra, 3px) + var(--sep-barras, 5px))) rotate(45deg);
 }
 
 .navbar-toggler.active .bar2 {
@@ -799,7 +803,7 @@ img {
 }
 
 .navbar-toggler.active .bar3 {
-  transform: translateY(-8px) rotate(-45deg);
+  transform: translateY(calc((var(--grosor-barra, 3px) + var(--sep-barras, 5px)) * -1)) rotate(-45deg);
 }
 
 /* Menú mobile a pantalla completa */
@@ -917,19 +921,27 @@ img {
   }
 
   /* La tira superior se arma alrededor de UNA sola medida: el alto del dibujo
-     del hamburguesa, contra la que se dimensiona la marca.
-
-     El aire de arriba y abajo (20px) es a propósito mayor que el de los
-     costados: los laterales no son libres, son los 12px de padding del
-     .container, los mismos que llevan todas las secciones de la página. Si se
-     los sube para emparejarlos, la marca deja de arrancar en el mismo eje
-     vertical que el texto del contenido, que es una alineación más visible que
-     la simetría interna de la tira. */
+     del hamburguesa, contra la que se dimensiona la marca. El ícono se define
+     por sus partes, así que cambiarle el grosor o la separación reescala solo
+     todo lo demás: el alto del ícono, el tamaño de "NAHU / DI", el recorrido de
+     la X y el arranque del menú. */
   .navbar {
-    --alto-icono: 19px;   /* 3 barras de 3px + 2 huecos de 5px */
+    --grosor-barra: 3px;
+    --sep-barras: 6px;
+    --alto-icono: calc(var(--grosor-barra) * 3 + var(--sep-barras) * 2);   /* 21px */
     --aire-tira: 20px;
     padding-top: var(--aire-tira);
     padding-bottom: var(--aire-tira);
+  }
+
+  /* Los mismos 20px a los costados, así el margen es idéntico por los cuatro
+     lados. Se pisa el padding de 12px que trae el .container de Bootstrap: es
+     el que usan todas las secciones, así que la marca queda 8px más adentro que
+     el texto del contenido. Se acepta ese desfasaje a cambio de despegar de la
+     pared al hamburguesa, que pegado a la esquina costaba agarrar. */
+  .navbar > .container {
+    padding-left: var(--aire-tira);
+    padding-right: var(--aire-tira);
   }
 
   /* En INICIO no hay tira: sobre el hero queda flotando sólo el hamburguesa, sin
@@ -959,21 +971,38 @@ img {
 
   /* El botón no puede traer padding ni márgenes sueltos: su caja tiene que medir
      exactamente lo que mide el dibujo, si no el centrado se calcula contra un
-     rectángulo más grande que lo que se ve. */
+     rectángulo más grande que lo que se ve. Lo que se toca se agranda aparte,
+     en el ::before de acá abajo. */
   .navbar-toggler {
     position: relative;
     z-index: 1060;
     padding: 0;
     border: 0;
-    width: 25px;
+    width: 28px;
     height: var(--alto-icono);
   }
 
-  /* Los 5px de separación van solo entre barras (antes eran 5px arriba y abajo
-     de cada una, lo que sumaba aire fuera del dibujo). La distancia entre
-     centros sigue siendo 8px, que es lo que asume el translateY de la X. */
+  /* Lo que responde al dedo no tiene por qué ser lo que se ve: el dibujo mide
+     28x21 y la zona sensible se lleva a 48x48 con un pseudo-elemento centrado
+     encima. Los 48px son los mismos que ya usan los iconos de Contacto y quedan
+     por encima del mínimo de 44x44 que pide la WCAG 2.5.5. Al ser absolute no
+     empuja el layout, así que el ícono no se mueve ni un pixel. */
+  .navbar-toggler::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 48px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+  }
+
+  /* La separación va sólo ENTRE barras (no arriba y abajo de cada una, que
+     sumaba aire fuera del dibujo). */
   .navbar-toggler .toggler-bar {
-    margin: 0 0 5px;
+    width: 28px;
+    height: var(--grosor-barra);
+    margin: 0 0 var(--sep-barras);
   }
 
   .navbar-toggler .toggler-bar:last-child {
