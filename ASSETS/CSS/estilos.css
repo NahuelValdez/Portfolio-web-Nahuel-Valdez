@@ -175,14 +175,13 @@ img {
       inset 0 0 80px rgba(90, 130, 175, 0.10);
   }
 
-  /* Más transparente que en mobile: el sidebar ocupa toda la altura, así que un
-     tinte fuerte apagaría del todo la aurora que pasa por detrás. */
+  /* Mismo gradiente que el fondo de las cards glass (.bloque-glass .bg-base),
+     para que el sidebar y las cards hablen el mismo lenguaje de color en vez
+     de sumar un tinte más a la paleta. Se mantiene el blur/saturate/contrast
+     propios del navbar (::before ya los trae de la regla base). */
   .navbar::before {
     background-color: transparent;
-    background-image: linear-gradient(
-      rgba(44, 54, 65, 0.55),
-      rgba(38, 45, 55, 0.42)
-    );
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(40, 50, 62, 0.34));
   }
 
   .navbar-brand {
@@ -871,9 +870,65 @@ img {
     font-weight: 700;
   }
 
+  /* La tira superior se arma alrededor de UNA sola medida: el alto del dibujo
+     del hamburguesa. La marca se dimensiona contra ella y el aire de arriba y
+     abajo se iguala al de los costados (los 12px de padding del .container),
+     así que el margen es el mismo por los cuatro lados. */
+  .navbar {
+    --alto-icono: 19px;   /* 3 barras de 3px + 2 huecos de 5px */
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  /* El botón no puede traer padding ni márgenes sueltos: su caja tiene que medir
+     exactamente lo que mide el dibujo, si no el centrado se calcula contra un
+     rectángulo más grande que lo que se ve. */
   .navbar-toggler {
     position: relative;
     z-index: 1060;
+    padding: 0;
+    border: 0;
+    width: 25px;
+    height: var(--alto-icono);
+  }
+
+  /* Los 5px de separación van solo entre barras (antes eran 5px arriba y abajo
+     de cada una, lo que sumaba aire fuera del dibujo). La distancia entre
+     centros sigue siendo 8px, que es lo que asume el translateY de la X. */
+  .navbar-toggler .toggler-bar {
+    margin: 0 0 5px;
+  }
+
+  .navbar-toggler .toggler-bar:last-child {
+    margin-bottom: 0;
+  }
+
+  /* "NAHU / DI" tenía dos problemas: Bootstrap le mete padding propio a
+     .navbar-brand y un margin-bottom de 8px al <h3> de adentro (de ahí que
+     sobrara aire abajo), y su tamaño no tenía ninguna relación con el del
+     hamburguesa. */
+  .navbar-brand {
+    padding: 0;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    height: var(--alto-icono);
+  }
+
+  .navbar-brand .h3 {
+    margin: 0;
+    line-height: 1;
+    /* Lo que se ve de un texto en mayúsculas es su cap height, no el font-size:
+       en Bai Jamjuree las mayúsculas miden 0.7125em. Dividiendo por ese factor,
+       el alto real de "NAHU / DI" en pantalla queda igual al del hamburguesa.
+       Con font-size responsive (el calc de Bootstrap) los dos se despegaban a
+       medida que cambiaba el ancho. */
+    font-size: calc(var(--alto-icono) / 0.7125);
+    /* Centrar la caja del texto no es lo mismo que centrar las mayúsculas: la
+       caja incluye el espacio del descendente (0.2375em) y las mayúsculas no
+       lo usan, así que quedan medio pixel bajas. Se sube esa diferencia. */
+    position: relative;
+    top: -0.0198em;
   }
 
   /* Bloquea el scroll de fondo y evita que un transform del navbar
