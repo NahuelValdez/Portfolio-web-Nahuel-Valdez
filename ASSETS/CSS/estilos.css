@@ -927,7 +927,7 @@ img {
      la simetría interna de la tira. */
   .navbar {
     --alto-icono: 19px;   /* 3 barras de 3px + 2 huecos de 5px */
-    --aire-tira: 28px;
+    --aire-tira: 20px;
     padding-top: var(--aire-tira);
     padding-bottom: var(--aire-tira);
   }
