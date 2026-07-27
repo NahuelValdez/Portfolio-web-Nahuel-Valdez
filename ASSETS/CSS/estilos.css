@@ -1693,22 +1693,20 @@ img {
    siempre desde la derecha (en vez de alternar por orden dentro de cada
    columna, que hacia que la 2da card de cada columna "cruzara" el sentido de
    la 1ra sin motivo). Mismo layout final de siempre: esto solo cambia el
-   trayecto de entrada, nunca donde queda la card. Usa el id #sobremi para
-   ganarle en especificidad a las reglas de arriba sin tocar el orden del
-   archivo. */
+   trayecto de entrada, nunca donde queda la card.
+   El :not(.visible) es clave: sin el, la regla de Educacion (mas especifica
+   por el :last-of-type) le ganaba a la regla ".visible" de mas arriba y la
+   card se quedaba trabada en translateX(46px) para siempre en vez de asentarse
+   en su lugar. */
 @media (min-width: 992px) {
-  #sobremi .bg-base.entra-lateral,
-  #sobremi .bg-base.entra-lateral.desde-der {
+  #sobremi .bg-base.entra-lateral:not(.visible),
+  #sobremi .bg-base.entra-lateral.desde-der:not(.visible) {
     transform: translateX(-46px) translateZ(0);
   }
 
-  #sobremi .col-lg-6:last-of-type .bg-base.entra-lateral,
-  #sobremi .col-lg-6:last-of-type .bg-base.entra-lateral.desde-der {
+  #sobremi .col-lg-6:last-of-type .bg-base.entra-lateral:not(.visible),
+  #sobremi .col-lg-6:last-of-type .bg-base.entra-lateral.desde-der:not(.visible) {
     transform: translateX(46px) translateZ(0);
-  }
-
-  #sobremi .bg-base.entra-lateral.visible {
-    transform: translateZ(0);
   }
 }
 
