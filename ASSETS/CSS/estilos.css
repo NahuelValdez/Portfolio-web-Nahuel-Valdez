@@ -114,8 +114,12 @@ img {
   backdrop-filter: blur(16px) saturate(160%);
   visibility: visible;
   /* visibility sin demora al MOSTRAR: entra a la vez que el opacity. Ver el
-     porqué del patrón completo en la regla de en-inicio, más abajo. */
+     porqué del patrón completo en la regla de en-inicio, más abajo.
+     will-change: en scroll táctil rápido el motor puede saltarse los frames
+     de un fundido que no está pre-promovido a su propia capa (ver el porqué
+     completo en .navbar-brand, más abajo). */
   transition: opacity 0.3s ease, visibility 0s;
+  will-change: opacity;
 }
 
 /* Ruido: la misma textura que las cards, para que el navbar se lea como el mismo
@@ -132,6 +136,7 @@ img {
   opacity: 0.5;
   visibility: visible;
   transition: opacity 0.3s ease, visibility 0s;
+  will-change: opacity;
 }
 
 .navbar > .container {
@@ -1094,9 +1099,20 @@ img {
 
   /* La marca sale deslizándose hacia la izquierda mientras se despliega el
      menú, en vez de quedar quieta tapada por el velo. Mismo timing (0.4s)
-     que la entrada del menú, para que se sientan como un solo movimiento. */
+     que la entrada del menú, para que se sientan como un solo movimiento.
+
+     will-change: en un scroll táctil rápido (el gesto real en un teléfono,
+     mucho más brusco que el scroll con mouse en el que se prueba desde la
+     compu) el hilo principal está saturado calculando el propio scroll, y
+     ahí el motor puede saltarse los frames intermedios de una transición que
+     no está pre-promovida a su propia capa: en vez de fundido se ve un salto
+     directo al valor final ("desaparece de golpe"). will-change reserva esa
+     capa de entrada, así el fundido corre en el compositor y no compite con
+     el scroll por el hilo principal. Mismo mecanismo que ya usa .card-custom
+     con backdrop-filter/transform, más abajo, para un síntoma equivalente. */
   .navbar-brand {
     transition: transform 0.4s ease-in-out, opacity 0.3s ease-in-out;
+    will-change: opacity, transform;
   }
 
   body.menu-open .navbar-brand {
