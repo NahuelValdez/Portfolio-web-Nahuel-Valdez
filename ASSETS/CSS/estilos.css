@@ -897,6 +897,15 @@ img {
     box-shadow: none;
   }
 
+  /* El ruido de la tira (.navbar::after) es aparte del vidrio y no se apagaba
+     con lo de arriba: quedaba activo encima del ruido propio del menú
+     (.navbar-collapse::after), duplicando la intensidad justo en la franja de
+     la tira (~54-70px) y no en el resto de la pantalla. Esa diferencia de
+     densidad de grano es el quiebre que se veía arriba de todo. */
+  body.menu-open .navbar::after {
+    opacity: 0;
+  }
+
   /* La marca sale deslizándose hacia la izquierda mientras se despliega el
      menú, en vez de quedar quieta tapada por el velo. Mismo timing (0.4s)
      que la entrada del menú, para que se sientan como un solo movimiento. */
