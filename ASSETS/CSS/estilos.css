@@ -430,6 +430,16 @@ img {
   opacity: 0.85;
 }
 
+/* El <br> del hero parte la bajada en dos renglones parejos ("Diseño de
+   objetos," / "del concepto al prototipo."), que es como se lee bien en una
+   pantalla angosta. En escritorio sobra ancho y la frase entra entera, así que
+   ahí el salto se anula en vez de dejar un corte arbitrario a media línea. */
+@media (min-width: 992px) {
+  .texto-hero br {
+    display: none;
+  }
+}
+
 #home {
   position: relative;
 }
