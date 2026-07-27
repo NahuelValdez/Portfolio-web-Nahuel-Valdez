@@ -127,6 +127,7 @@ img {
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   mix-blend-mode: overlay;
   opacity: 0.5;
+  transition: opacity 0.3s ease;
 }
 
 .navbar > .container {
@@ -735,8 +736,16 @@ img {
 }
 
 /* NAVBAR - ocultar al scrollear */
+/* El !important es para ganarle a la transición que declara .navbar más arriba,
+   pero al reemplazarla entera se llevaba puestas las de border-color y
+   box-shadow, y el filo de la tira aparecía y desaparecía de golpe. Van acá
+   también para que el paso de "sin fondo" a "con fondo" se sienta como uno solo
+   con el del vidrio (::before, 0.3s). */
 .navbar {
-  transition: transform 0.2s ease-in-out !important;
+  transition:
+    transform 0.2s ease-in-out,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease !important;
 }
 
 .navbar.nav-hidden {
@@ -899,9 +908,34 @@ img {
      la simetría interna de la tira. */
   .navbar {
     --alto-icono: 19px;   /* 3 barras de 3px + 2 huecos de 5px */
-    --aire-tira: 20px;
+    --aire-tira: 28px;
     padding-top: var(--aire-tira);
     padding-bottom: var(--aire-tira);
+  }
+
+  /* En INICIO no hay tira: sobre el hero queda flotando sólo el hamburguesa, sin
+     vidrio, sin ruido, sin filo y sin la marca. El nombre ya lo dice el propio
+     hero ("soy NAHU,"), así que repetirlo arriba era decir dos veces lo mismo
+     tapando la portada.
+
+     La clase la maneja el IntersectionObserver que ya existía para el sidebar de
+     escritorio (index.html), así que el estado es el mismo en las dos vistas: se
+     enciende cuando #home ocupa más de la mitad de la pantalla. Todo lo que se
+     apaga acá tiene su transición, así que la tira se arma sola al salir del
+     hero en vez de aparecer de golpe. */
+  .navbar.en-inicio::before,
+  .navbar.en-inicio::after {
+    opacity: 0;
+  }
+
+  .navbar.en-inicio {
+    border-bottom-color: transparent;
+    box-shadow: none;
+  }
+
+  .navbar.en-inicio .navbar-brand {
+    opacity: 0;
+    pointer-events: none;
   }
 
   /* El botón no puede traer padding ni márgenes sueltos: su caja tiene que medir
