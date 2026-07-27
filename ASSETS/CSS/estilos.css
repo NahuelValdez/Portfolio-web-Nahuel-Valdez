@@ -781,6 +781,15 @@ img {
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+/* Las de los extremos en color de acento y la del medio blanca: el mismo
+   patrón de la bandera. De paso, al abrir el menú la del medio se apaga y las
+   que quedan cruzadas son justo estas dos, así que la X entera se lee en el
+   color de acento. */
+.bar1,
+.bar3 {
+  background-color: var(--color-brand);
+}
+
 .navbar-toggler.active .bar1 {
   transform: translateY(8px) rotate(45deg);
 }
