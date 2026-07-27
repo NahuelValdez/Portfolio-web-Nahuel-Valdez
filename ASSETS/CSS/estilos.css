@@ -707,20 +707,13 @@ img {
 
 /* Boton de WhatsApp en Contacto: unico acceso a ese canal en todo el sitio
    (ver bloque-glass de Proyectos para la decision de no duplicarlo con un
-   boton flotante). Reusa el lenguaje de .btn-brand (fondo menta, invierte
-   a oscuro + late en hover) en vez del circulo chico de los otros iconos,
-   para que se lea como la accion preferida. */
+   boton flotante). Mismo circulo de 48px que mail/Instagram, pero relleno en
+   el color de acento (en vez del circulo hueco de los otros) para que siga
+   leyendose como la accion preferida aun sin el texto "Escribime". */
 .social-icons a.btn-whatsapp {
-  width: auto;
-  height: 48px;
-  padding: 0 22px 0 18px;
-  gap: 9px;
-  border-radius: 100px;
   background-color: var(--color-brand);
   border-color: transparent;
   color: var(--color-base2);
-  font-size: 16px;
-  font-weight: 700;
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -782,16 +775,23 @@ img {
   height: 3px;
   margin: 5px auto;
   background-color: #fff;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
 }
 
 /* Las de los extremos en color de acento y la del medio blanca: el mismo
-   patrón de la bandera. De paso, al abrir el menú la del medio se apaga y las
-   que quedan cruzadas son justo estas dos, así que la X entera se lee en el
-   color de acento. */
+   patrón de la bandera. Es el estado de reposo (hamburguesa cerrada); al
+   abrirse, la regla .active de más abajo las pasa a blanco. */
 .bar1,
 .bar3 {
   background-color: var(--color-brand);
+}
+
+/* Al transformarse en X, las dos barras que quedan cruzadas (bar2 se apaga)
+   pasan a blanco: la X se lee neutra mientras está abierta, y recién al
+   cerrarse vuelve a los colores de la bandera. */
+.navbar-toggler.active .bar1,
+.navbar-toggler.active .bar3 {
+  background-color: #fff;
 }
 
 /* Para cerrar la X cada barra de los extremos tiene que caer justo sobre la del
