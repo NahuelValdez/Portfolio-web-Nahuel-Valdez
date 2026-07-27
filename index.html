@@ -250,6 +250,24 @@
 
     <!-- //Proyectos -->
 
+    <!-- cinta -->
+
+    <!-- Cinta de Möbius con la marca corriendo por la superficie. El texto vive
+         en una textura (un canvas 2D), no en geometría: una sola tira de ~2400
+         triángulos con MeshBasicMaterial, sin luces ni sombras, que es lo que la
+         hace barata de animar incluso en teléfono.
+         El texto de verdad, para lectores de pantalla y buscadores, va en el
+         .visually-hidden de abajo: lo que se dibuja en un <canvas> no existe
+         para el DOM. -->
+    <section id="cinta" aria-labelledby="cinta-texto">
+      <div id="lienzo-cinta" aria-hidden="true">
+        <canvas id="canvas-cinta"></canvas>
+      </div>
+      <p id="cinta-texto" class="visually-hidden">NAHU / DI — Estudio de diseño creativo</p>
+    </section>
+
+    <!-- //cinta -->
+
     <!-- skills -->
 
     <!-- Bloque unificado: Habilidades + Sobre mí + Contacto comparten UNA sola aurora
@@ -1653,6 +1671,232 @@ if (window.innerWidth >= 992) {
     window.addEventListener('scroll', solicitarRevision, { passive: true });
     window.addEventListener('resize', solicitarRevision);
     revisar();
+  })();
+</script>
+
+<!-- ===== Cinta de Möbius: la marca corriendo por una tira retorcida ===== -->
+<script type="module">
+  (() => {
+    const contenedor = document.getElementById('lienzo-cinta');
+    const canvas = document.getElementById('canvas-cinta');
+    if (!contenedor || !canvas) return;
+
+    const TEXTO_SECUNDARIO = 'ESTUDIO DE DISEÑO CREATIVO';
+    // Mismos colores que el CSS (no se pueden leer las variables desde el canvas 2D)
+    const COLOR_TEXTO      = '#eef3db';   // --color-heading
+    const COLOR_ACENTO     = '#baffdf';   // --color-brand
+    const COLOR_SECUNDARIO = '#b6cbce';   // --color-body
+
+    // La cinta es una banda de Möbius: una tira que da la vuelta con medio giro,
+    // así que tiene UNA sola cara. Eso es justo lo que hace el efecto de las
+    // referencias: el texto se va dando vuelta solo, sin trucos.
+    const RADIO = 1.50;          // radio del anillo
+    const ANCHO = 0.72;          // media anchura de la tira
+    const VUELTAS_TEXTO = 2;     // cuántas veces se repite la marca alrededor
+    // Bien de canto (~58°), como en las referencias: así el medio giro de la
+    // cinta se lee como tal. De frente sería sólo un círculo de texto.
+    const INCLINACION = 1.02;    // rad
+    const VELOCIDAD = 0.17;      // rad/s
+
+    // En pantallas chicas se baja el detalle: la mitad de triángulos y una
+    // textura de un cuarto del área. La silueta es idéntica, pero cuesta mucho
+    // menos batería.
+    const chico = window.matchMedia('(max-width: 991px)').matches;
+    const SEG_U = chico ? 140 : 240;
+    const SEG_V = chico ? 4 : 6;
+    const TEX_W = chico ? 2048 : 4096;
+    const TEX_H = chico ? 256 : 512;
+
+    const menosMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // --- Texto sobre la tira ---
+    // El texto no es geometría: se dibuja en un canvas 2D que después se usa de
+    // textura. Es lo que permite que sea una sola tira barata en vez de miles de
+    // triángulos por letra.
+    function dibujarRuns(ctx, runs, xCentro, y) {
+      const ancho = runs.reduce((a, r) => a + ctx.measureText(r.texto).width, 0);
+      let x = xCentro - ancho / 2;
+      for (const r of runs) {
+        ctx.fillStyle = r.color;
+        ctx.fillText(r.texto, x, y);
+        x += ctx.measureText(r.texto).width;
+      }
+    }
+
+    // ctx.letterSpacing todavía no está en todos los motores, así que el
+    // espaciado del texto chico se arma letra por letra.
+    function dibujarEspaciado(ctx, texto, xCentro, y, espacio, color) {
+      const letras = [...texto];
+      let ancho = -espacio;
+      for (const l of letras) ancho += ctx.measureText(l).width + espacio;
+      let x = xCentro - ancho / 2;
+      ctx.fillStyle = color;
+      for (const l of letras) {
+        ctx.fillText(l, x, y);
+        x += ctx.measureText(l).width + espacio;
+      }
+    }
+
+    function crearTextura() {
+      const c = document.createElement('canvas');
+      c.width = TEX_W;
+      c.height = TEX_H;
+      const ctx = c.getContext('2d');
+
+      const paso = TEX_W / VUELTAS_TEXTO;
+      const tamPrincipal = TEX_H * 0.42;
+      const tamSecundario = TEX_H * 0.10;
+
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+
+      for (let i = 0; i < VUELTAS_TEXTO; i++) {
+        const centro = paso * (i + 0.5);
+
+        ctx.font = `700 ${tamPrincipal}px "Bai Jamjuree", sans-serif`;
+        dibujarRuns(ctx, [
+          { texto: 'NAHU ', color: COLOR_TEXTO },
+          { texto: '/',     color: COLOR_ACENTO },
+          { texto: ' DI',   color: COLOR_TEXTO },
+        ], centro, TEX_H * 0.37);
+
+        ctx.font = `500 ${tamSecundario}px "Bai Jamjuree", sans-serif`;
+        dibujarEspaciado(ctx, TEXTO_SECUNDARIO, centro, TEX_H * 0.72, tamSecundario * 0.62, COLOR_SECUNDARIO);
+      }
+      return c;
+    }
+
+    import('three').then(async (THREE) => {
+      const { ParametricGeometry } = await import('three/addons/geometries/ParametricGeometry.js');
+
+      // La textura se dibuja con la tipografía del sitio. Si se dibuja antes de
+      // que la fuente esté lista, el canvas cae en la del sistema y la marca
+      // queda con otra letra, sin forma de enterarse después.
+      try {
+        await Promise.all([
+          document.fonts.load('700 100px "Bai Jamjuree"'),
+          document.fonts.load('500 100px "Bai Jamjuree"'),
+        ]);
+        await document.fonts.ready;
+      } catch (e) { /* si la fuente no carga, se dibuja con la de sistema */ }
+
+      const escena = new THREE.Scene();
+      const camara = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+
+      const render = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      render.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      render.setClearColor(0x000000, 0);
+
+      const textura = new THREE.CanvasTexture(crearTextura());
+      textura.wrapS = THREE.RepeatWrapping;
+      textura.wrapT = THREE.ClampToEdgeWrapping;
+      textura.colorSpace = THREE.SRGBColorSpace;
+      textura.anisotropy = render.capabilities.getMaxAnisotropy();
+
+      const geometria = new ParametricGeometry((u, v, destino) => {
+        const a = u * Math.PI * 2;
+        const w = (v - 0.5) * 2 * ANCHO;
+        const r = RADIO + w * Math.cos(a / 2);
+        destino.set(r * Math.cos(a), r * Math.sin(a), w * Math.sin(a / 2));
+      }, SEG_U, SEG_V);
+
+      const material = new THREE.MeshBasicMaterial({
+        map: textura,
+        transparent: true,
+        side: THREE.DoubleSide,
+        // Sin escritura de profundidad la cara de atrás se lee a través de la de
+        // adelante, que es el efecto de las referencias: el texto invertido del
+        // otro lado del anillo se ve igual.
+        depthWrite: false,
+      });
+
+      // Dos grupos anidados a propósito: el de afuera sólo inclina (queda
+      // quieto) y el de adentro gira sobre el eje del anillo. Girando el de
+      // afuera, la cinta se pondría de canto y desaparecería dos veces por
+      // vuelta; girando sobre su propio eje, la silueta no cambia y lo que se
+      // mueve es el texto recorriendo la cinta, que es el efecto buscado.
+      const grupo = new THREE.Group();
+      grupo.rotation.x = INCLINACION;
+      grupo.rotation.z = -0.14;
+
+      const anillo = new THREE.Group();
+      anillo.add(new THREE.Mesh(geometria, material));
+      grupo.add(anillo);
+      escena.add(grupo);
+
+      // --- Encuadre ---
+      // Se proyectan los vértices con la cámara real y se mide cuánto ocupan de
+      // pantalla, corrigiendo la distancia hasta que llenen el OCUPACION que se
+      // pide. Calcularlo con la caja del objeto no alcanzaba: en perspectiva la
+      // parte de la cinta que queda cerca proyecta bastante más grande que la
+      // del centro, y compensar eso a ojo la dejaba chica y perdida en el
+      // cuadro. Como el giro es sobre el eje del anillo, la silueta no cambia
+      // durante la animación y basta con calcularlo una vez por medida.
+      const OCUPACION = 0.92;
+      const malla = anillo.children[0];
+      const vertice = new THREE.Vector3();
+
+      function encuadrar() {
+        const posiciones = geometria.attributes.position;
+        for (let intento = 0; intento < 8; intento++) {
+          camara.updateMatrixWorld(true);
+          camara.updateProjectionMatrix();
+          grupo.updateMatrixWorld(true);
+
+          let maxX = 0, maxY = 0;
+          for (let i = 0; i < posiciones.count; i++) {
+            vertice.fromBufferAttribute(posiciones, i).applyMatrix4(malla.matrixWorld).project(camara);
+            maxX = Math.max(maxX, Math.abs(vertice.x));
+            maxY = Math.max(maxY, Math.abs(vertice.y));
+          }
+
+          const factor = Math.max(maxX, maxY) / OCUPACION;
+          if (Math.abs(factor - 1) < 0.005) break;
+          camara.position.z *= factor;
+        }
+      }
+
+      function medir() {
+        const W = contenedor.clientWidth;
+        const H = contenedor.clientHeight;
+        if (!W || !H) return;
+
+        render.setSize(W, H, false);
+        camara.aspect = W / H;
+        camara.position.z = 5;   // punto de partida; encuadrar() lo corrige
+        camara.updateProjectionMatrix();
+        encuadrar();
+      }
+      medir();
+      window.addEventListener('resize', medir);
+
+      // Fuera de pantalla no se dibuja nada: la sección vive en el medio de la
+      // página y sin esto seguiría gastando GPU mientras se lee el resto.
+      // Arranca en true a propósito: si el observador no llegara a disparar, la
+      // cinta se dibuja igual. Al revés, un fallo suyo la dejaría en blanco.
+      let visible = true;
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; })
+        .observe(contenedor);
+
+      if (menosMovimiento) {
+        // Con "reducir movimiento" activado la cinta se dibuja quieta: la marca
+        // se sigue leyendo, sin el giro.
+        medir();
+        render.render(escena, camara);
+        return;
+      }
+
+      let ultimo = performance.now();
+      function animar(ahora) {
+        requestAnimationFrame(animar);
+        const dt = Math.min((ahora - ultimo) / 1000, 0.05);
+        ultimo = ahora;
+        if (!visible || document.hidden) return;
+        anillo.rotation.z += VELOCIDAD * dt;
+        render.render(escena, camara);
+      }
+      requestAnimationFrame(animar);
+    });
   })();
 </script>
 

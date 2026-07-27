@@ -1818,3 +1818,35 @@ img {
   #home .container { position: relative; z-index: 1; }
   #home .btn-scroll-down-wrap { z-index: 1; }
 }
+
+/* ===== CINTA DE MÖBIUS (la marca girando) ===== */
+/* La sección es sólo el marco: todo lo que se ve lo dibuja el canvas. El alto va
+   en vh para que la cinta ocupe siempre una franja parecida sin importar la
+   pantalla, con topes para que no se aplaste en un monitor bajo ni se coma la
+   pantalla entera en uno alto. */
+#cinta {
+  position: relative;
+  overflow: hidden;   /* al girar, los extremos de la cinta barren fuera del cuadro */
+}
+
+#lienzo-cinta {
+  width: 100%;
+  height: 46vh;
+  min-height: 280px;
+  max-height: 560px;
+}
+
+/* Sin display:block el canvas es inline y arrastra el espacio del renglón,
+   dejando una franja muerta abajo. */
+#lienzo-cinta canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 991px) {
+  #lienzo-cinta {
+    height: 38vh;
+    min-height: 240px;
+  }
+}
