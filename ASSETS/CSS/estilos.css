@@ -159,29 +159,44 @@ img {
 }
 
 @media (min-width: 992px) {
+  /* El sidebar usa el MISMO material que las cards glass del bloque
+     (.bloque-glass .bg-base): mismo gradiente, mismo borde, mismo filo
+     iluminado y mismo filtro. Antes compartía sólo el color y aún así se veía
+     distinto, porque el acabado (borde a 0.12 en vez de 0.22, filo a 0.10 en
+     el canto derecho en vez de 0.16 arriba, blur 16 en vez de 18) hacía de
+     todo el resto. El borde de separación sigue yendo a la derecha, que es
+     donde esta columna toca el contenido. */
   .navbar {
     min-height: 100vh;
     width: var(--sidbar-width);
-    /* Más transparente que en mobile: el sidebar es alto y ocupa toda la altura,
-       así que un tinte fuerte apagaría del todo la aurora que pasa por detrás.
-       El borde va a la derecha (no abajo) porque acá es una columna. */
     background: transparent;   /* el tinte va en ::before, junto con el blur */
     border-bottom: none;
-    border-right: 1px solid rgba(150, 180, 220, 0.12);
-    /* Acá es una columna, así que el filo iluminado va en el borde interno
-       derecho en vez de arriba, más el glow azulado tenue de las cards. */
+    border-right: 1px solid rgba(150, 180, 220, 0.22);
     box-shadow:
-      inset -1px 0 0 rgba(255, 255, 255, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
       inset 0 0 80px rgba(90, 130, 175, 0.10);
   }
 
-  /* Mismo gradiente que el fondo de las cards glass (.bloque-glass .bg-base),
-     para que el sidebar y las cards hablen el mismo lenguaje de color en vez
-     de sumar un tinte más a la paleta. Se mantiene el blur/saturate/contrast
-     propios del navbar (::before ya los trae de la regla base). */
   .navbar::before {
     background-color: transparent;
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(40, 50, 62, 0.34));
+    /* Un gradiente a 135° se reparte sobre la diagonal del elemento, así que la
+       misma declaración da colores distintos según el tamaño. Las cards del
+       bloque recorren entre 384px (la más chica de Habilidades) y 644px (la más
+       alta de Sobre mí); esta columna, al ocupar los 100vh, se va a ~800px y el
+       degradé se estira más que cualquier card, dejando de más el extremo
+       oscuro.
+
+       Cerrando el degradé a 450px queda dentro del rango que ya manejan las
+       cards entre sí, en vez de por encima de todas. De ahí para abajo el
+       sidebar sostiene el mismo color con el que cierra una card, que es lo más
+       parecido a "seguir siendo la misma superficie". */
+    background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.07) 0,
+      rgba(40, 50, 62, 0.34) 450px
+    );
+    -webkit-backdrop-filter: blur(18px) saturate(150%) contrast(105%);
+    backdrop-filter: blur(18px) saturate(150%) contrast(105%);
   }
 
   .navbar-brand {
