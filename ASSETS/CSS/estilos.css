@@ -447,14 +447,9 @@ img {
 }
 
 /* El <br> del hero parte la bajada en dos renglones parejos ("Diseño de
-   objetos," / "del concepto al prototipo."), que es como se lee bien en una
-   pantalla angosta. En escritorio sobra ancho y la frase entra entera, así que
-   ahí el salto se anula en vez de dejar un corte arbitrario a media línea. */
-@media (min-width: 992px) {
-  .texto-hero br {
-    display: none;
-  }
-}
+   objetos," / "del concepto al prototipo."), en dos renglones parejos tanto en
+   mobile como en escritorio: mismo corte en todos lados, un solo texto que
+   mantener. */
 
 #home {
   position: relative;
@@ -686,16 +681,17 @@ img {
   gap: 10px;
 }
 
-/* 48px de lado: por encima del minimo de 44px que recomienda WCAG 2.5.5 para
-   objetivos tactiles (a 40px se sentian chicos de tocar en el celular). */
+/* 56px de lado: ya arrancaba en 48px (por encima del mínimo de 44px que
+   recomienda WCAG 2.5.5), pero se agranda más para que el objetivo táctil sea
+   más cómodo todavía. */
 .social-icons a {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 100px;
-  font-size: 22px;
+  font-size: 26px;
   color: #fff;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(150, 180, 220, 0.25);
@@ -710,9 +706,9 @@ img {
 
 /* .lab (linea-awesome, iconos de marca) trae su propio width/height/font-size
    fijos (35px) pensados para uso suelto; acá pisamos eso para que el icono
-   de Instagram quede al mismo tamaño chico que el resto dentro del circulo. */
+   de Instagram quede al mismo tamaño que el resto dentro del circulo. */
 .social-icons a i {
-  font-size: 22px;
+  font-size: 26px;
   width: auto;
   height: auto;
 }
@@ -1341,9 +1337,15 @@ img {
   gap: 8px;
   opacity: 0;
   transform: translateY(24px);
+  /* Entraba a los 8s: con el estilo sobrio de ahora (fondo casi transparente,
+     ver .btn-brand) ya no compite con el resto del hero, así que no hace
+     falta atrasarlo tanto. 1.2s es justo después de que termina de entrar el
+     texto de arriba (AOS: 800ms de duración + 150ms de delay del párrafo).
+     El rebote arranca a los 1.8s, apenas termina esta animación de entrada,
+     así no hay un salto entre "aparecer" y "empezar a rebotar". */
   animation:
-    entrarBotonAbajo 0.6s ease-out 8s forwards,
-    reboteBoton 1.6s ease-in-out 2.4s infinite;
+    entrarBotonAbajo 0.6s ease-out 1.2s forwards,
+    reboteBoton 1.6s ease-in-out 1.8s infinite;
 }
 
 @keyframes reboteBoton {
@@ -1685,6 +1687,29 @@ img {
 .bloque-glass .bg-base.entra-lateral.visible {
   transform: translateZ(0);
   opacity: 1;
+}
+
+/* Desktop: la columna Experiencia entra siempre desde la izquierda y Educación
+   siempre desde la derecha (en vez de alternar por orden dentro de cada
+   columna, que hacia que la 2da card de cada columna "cruzara" el sentido de
+   la 1ra sin motivo). Mismo layout final de siempre: esto solo cambia el
+   trayecto de entrada, nunca donde queda la card. Usa el id #sobremi para
+   ganarle en especificidad a las reglas de arriba sin tocar el orden del
+   archivo. */
+@media (min-width: 992px) {
+  #sobremi .bg-base.entra-lateral,
+  #sobremi .bg-base.entra-lateral.desde-der {
+    transform: translateX(-46px) translateZ(0);
+  }
+
+  #sobremi .col-lg-6:last-of-type .bg-base.entra-lateral,
+  #sobremi .col-lg-6:last-of-type .bg-base.entra-lateral.desde-der {
+    transform: translateX(46px) translateZ(0);
+  }
+
+  #sobremi .bg-base.entra-lateral.visible {
+    transform: translateZ(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
