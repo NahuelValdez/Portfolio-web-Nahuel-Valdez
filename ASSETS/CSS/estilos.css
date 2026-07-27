@@ -822,7 +822,10 @@ img {
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 70px;
+    /* Los links arrancan debajo de la tira, con 26px de aire. Se calcula contra
+       las mismas variables que arman la tira (y no con un 70px fijo, que era lo
+       que había antes) para que al cambiarle el aire no se coma este hueco. */
+    padding-top: calc(var(--aire-tira) * 2 + var(--alto-icono) + 1px + 26px);
     transform: translateX(100%);
     transition: transform 0.4s ease-in-out;
     z-index: 1050;
@@ -886,13 +889,19 @@ img {
   }
 
   /* La tira superior se arma alrededor de UNA sola medida: el alto del dibujo
-     del hamburguesa. La marca se dimensiona contra ella y el aire de arriba y
-     abajo se iguala al de los costados (los 12px de padding del .container),
-     así que el margen es el mismo por los cuatro lados. */
+     del hamburguesa, contra la que se dimensiona la marca.
+
+     El aire de arriba y abajo (20px) es a propósito mayor que el de los
+     costados: los laterales no son libres, son los 12px de padding del
+     .container, los mismos que llevan todas las secciones de la página. Si se
+     los sube para emparejarlos, la marca deja de arrancar en el mismo eje
+     vertical que el texto del contenido, que es una alineación más visible que
+     la simetría interna de la tira. */
   .navbar {
     --alto-icono: 19px;   /* 3 barras de 3px + 2 huecos de 5px */
-    padding-top: 12px;
-    padding-bottom: 12px;
+    --aire-tira: 20px;
+    padding-top: var(--aire-tira);
+    padding-bottom: var(--aire-tira);
   }
 
   /* El botón no puede traer padding ni márgenes sueltos: su caja tiene que medir
